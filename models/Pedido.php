@@ -55,6 +55,15 @@ class Pedido extends BaseModel
 
 
 
+
+
+    public function findById(int $id): ?array
+    {
+        $stmt = $this->db->prepare('SELECT p.id, p.cliente_id, p.cotizacion_id, p.usuario_id, p.estado, p.total, p.fecha, c.nombre AS cliente_nombre FROM pedidos p INNER JOIN clientes c ON c.id = p.cliente_id WHERE p.id = :id LIMIT 1');
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch() ?: null;
+    }
+
     public function byCliente(int $clienteId): array
     {
         $stmt = $this->db->prepare('SELECT id, cotizacion_id, estado, total, fecha FROM pedidos WHERE cliente_id = :cliente_id ORDER BY id DESC');

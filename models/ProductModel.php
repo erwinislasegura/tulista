@@ -56,6 +56,15 @@ class ProductModel extends BaseModel
         return $stmt->fetchAll();
     }
 
+
+
+    public function findBasic(int $id): ?array
+    {
+        $stmt = $this->db->prepare('SELECT id, nombre, sku, existencia, stock_minimo, precio_venta_total FROM productos WHERE id = :id LIMIT 1');
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch() ?: null;
+    }
+
     public function create(array $data): bool
     {
         $stmt = $this->db->prepare(
