@@ -26,7 +26,7 @@
 
                 <div class="tab-content pt-3">
                     <div class="tab-pane fade show active" id="tab-productos">
-                        <form method="post" class="row g-3">
+                        <form method="post" class="row g-3 tl-minimal-form">
                             <input type="hidden" name="action" value="add_product">
                             <input type="hidden" name="return_tab" value="tab-productos">
                             <div class="col-md-3"><label class="form-label">Categoría</label><select class="form-select" name="categoria_id" required><option value="">Seleccionar</option><?php foreach ($data['categories'] as $item): ?><option value="<?= (int) $item['id'] ?>"><?= htmlspecialchars($item['nombre']) ?></option><?php endforeach; ?></select></div>
@@ -72,7 +72,7 @@
                     </div>
 
                     <div class="tab-pane fade" id="tab-categorias">
-                        <form method="post" class="row g-2 mb-3">
+                        <form method="post" class="row g-2 mb-3 tl-minimal-form">
                             <input type="hidden" name="action" value="add_category">
                             <input type="hidden" name="return_tab" value="tab-categorias">
                             <div class="col-md-6"><input class="form-control" name="name" placeholder="Nombre de categoría" required></div>
@@ -81,7 +81,7 @@
                     </div>
 
                     <div class="tab-pane fade" id="tab-marcas">
-                        <form method="post" class="row g-2 mb-3">
+                        <form method="post" class="row g-2 mb-3 tl-minimal-form">
                             <input type="hidden" name="action" value="add_brand">
                             <input type="hidden" name="return_tab" value="tab-marcas">
                             <div class="col-md-6"><input class="form-control" name="name" placeholder="Nombre de marca" required></div>
@@ -90,7 +90,7 @@
                     </div>
 
                     <div class="tab-pane fade" id="tab-unidades">
-                        <form method="post" class="row g-2 mb-3">
+                        <form method="post" class="row g-2 mb-3 tl-minimal-form">
                             <input type="hidden" name="action" value="add_unit">
                             <input type="hidden" name="return_tab" value="tab-unidades">
                             <div class="col-md-6"><input class="form-control" name="name" placeholder="Nombre de unidad" required></div>
@@ -99,7 +99,7 @@
                     </div>
 
                     <div class="tab-pane fade" id="tab-importacion">
-                        <form method="post" id="import-form" class="row g-3">
+                        <form method="post" id="import-form" class="row g-3 tl-minimal-form">
                             <input type="hidden" name="action" value="import_products">
                             <input type="hidden" name="return_tab" value="tab-importacion">
                             <input type="hidden" name="import_payload" id="import_payload">

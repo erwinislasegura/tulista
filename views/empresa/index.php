@@ -4,7 +4,7 @@
 
 <div class="card">
     <h5 class="tl-section-title">Configuración de empresa</h5>
-    <form method="post" enctype="multipart/form-data" class="row g-3">
+    <form method="post" enctype="multipart/form-data" class="row g-3 tl-minimal-form">
         <input type="hidden" name="logo_path_actual" value="<?= htmlspecialchars($data['empresa']['logo_path'] ?? '') ?>">
         <div class="col-md-4">
             <label class="form-label">Nombre comercial</label>

@@ -46,10 +46,10 @@ body,
 .card,
 .auth-card,
 .tl-card {
-    border: 0;
-    border-radius: 12px;
-    box-shadow: var(--tl-shadow);
-    padding: 18px;
+    border: 1px solid #ECEFF5;
+    border-radius: 14px;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+    padding: 16px;
     background: var(--tl-white);
 }
 
@@ -61,15 +61,18 @@ body,
 
 .form-label {
     color: var(--tl-text);
+    font-size: 0.78rem;
     font-weight: 600;
-    margin-bottom: 0.4rem;
+    letter-spacing: 0.01em;
+    margin-bottom: 0.3rem;
 }
 
 .form-control,
 .form-select,
 .form-control:focus,
 .form-select:focus {
-    min-height: 36px;
+    min-height: 32px;
+    height: 32px;
     border-radius: 8px;
 }
 
@@ -78,6 +81,13 @@ body,
     border: 1px solid var(--tl-border);
     color: var(--tl-text);
     background-color: #fff;
+    font-size: 0.84rem;
+    padding: 0.32rem 0.65rem;
+}
+
+textarea.form-control {
+    min-height: 72px;
+    height: auto;
 }
 
 .form-control::placeholder {
@@ -91,10 +101,10 @@ body,
 }
 
 .btn {
-    min-height: 36px;
+    min-height: 34px;
     border-radius: 8px;
     font-weight: 600;
-    padding: 0.6rem 1rem;
+    padding: 0.45rem 0.9rem;
     border: 0;
 }
 
@@ -201,17 +211,47 @@ body,
 }
 
 .tl-section-title {
-    margin-bottom: 16px;
+    margin-bottom: 14px;
     color: var(--tl-text);
     font-weight: 700;
 }
 
 
+.tl-form-card {
+    border: 1px solid #ECEFF5;
+    border-radius: 12px;
+    padding: 14px;
+    background: linear-gradient(180deg, #FFFFFF 0%, #FCFCFE 100%);
+}
+
+.tl-form-card-title {
+    font-size: 0.82rem;
+    color: var(--tl-purple);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+}
+
+.tl-form-actions {
+    border-top: 1px solid #EEF0F6;
+    margin-top: 0.25rem;
+    padding-top: 0.85rem;
+}
+
+.tl-input-group .input-group-text {
+    background: #F7F7FB;
+    border-color: var(--tl-border);
+    color: #7A8091;
+    font-size: 0.78rem;
+}
+
+
 .tl-compact-input {
-    min-height: 36px !important;
-    height: 36px;
-    padding-top: 0.35rem;
-    padding-bottom: 0.35rem;
+    min-height: 32px !important;
+    height: 32px;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
 }
 
 .card h5, .tl-section-title {
@@ -221,4 +261,91 @@ body,
 .table tbody td, .table thead th {
     padding-top: 0.65rem;
     padding-bottom: 0.65rem;
+}
+
+
+/* Minimal ERP forms inspired by reference mockup */
+.page-content {
+    background: #ececec !important;
+}
+
+.card,
+.auth-card,
+.tl-card {
+    border: 1px solid #d4d7dc;
+    border-radius: 4px;
+    box-shadow: none;
+    background: #efefef;
+}
+
+.tl-form-card {
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    background: transparent;
+}
+
+.tl-form-card-title {
+    color: #495057;
+    font-size: 0.95rem;
+    letter-spacing: 0;
+    text-transform: none;
+    margin-bottom: 0.75rem;
+}
+
+.tl-minimal-form .form-control,
+.tl-minimal-form .form-select {
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid #b7bcc3;
+    border-radius: 0;
+    min-height: 30px;
+    height: 30px;
+    padding-left: 0;
+    padding-right: 0;
+    box-shadow: none !important;
+}
+
+.tl-minimal-form .form-control:focus,
+.tl-minimal-form .form-select:focus {
+    border-bottom: 2px solid #6a6f76;
+}
+
+.tl-minimal-form .form-label {
+    font-size: 0.88rem;
+    color: #555;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+}
+
+.tl-minimal-form .input-group {
+    align-items: end;
+}
+
+.tl-minimal-form .input-group .input-group-text {
+    border: 0;
+    border-bottom: 1px solid #b7bcc3;
+    border-radius: 0;
+    background: transparent;
+    padding: 0 0.35rem 0.2rem 0;
+}
+
+.tl-minimal-form .tl-form-actions {
+    border-top: 1px solid #cfd4da;
+    margin-top: 1rem;
+    padding-top: 1rem;
+}
+
+.tl-minimal-form .btn-primary,
+.tl-minimal-form .btn-success {
+    background: #0f9d9a;
+    color: #fff;
+    border-radius: 0;
+}
+
+.tl-minimal-form .btn-light,
+.tl-minimal-form .btn-secondary {
+    background: transparent;
+    color: #0f9d9a;
+    border: 0;
 }

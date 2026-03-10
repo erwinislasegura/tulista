@@ -1,4 +1,4 @@
-<form method="post" id="import-form" class="row g-3">
+<form method="post" id="import-form" class="row g-3 tl-minimal-form">
     <input type="hidden" name="action" value="import_products">
     <input type="hidden" name="return_url" value="apps-productos-importacion.php">
     <input type="hidden" name="import_payload" id="import_payload">

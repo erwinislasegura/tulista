@@ -25,7 +25,7 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><span class="dropdown-item-text">Pedido #<?= (int) $pedido['id'] ?></span></li>
                                 <li>
-                                    <form method="post" class="px-2 py-1">
+                                    <form method="post" class="px-2 py-1 tl-minimal-form">
                                         <input type="hidden" name="action" value="estado">
                                         <input type="hidden" name="id" value="<?= (int) $pedido['id'] ?>">
                                         <label class="form-label small mb-1">Editar estado</label>

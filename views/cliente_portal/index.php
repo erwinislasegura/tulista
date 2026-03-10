@@ -4,7 +4,7 @@
 
 <div class="card mb-4">
     <h5 class="tl-section-title">Nueva cotización</h5>
-    <form method="post">
+    <form method="post" class="tl-minimal-form">
         <input type="hidden" name="action" value="crear_cotizacion">
         <div class="table-responsive">
             <table class="table align-middle">

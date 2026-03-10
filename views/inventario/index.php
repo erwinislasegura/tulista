@@ -4,7 +4,7 @@
 
 <div class="card mb-4">
     <h5 class="tl-section-title">Registrar movimiento</h5>
-    <form method="post" class="row g-2">
+    <form method="post" class="row g-2 tl-minimal-form">
         <input type="hidden" name="action" value="movimiento">
         <div class="col-md-4">
             <label class="form-label">Producto</label>
