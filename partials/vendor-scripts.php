@@ -27,3 +27,5 @@ $hasBuiltJs = file_exists($assetRoot . '/js/vendor.js') && file_exists($assetRoo
     <!-- Local app behavior scripts (available in repo) -->
     <script src="assets/source/js/app.js"></script>
 <?php endif; ?>
+
+<script src="assets/source/js/pwa-register.js"></script>

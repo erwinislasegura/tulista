@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../models/MovimientoStock.php';
 require_once __DIR__ . '/../models/ProductModel.php';
 require_once __DIR__ . '/../services/AuthService.php';
+require_once __DIR__ . '/../services/AuthorizationService.php';
 require_once __DIR__ . '/../services/AuditService.php';
 
 class InventarioController
@@ -13,7 +14,7 @@ class InventarioController
     public function __construct()
     {
         AuthService::startSession();
-        AuthService::requireRole(['admin', 'supervisor', 'bodega']);
+        AuthorizationService::requirePermission('inventario.view');
         $this->movimientos = new MovimientoStock();
         $this->productos = new ProductModel();
         $_SESSION['inventario_flash'] = $_SESSION['inventario_flash'] ?? [];

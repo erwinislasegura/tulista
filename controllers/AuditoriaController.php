@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../models/LogSistema.php';
 require_once __DIR__ . '/../services/AuthService.php';
+require_once __DIR__ . '/../services/AuthorizationService.php';
 
 class AuditoriaController
 {
@@ -10,7 +11,7 @@ class AuditoriaController
     public function __construct()
     {
         AuthService::startSession();
-        AuthService::requireRole(['admin', 'supervisor']);
+        AuthorizationService::requirePermission('auditoria.view');
         $this->log = new LogSistema();
     }
 

@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../models/Cliente.php';
 require_once __DIR__ . '/../services/AuthService.php';
+require_once __DIR__ . '/../services/AuthorizationService.php';
 require_once __DIR__ . '/../services/AuditService.php';
 
 class ClienteController
@@ -17,7 +18,7 @@ class ClienteController
 
     public function handleRequest(): array
     {
-        AuthService::requireRole(['admin', 'supervisor', 'vendedor']);
+        AuthorizationService::requirePermission('clientes.manage');
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $action = $_POST['action'] ?? '';
@@ -107,6 +108,8 @@ class ClienteController
         $email = trim($_POST['email'] ?? '');
         $telefono = trim($_POST['telefono'] ?? '');
         $direccion = trim($_POST['direccion'] ?? '');
+        $giro = trim($_POST['giro'] ?? '');
+        $comuna = trim($_POST['comuna'] ?? '');
         $tipoCliente = trim($_POST['tipo_cliente'] ?? 'mayorista');
         $password = $_POST['password'] ?? '';
         $token = trim($_POST['token'] ?? bin2hex(random_bytes(5)));
@@ -129,6 +132,8 @@ class ClienteController
             'email' => $email,
             'telefono' => $telefono,
             'direccion' => $direccion,
+            'giro' => $giro,
+            'comuna' => $comuna,
             'tipo_cliente' => $tipoCliente !== '' ? $tipoCliente : 'mayorista',
             'password' => $password !== '' ? password_hash($password, PASSWORD_DEFAULT) : '',
             'token' => $token,

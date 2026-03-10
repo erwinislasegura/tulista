@@ -29,6 +29,19 @@
                 </div>
             </div>
 
+
+            <div class="col-12">
+                <div class="tl-form-card">
+                    <h6 class="tl-form-card-title">Datos de contacto y despacho</h6>
+                    <div class="row g-2">
+                        <div class="col-md-3"><label class="form-label">Contacto</label><input id="f_contacto_nombre" name="contacto_nombre" class="form-control tl-compact-input" required></div>
+                        <div class="col-md-3"><label class="form-label">Email contacto</label><input id="f_contacto_email" type="email" name="contacto_email" class="form-control tl-compact-input"></div>
+                        <div class="col-md-2"><label class="form-label">Teléfono</label><input id="f_contacto_telefono" name="contacto_telefono" class="form-control tl-compact-input"></div>
+                        <div class="col-md-4"><label class="form-label">Dirección entrega</label><input id="f_direccion_entrega" name="direccion_entrega" class="form-control tl-compact-input"></div>
+                        <div class="col-12"><label class="form-label">Observaciones</label><input name="observaciones" class="form-control tl-compact-input" placeholder="Horario de entrega, referencias, etc."></div>
+                    </div>
+                </div>
+            </div>
             <div class="col-12">
                 <div class="table-responsive">
                     <table class="table table-sm align-middle">
@@ -134,6 +147,10 @@
         setValue('c_email', c.email);
         setValue('c_telefono', c.telefono);
         setValue('c_direccion', c.direccion);
+        setValue('f_contacto_nombre', c.nombre);
+        setValue('f_contacto_email', c.email);
+        setValue('f_contacto_telefono', c.telefono);
+        setValue('f_direccion_entrega', c.direccion);
     });
 
     document.querySelectorAll('.js-item-check').forEach(function (check) {

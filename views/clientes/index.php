@@ -13,12 +13,14 @@
                     <div class="col-md-2"><label class="form-label">RUT</label><input name="rut" class="form-control tl-compact-input" required></div>
                     <div class="col-md-3"><label class="form-label">Nombre</label><input name="nombre" class="form-control tl-compact-input" required></div>
                     <div class="col-md-3"><label class="form-label">Empresa</label><input name="empresa" class="form-control tl-compact-input"></div>
+                    <div class="col-md-2"><label class="form-label">Giro</label><input name="giro" class="form-control tl-compact-input"></div>
+                    <div class="col-md-2"><label class="form-label">Comuna</label><input name="comuna" class="form-control tl-compact-input"></div>
                     <div class="col-md-2"><label class="form-label">Teléfono</label><input name="telefono" class="form-control tl-compact-input"></div>
                     <div class="col-md-2"><label class="form-label">Email</label><input type="email" name="email" class="form-control tl-compact-input" required></div>
                     <div class="col-md-4"><label class="form-label">Dirección</label><input name="direccion" class="form-control tl-compact-input"></div>
                     <div class="col-md-2"><label class="form-label">Tipo cliente</label><select name="tipo_cliente" class="form-select tl-compact-input"><option value="mayorista">Mayorista</option><option value="minorista">Minorista</option><option value="institucional">Institucional</option></select></div>
                     <div class="col-md-2"><label class="form-label">Clave portal</label><input type="password" name="password" class="form-control tl-compact-input" required></div>
-                    <div class="col-md-2"><label class="form-label">Token acceso</label><input name="token" class="form-control tl-compact-input" value="<?= bin2hex(random_bytes(5)) ?>"></div>
+                    <div class="col-md-2"><label class="form-label">Token acceso</label><input id="cliente_token" name="token" class="form-control tl-compact-input" value="<?= bin2hex(random_bytes(5)) ?>"></div>
                     <div class="col-md-2 form-check mt-4 ms-2"><input type="checkbox" name="estado" class="form-check-input" checked><label class="form-check-label">Activo</label></div>
                 </div>
                 <div class="tl-form-actions d-flex justify-content-end"><button class="btn btn-primary" type="submit">Crear cliente</button></div>
@@ -39,7 +41,7 @@
             <?php foreach ($data['clientes'] as $cliente): ?>
                 <?php $portalUrl = 'cotizar.php?token=' . urlencode($cliente['token']); ?>
                 <tr>
-                    <td><strong><?= htmlspecialchars($cliente['nombre']) ?></strong><div class="small text-muted"><?= htmlspecialchars($cliente['rut']) ?> · <?= htmlspecialchars($cliente['empresa'] ?: '-') ?></div></td>
+                    <td><strong><?= htmlspecialchars($cliente['nombre']) ?></strong><div class="small text-muted"><?= htmlspecialchars($cliente['rut']) ?> · <?= htmlspecialchars($cliente['empresa'] ?: '-') ?> · <?= htmlspecialchars($cliente['comuna'] ?: '-') ?></div></td>
                     <td><?= htmlspecialchars($cliente['email']) ?><div class="small text-muted"><?= htmlspecialchars($cliente['telefono'] ?: '-') ?> · <?= htmlspecialchars($cliente['tipo_cliente'] ?: '-') ?></div></td>
                     <td><input class="form-control form-control-sm" readonly value="<?= htmlspecialchars($portalUrl) ?>"></td>
                     <td><?= (int) $cliente['total_cotizaciones'] ?></td>
@@ -66,6 +68,8 @@
                             <div class="col-12"><div class="tl-form-card"><h6 class="tl-form-card-title">Editar información</h6><div class="row g-2 tl-minimal-form"><div class="col-md-3"><label class="form-label">RUT</label><input name="rut" class="form-control tl-compact-input" value="<?= htmlspecialchars($cliente['rut']) ?>" required></div>
                             <div class="col-md-3"><label class="form-label">Nombre</label><input name="nombre" class="form-control tl-compact-input" value="<?= htmlspecialchars($cliente['nombre']) ?>" required></div>
                             <div class="col-md-3"><label class="form-label">Empresa</label><input name="empresa" class="form-control tl-compact-input" value="<?= htmlspecialchars($cliente['empresa'] ?? '') ?>"></div>
+                            <div class="col-md-3"><label class="form-label">Giro</label><input name="giro" class="form-control tl-compact-input" value="<?= htmlspecialchars($cliente['giro'] ?? '') ?>"></div>
+                            <div class="col-md-3"><label class="form-label">Comuna</label><input name="comuna" class="form-control tl-compact-input" value="<?= htmlspecialchars($cliente['comuna'] ?? '') ?>"></div>
                             <div class="col-md-3"><label class="form-label">Email</label><input type="email" name="email" class="form-control tl-compact-input" value="<?= htmlspecialchars($cliente['email']) ?>" required></div>
                             <div class="col-md-3"><label class="form-label">Teléfono</label><input name="telefono" class="form-control tl-compact-input" value="<?= htmlspecialchars($cliente['telefono'] ?? '') ?>"></div>
                             <div class="col-md-4"><label class="form-label">Dirección</label><input name="direccion" class="form-control tl-compact-input" value="<?= htmlspecialchars($cliente['direccion'] ?? '') ?>"></div>
@@ -106,3 +110,20 @@
     </div>
 </div>
 <?php endif; ?>
+
+<script>
+(function () {
+  const nombre = document.querySelector('input[name="nombre"]');
+  const empresa = document.querySelector('input[name="empresa"]');
+  const token = document.getElementById('cliente_token');
+  const slugifyToken = (v) => v.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '').slice(0, 10);
+  function refreshToken() {
+    if (!token || token.dataset.manual === '1') return;
+    const base = slugifyToken((nombre?.value || '') + (empresa?.value || ''));
+    if (base.length >= 6) token.value = base;
+  }
+  token?.addEventListener('input', () => token.dataset.manual = '1');
+  nombre?.addEventListener('input', refreshToken);
+  empresa?.addEventListener('input', refreshToken);
+})();
+</script>

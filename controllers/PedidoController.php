@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../models/Pedido.php';
 require_once __DIR__ . '/../services/AuthService.php';
+require_once __DIR__ . '/../services/AuthorizationService.php';
 require_once __DIR__ . '/../services/AuditService.php';
 
 class PedidoController
@@ -11,7 +12,7 @@ class PedidoController
     public function __construct()
     {
         AuthService::startSession();
-        AuthService::requireRole(['admin', 'supervisor', 'vendedor', 'bodega']);
+        AuthorizationService::requirePermission('pedidos.view');
         $this->pedidos = new Pedido();
         $_SESSION['pedidos_flash'] = $_SESSION['pedidos_flash'] ?? [];
     }
@@ -122,6 +123,11 @@ class PedidoController
         $estado = $_POST['estado'] ?? 'pendiente';
         $total = (float) ($_POST['total'] ?? 0);
         $fecha = trim($_POST['fecha'] ?? '');
+        $contactoNombre = trim($_POST['contacto_nombre'] ?? '');
+        $contactoEmail = trim($_POST['contacto_email'] ?? '');
+        $contactoTelefono = trim($_POST['contacto_telefono'] ?? '');
+        $direccionEntrega = trim($_POST['direccion_entrega'] ?? '');
+        $observaciones = trim($_POST['observaciones'] ?? '');
 
         $allowed = Pedido::ESTADOS_OPERACION;
         if ($clienteId <= 0 || $total < 0 || !in_array($estado, $allowed, true)) {
@@ -142,6 +148,11 @@ class PedidoController
             'estado' => $estado,
             'total' => $total,
             'fecha' => $fecha,
+            'contacto_nombre' => $contactoNombre,
+            'contacto_email' => $contactoEmail,
+            'contacto_telefono' => $contactoTelefono,
+            'direccion_entrega' => $direccionEntrega,
+            'observaciones' => $observaciones,
         ];
     }
 

@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../models/Pedido.php';
 require_once __DIR__ . '/../models/ProductModel.php';
 require_once __DIR__ . '/../services/AuthService.php';
+require_once __DIR__ . '/../services/AuthorizationService.php';
 
 class BodegaController
 {
@@ -12,7 +13,7 @@ class BodegaController
     public function __construct()
     {
         AuthService::startSession();
-        AuthService::requireRole(['admin', 'supervisor', 'bodega', 'vendedor']);
+        AuthorizationService::requirePermission('bodega.view');
         $this->pedidos = new Pedido();
         $this->productos = new ProductModel();
     }

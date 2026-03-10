@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../models/ReporteModel.php';
 require_once __DIR__ . '/../services/AuthService.php';
+require_once __DIR__ . '/../services/AuthorizationService.php';
 
 class ReporteController
 {
@@ -10,7 +11,7 @@ class ReporteController
     public function __construct()
     {
         AuthService::startSession();
-        AuthService::requireRole(['admin', 'supervisor']);
+        AuthorizationService::requirePermission('reportes.view');
         $this->reporte = new ReporteModel();
     }
 

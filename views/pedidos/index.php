@@ -8,7 +8,7 @@
         <input type="hidden" name="action" value="create">
         <div class="col-md-3">
             <label class="form-label">Cliente</label>
-            <select name="cliente_id" class="form-select tl-compact-input" required>
+            <select id="pedido_cliente" name="cliente_id" class="form-select tl-compact-input" required>
                 <option value="">Selecciona cliente...</option>
                 <?php foreach ($data['clientes'] as $cliente): ?>
                     <option value="<?= (int) $cliente['id'] ?>"><?= htmlspecialchars($cliente['nombre']) ?> (<?= htmlspecialchars($cliente['rut']) ?>)</option>
@@ -17,7 +17,7 @@
         </div>
         <div class="col-md-3">
             <label class="form-label">Cotización (opcional)</label>
-            <select name="cotizacion_id" class="form-select tl-compact-input">
+            <select id="pedido_cotizacion" name="cotizacion_id" class="form-select tl-compact-input">
                 <option value="">Sin cotización</option>
                 <?php foreach ($data['cotizaciones'] as $cotizacion): ?>
                     <option value="<?= (int) $cotizacion['id'] ?>">#<?= (int) $cotizacion['id'] ?> · <?= htmlspecialchars($cotizacion['cliente_nombre']) ?> · $<?= number_format((float) $cotizacion['total'], 0, ',', '.') ?></option>
@@ -36,6 +36,13 @@
         <div class="col-md-2"><label class="form-label">Total</label><input type="number" step="0.01" min="0" name="total" class="form-control tl-compact-input" required></div>
         <div class="col-md-2"><label class="form-label">Estado</label><select name="estado" class="form-select tl-compact-input"><?php foreach (($data['estados_operacion'] ?? []) as $estado): ?><option value="<?= $estado ?>"><?= ucfirst($estado) ?></option><?php endforeach; ?></select></div>
         <div class="col-md-3"><label class="form-label">Fecha</label><input type="datetime-local" name="fecha" class="form-control tl-compact-input"></div>
+
+        <div class="col-md-3"><label class="form-label">Contacto</label><input id="pedido_contacto" name="contacto_nombre" class="form-control tl-compact-input"></div>
+        <div class="col-md-3"><label class="form-label">Email contacto</label><input id="pedido_email" type="email" name="contacto_email" class="form-control tl-compact-input"></div>
+        <div class="col-md-2"><label class="form-label">Teléfono</label><input id="pedido_telefono" name="contacto_telefono" class="form-control tl-compact-input"></div>
+        <div class="col-md-4"><label class="form-label">Dirección entrega</label><input id="pedido_direccion" name="direccion_entrega" class="form-control tl-compact-input"></div>
+        <div class="col-md-9"><label class="form-label">Observaciones</label><input name="observaciones" class="form-control tl-compact-input"></div>
+
         <div class="col-12"><button class="btn btn-primary" type="submit">Guardar pedido</button></div>
     </form>
 </div>
@@ -118,12 +125,17 @@
                         <form method="post" class="row g-2">
                             <input type="hidden" name="action" value="update">
                             <input type="hidden" name="id" value="<?= (int) $pedido['id'] ?>">
-                            <div class="col-md-4"><label class="form-label">Cliente</label><select name="cliente_id" class="form-select tl-compact-input" required><?php foreach ($data['clientes'] as $cliente): ?><option value="<?= (int) $cliente['id'] ?>" <?= (int) $cliente['id'] === (int) $pedido['cliente_id'] ? 'selected' : '' ?>><?= htmlspecialchars($cliente['nombre']) ?></option><?php endforeach; ?></select></div>
-                            <div class="col-md-3"><label class="form-label">Cotización</label><select name="cotizacion_id" class="form-select tl-compact-input"><option value="">Sin cotización</option><?php foreach ($data['cotizaciones'] as $cotizacion): ?><option value="<?= (int) $cotizacion['id'] ?>" <?= (int) $cotizacion['id'] === (int) ($pedido['cotizacion_id'] ?? 0) ? 'selected' : '' ?>>#<?= (int) $cotizacion['id'] ?></option><?php endforeach; ?></select></div>
+                            <div class="col-md-4"><label class="form-label">Cliente</label><select id="pedido_cliente" name="cliente_id" class="form-select tl-compact-input" required><?php foreach ($data['clientes'] as $cliente): ?><option value="<?= (int) $cliente['id'] ?>" <?= (int) $cliente['id'] === (int) $pedido['cliente_id'] ? 'selected' : '' ?>><?= htmlspecialchars($cliente['nombre']) ?></option><?php endforeach; ?></select></div>
+                            <div class="col-md-3"><label class="form-label">Cotización</label><select id="pedido_cotizacion" name="cotizacion_id" class="form-select tl-compact-input"><option value="">Sin cotización</option><?php foreach ($data['cotizaciones'] as $cotizacion): ?><option value="<?= (int) $cotizacion['id'] ?>" <?= (int) $cotizacion['id'] === (int) ($pedido['cotizacion_id'] ?? 0) ? 'selected' : '' ?>>#<?= (int) $cotizacion['id'] ?></option><?php endforeach; ?></select></div>
                             <div class="col-md-3"><label class="form-label">Vendedor</label><select name="usuario_id" class="form-select tl-compact-input"><option value="">Sin asignar</option><?php foreach ($data['vendedores'] as $vendedor): ?><option value="<?= (int) $vendedor['id'] ?>" <?= (int) $vendedor['id'] === (int) ($pedido['usuario_id'] ?? 0) ? 'selected' : '' ?>><?= htmlspecialchars($vendedor['nombre']) ?></option><?php endforeach; ?></select></div>
                             <div class="col-md-2"><label class="form-label">Estado</label><select name="estado" class="form-select tl-compact-input"><?php foreach (($data['estados_operacion'] ?? []) as $estado): ?><option value="<?= $estado ?>" <?= $estado === $pedido['estado'] ? 'selected' : '' ?>><?= ucfirst($estado) ?></option><?php endforeach; ?></select></div>
                             <div class="col-md-3"><label class="form-label">Total</label><input type="number" step="0.01" min="0" name="total" class="form-control tl-compact-input" value="<?= htmlspecialchars((string) $pedido['total']) ?>" required></div>
                             <div class="col-md-4"><label class="form-label">Fecha</label><input type="datetime-local" name="fecha" class="form-control tl-compact-input" value="<?= htmlspecialchars(date('Y-m-d\TH:i', strtotime($pedido['fecha']))) ?>"></div>
+                            <div class="col-md-3"><label class="form-label">Contacto</label><input name="contacto_nombre" class="form-control tl-compact-input" value="<?= htmlspecialchars($pedido['contacto_nombre'] ?? '') ?>"></div>
+                            <div class="col-md-3"><label class="form-label">Email</label><input type="email" name="contacto_email" class="form-control tl-compact-input" value="<?= htmlspecialchars($pedido['contacto_email'] ?? '') ?>"></div>
+                            <div class="col-md-2"><label class="form-label">Teléfono</label><input name="contacto_telefono" class="form-control tl-compact-input" value="<?= htmlspecialchars($pedido['contacto_telefono'] ?? '') ?>"></div>
+                            <div class="col-md-4"><label class="form-label">Dirección entrega</label><input name="direccion_entrega" class="form-control tl-compact-input" value="<?= htmlspecialchars($pedido['direccion_entrega'] ?? '') ?>"></div>
+                            <div class="col-12"><label class="form-label">Observaciones</label><input name="observaciones" class="form-control tl-compact-input" value="<?= htmlspecialchars($pedido['observaciones'] ?? '') ?>"></div>
                             <div class="col-12 d-flex justify-content-end gap-2 mt-3"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary" type="submit">Guardar cambios</button></div>
                         </form>
                     </div></div></div>
@@ -133,3 +145,15 @@
         </table>
     </div>
 </div>
+
+<script>
+(function(){
+ const clientes = <?= json_encode($data['clientes'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
+ const byId = Object.fromEntries(clientes.map(c => [String(c.id), c]));
+ const clienteSel = document.getElementById('pedido_cliente');
+ const cotSel = document.getElementById('pedido_cotizacion');
+ const set = (id,v)=>{const el=document.getElementById(id); if(el&&!el.value) el.value=v||'';};
+ clienteSel?.addEventListener('change', function(){ const c=byId[this.value]||{}; set('pedido_contacto', c.nombre); set('pedido_email', c.email); set('pedido_telefono', c.telefono); set('pedido_direccion', c.direccion); });
+ cotSel?.addEventListener('change', function(){ const o=this.options[this.selectedIndex]; if(!o) return; if(o.dataset.cliente&&clienteSel) clienteSel.value=o.dataset.cliente; set('pedido_contacto', o.dataset.contacto); set('pedido_email', o.dataset.email); set('pedido_telefono', o.dataset.telefono); set('pedido_direccion', o.dataset.direccion); });
+})();
+</script>
