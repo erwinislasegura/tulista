@@ -38,3 +38,40 @@
     <?php endforeach; ?>
     </tbody></table></div>
 </div>
+
+
+<div class="card mt-4">
+    <h5 class="tl-section-title">Consulta de stock</h5>
+    <form method="get" class="row g-2 align-items-end mb-3">
+        <div class="col-md-8">
+            <label class="form-label">Buscar por nombre o SKU</label>
+            <input type="text" name="stock_q" class="form-control tl-compact-input" value="<?= htmlspecialchars($data['stock_query'] ?? '') ?>" placeholder="Ej: detergente o SKU-001">
+        </div>
+        <div class="col-md-4 d-flex gap-2">
+            <button class="btn btn-primary" type="submit">Consultar</button>
+            <a href="apps-inventario.php" class="btn btn-light">Limpiar</a>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead><tr><th>Producto</th><th>SKU</th><th>Existencia</th><th>Stock mínimo</th><th>Precio</th><th>Estado</th></tr></thead>
+            <tbody>
+            <?php foreach (($data['stock_resultados'] ?? []) as $item): ?>
+                <?php $bajo = (int) $item['existencia'] <= (int) $item['stock_minimo']; ?>
+                <tr>
+                    <td><?= htmlspecialchars($item['nombre']) ?></td>
+                    <td><?= htmlspecialchars($item['sku']) ?></td>
+                    <td><?= (int) $item['existencia'] ?></td>
+                    <td><?= (int) $item['stock_minimo'] ?></td>
+                    <td>$<?= number_format((float) $item['precio_venta_total'], 0, ',', '.') ?></td>
+                    <td><span class="badge <?= $bajo ? 'bg-danger-subtle text-danger' : 'bg-success-subtle text-success' ?>"><?= $bajo ? 'Bajo mínimo' : 'Disponible' ?></span></td>
+                </tr>
+            <?php endforeach; ?>
+            <?php if (empty($data['stock_resultados'])): ?>
+                <tr><td colspan="6" class="text-center text-muted py-3">Sin resultados para la consulta de stock.</td></tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -97,6 +97,7 @@ CREATE TABLE IF NOT EXISTS cotizacion_detalle (
     producto_id INT UNSIGNED NOT NULL,
     cantidad INT NOT NULL,
     precio DECIMAL(12,2) NOT NULL,
+    descuento_pct DECIMAL(5,2) NOT NULL DEFAULT 0,
     subtotal DECIMAL(12,2) NOT NULL,
     CONSTRAINT fk_detalle_cotizacion FOREIGN KEY (cotizacion_id) REFERENCES cotizaciones(id) ON DELETE CASCADE,
     CONSTRAINT fk_detalle_producto FOREIGN KEY (producto_id) REFERENCES productos(id)
@@ -107,7 +108,7 @@ CREATE TABLE IF NOT EXISTS pedidos (
     cliente_id INT UNSIGNED NOT NULL,
     cotizacion_id INT UNSIGNED DEFAULT NULL,
     usuario_id INT UNSIGNED DEFAULT NULL,
-    estado ENUM('pendiente','preparacion','enviado','entregado','cancelado') NOT NULL DEFAULT 'pendiente',
+    estado ENUM('pendiente','empaquetado','despachado','transito','entregado','cancelado') NOT NULL DEFAULT 'pendiente',
     total DECIMAL(12,2) NOT NULL DEFAULT 0,
     fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -226,9 +227,10 @@ INSERT IGNORE INTO roles_usuario (codigo, nombre) VALUES
 ('bodega', 'Bodega');
 INSERT IGNORE INTO estados_pedido (codigo, nombre, orden_visual) VALUES
 ('pendiente', 'Pendiente', 1),
-('preparacion', 'Preparación', 2),
-('enviado', 'Enviado', 3),
-('entregado', 'Entregado', 4),
+('empaquetado', 'Empaquetado', 2),
+('despachado', 'Despachado', 3),
+('transito', 'En tránsito', 4),
+('entregado', 'Entregado', 5),
 ('cancelado', 'Cancelado', 5);
 
 INSERT INTO usuarios (nombre, email, password, rol, porcentaje_comision, estado)

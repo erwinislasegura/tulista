@@ -3,8 +3,13 @@ require_once __DIR__ . '/../services/AuthService.php';
 require_once __DIR__ . '/../services/CompanyConfigService.php';
 
 $user = AuthService::user();
+$cliente = AuthService::cliente();
+$isClientePortal = $cliente !== null && $user === null;
 $companyConfig = CompanyConfigService::get();
 $logoPath = $companyConfig['logo_path'] ?: 'assets/source/images/logo-tulista-mark.svg';
+$profileName = $isClientePortal ? ($cliente['nombre'] ?? 'Cliente') : ($user['nombre'] ?? 'Usuario');
+$profileSubtitle = $isClientePortal ? ('RUT: ' . ($cliente['rut'] ?? '-')) : ('Rol: ' . ($user['rol'] ?? 'usuario'));
+$logoutUrl = $isClientePortal ? 'logout-clientes.php' : 'logout-usuarios.php';
 ?>
 <header class="topbar">
      <div class="container-fluid">
@@ -31,12 +36,17 @@ $logoPath = $companyConfig['logo_path'] ?: 'assets/source/images/logo-tulista-ma
                               </span>
                          </a>
                          <div class="dropdown-menu dropdown-menu-end">
-                              <h6 class="dropdown-header">Hola <?= htmlspecialchars($user['nombre'] ?? 'Usuario') ?></h6>
+                              <h6 class="dropdown-header mb-0"><?= htmlspecialchars($profileName) ?></h6>
+                              <p class="px-3 py-1 text-muted small mb-0"><?= htmlspecialchars($profileSubtitle) ?></p>
+                              <?php if ($isClientePortal): ?>
+                                   <p class="px-3 text-muted small mb-1"><?= htmlspecialchars($cliente['email'] ?? '') ?></p>
+                              <?php else: ?>
                               <a class="dropdown-item" href="apps-configuracion-empresa.php">
                                    <i class="bx bx-cog text-muted fs-18 align-middle me-1"></i><span class="align-middle">Configuración empresa</span>
                               </a>
+                              <?php endif; ?>
                               <div class="dropdown-divider my-1"></div>
-                              <a class="dropdown-item text-danger" href="logout-usuarios.php">
+                              <a class="dropdown-item text-danger" href="<?= htmlspecialchars($logoutUrl) ?>">
                                    <i class="bx bx-log-out fs-18 align-middle me-1"></i><span class="align-middle">Cerrar sesión</span>
                               </a>
                          </div>
