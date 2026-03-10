@@ -6,7 +6,7 @@ class Usuario extends BaseModel
 {
     public function all(): array
     {
-        return $this->db->query('SELECT id, nombre, email, rol, estado, created_at FROM usuarios ORDER BY id DESC')->fetchAll();
+        return $this->db->query('SELECT id, nombre, email, rol, porcentaje_comision, estado, created_at FROM usuarios ORDER BY id DESC')->fetchAll();
     }
 
     public function findByEmail(string $email): ?array
@@ -16,23 +16,16 @@ class Usuario extends BaseModel
         return $stmt->fetch() ?: null;
     }
 
-    public function find(int $id): ?array
-    {
-        $stmt = $this->db->prepare('SELECT id, nombre, email, rol, estado FROM usuarios WHERE id = :id LIMIT 1');
-        $stmt->execute(['id' => $id]);
-        return $stmt->fetch() ?: null;
-    }
-
     public function create(array $data): bool
     {
-        $stmt = $this->db->prepare('INSERT INTO usuarios (nombre, email, password, rol, estado) VALUES (:nombre, :email, :password, :rol, :estado)');
+        $stmt = $this->db->prepare('INSERT INTO usuarios (nombre, email, password, rol, porcentaje_comision, estado) VALUES (:nombre, :email, :password, :rol, :porcentaje_comision, :estado)');
         return $stmt->execute($data);
     }
 
     public function update(int $id, array $data): bool
     {
         $data['id'] = $id;
-        $sql = 'UPDATE usuarios SET nombre = :nombre, email = :email, rol = :rol, estado = :estado';
+        $sql = 'UPDATE usuarios SET nombre = :nombre, email = :email, rol = :rol, porcentaje_comision = :porcentaje_comision, estado = :estado';
         if (!empty($data['password'])) {
             $sql .= ', password = :password';
         }
@@ -43,11 +36,5 @@ class Usuario extends BaseModel
             unset($data['password']);
         }
         return $stmt->execute($data);
-    }
-
-    public function delete(int $id): bool
-    {
-        $stmt = $this->db->prepare('DELETE FROM usuarios WHERE id = :id');
-        return $stmt->execute(['id' => $id]);
     }
 }
