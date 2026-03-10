@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../models/Usuario.php';
 require_once __DIR__ . '/../services/AuthService.php';
+require_once __DIR__ . '/../services/AuthorizationService.php';
 require_once __DIR__ . '/../services/AuditService.php';
 
 class UsuarioController
@@ -17,7 +18,7 @@ class UsuarioController
 
     public function handleRequest(): array
     {
-        AuthService::requireRole(['admin', 'supervisor']);
+        AuthorizationService::requirePermission('usuarios.manage');
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $action = $_POST['action'] ?? '';
             if ($action === 'create') {

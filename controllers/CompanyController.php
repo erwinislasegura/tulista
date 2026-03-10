@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../models/CompanyConfig.php';
 require_once __DIR__ . '/../services/AuthService.php';
+require_once __DIR__ . '/../services/AuthorizationService.php';
 
 class CompanyController
 {
@@ -10,7 +11,7 @@ class CompanyController
     public function __construct()
     {
         AuthService::startSession();
-        AuthService::requireRole(['admin']);
+        AuthorizationService::requirePermission('configuracion.view');
         $this->company = new CompanyConfig();
         $_SESSION['empresa_flash'] = $_SESSION['empresa_flash'] ?? [];
     }

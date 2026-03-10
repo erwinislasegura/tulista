@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../services/AuthService.php';
+require_once __DIR__ . '/../services/AuthorizationService.php';
 require_once __DIR__ . '/../services/CompanyConfigService.php';
 $companyConfig = CompanyConfigService::get();
 $currentPage = basename($_SERVER['PHP_SELF'] ?? 'index.php');
@@ -7,6 +8,31 @@ $logoPath = $companyConfig['logo_path'] ?: 'assets/source/images/logo-tulista-ma
 $cliente = AuthService::cliente();
 $user = AuthService::user();
 $isClientePortal = $cliente !== null && $user === null;
+
+$menu = [
+    'Principal' => [
+        ['page' => 'index.php', 'text' => 'Dashboard', 'icon' => 'solar:widget-2-broken', 'perm' => 'dashboard.view'],
+    ],
+    'Flujo comercial' => [
+        ['page' => 'apps-cotizaciones.php', 'text' => '1. Cotizaciones', 'icon' => 'solar:bill-list-broken', 'perm' => 'cotizaciones.manage'],
+        ['page' => 'apps-pedidos.php', 'text' => '2. Pedidos', 'icon' => 'solar:cart-large-broken', 'perm' => 'pedidos.view'],
+        ['page' => 'apps-clientes.php', 'text' => '3. Clientes', 'icon' => 'solar:users-group-rounded-broken', 'perm' => 'clientes.manage'],
+    ],
+    'Operación' => [
+        ['page' => 'apps-productos.php', 'text' => 'Productos', 'icon' => 'solar:box-broken', 'perm' => 'productos.view', 'pages' => ['apps-productos.php','apps-productos-categorias.php','apps-productos-marcas.php','apps-productos-unidades.php','apps-productos-importacion.php']],
+        ['page' => 'apps-inventario.php', 'text' => 'Inventario', 'icon' => 'solar:archive-broken', 'perm' => 'inventario.view'],
+        ['page' => 'apps-bodega.php', 'text' => 'Bodega', 'icon' => 'solar:box-minimalistic-broken', 'perm' => 'bodega.view'],
+    ],
+    'Control' => [
+        ['page' => 'apps-reportes.php', 'text' => 'Reportes', 'icon' => 'solar:chart-square-broken', 'perm' => 'reportes.view'],
+        ['page' => 'apps-auditoria.php', 'text' => 'Auditoría', 'icon' => 'solar:document-text-broken', 'perm' => 'auditoria.view'],
+    ],
+    'Sistema' => [
+        ['page' => 'apps-usuarios.php', 'text' => 'Usuarios y permisos', 'icon' => 'solar:user-id-broken', 'perm' => 'usuarios.manage'],
+        ['page' => 'apps-mantenedores.php', 'text' => 'Mantenedores', 'icon' => 'solar:slider-horizontal-broken', 'perm' => 'usuarios.manage'],
+        ['page' => 'apps-configuracion-empresa.php', 'text' => 'Configuración', 'icon' => 'solar:settings-broken', 'perm' => 'configuracion.view'],
+    ],
+];
 ?>
 <div class="main-nav">
      <div class="logo-box py-3 px-3">
@@ -24,32 +50,26 @@ $isClientePortal = $cliente !== null && $user === null;
           <ul class="navbar-nav" id="navbar-nav">
                <?php if ($isClientePortal): ?>
                     <li class="menu-title">Portal cliente</li>
-                    <li class="nav-item"><a class="nav-link" href="<?= $currentPage ?>#hacer-cotizacion"><span class="nav-icon"><iconify-icon icon="solar:bill-list-broken"></iconify-icon></span><span class="nav-text">Hacer cotización</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?= $currentPage ?>#aprobar-cotizacion"><span class="nav-icon"><iconify-icon icon="solar:check-circle-broken"></iconify-icon></span><span class="nav-text">Aprobar cotización</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?= $currentPage ?>#seguimiento-pedido"><span class="nav-icon"><iconify-icon icon="solar:delivery-broken"></iconify-icon></span><span class="nav-text">Seguimiento de pedido</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?= $currentPage ?>#estado-pagos"><span class="nav-icon"><iconify-icon icon="solar:wallet-money-broken"></iconify-icon></span><span class="nav-text">Pedidos pagados / por pagar</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?= $currentPage ?>#hacer-cotizacion"><span class="nav-icon"><iconify-icon icon="solar:bill-list-broken"></iconify-icon></span><span class="nav-text">1. Hacer cotización</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?= $currentPage ?>#aprobar-cotizacion"><span class="nav-icon"><iconify-icon icon="solar:check-circle-broken"></iconify-icon></span><span class="nav-text">2. Aprobar cotización</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?= $currentPage ?>#seguimiento-pedido"><span class="nav-icon"><iconify-icon icon="solar:delivery-broken"></iconify-icon></span><span class="nav-text">3. Seguimiento pedido</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?= $currentPage ?>#estado-pagos"><span class="nav-icon"><iconify-icon icon="solar:wallet-money-broken"></iconify-icon></span><span class="nav-text">4. Estado de pagos</span></a></li>
                     <li class="nav-item mt-2"><a class="nav-link" href="logout-clientes.php"><span class="nav-icon"><iconify-icon icon="solar:logout-2-broken"></iconify-icon></span><span class="nav-text">Cerrar sesión</span></a></li>
                <?php else: ?>
-               <li class="menu-title">Principal</li>
-               <li class="nav-item"><a class="nav-link <?= $currentPage === 'index.php' ? 'active' : '' ?>" href="index.php"><span class="nav-icon"><iconify-icon icon="solar:widget-2-broken"></iconify-icon></span><span class="nav-text">Dashboard</span></a></li>
-
-               <li class="menu-title">Ventas</li>
-               <li class="nav-item"><a class="nav-link <?= $currentPage === 'apps-cotizaciones.php' ? 'active' : '' ?>" href="apps-cotizaciones.php"><span class="nav-icon"><iconify-icon icon="solar:bill-list-broken"></iconify-icon></span><span class="nav-text">Cotizaciones</span></a></li>
-               <li class="nav-item"><a class="nav-link <?= $currentPage === 'apps-pedidos.php' ? 'active' : '' ?>" href="apps-pedidos.php"><span class="nav-icon"><iconify-icon icon="solar:cart-large-broken"></iconify-icon></span><span class="nav-text">Pedidos</span></a></li>
-               <li class="nav-item"><a class="nav-link <?= $currentPage === 'apps-clientes.php' ? 'active' : '' ?>" href="apps-clientes.php"><span class="nav-icon"><iconify-icon icon="solar:users-group-rounded-broken"></iconify-icon></span><span class="nav-text">Clientes</span></a></li>
-
-               <li class="menu-title">Operación</li>
-               <li class="nav-item"><a class="nav-link <?= in_array($currentPage, ['apps-productos.php','apps-productos-categorias.php','apps-productos-marcas.php','apps-productos-unidades.php','apps-productos-importacion.php'], true) ? 'active' : '' ?>" href="apps-productos.php"><span class="nav-icon"><iconify-icon icon="solar:box-broken"></iconify-icon></span><span class="nav-text">Productos</span></a></li>
-               <li class="nav-item"><a class="nav-link <?= $currentPage === 'apps-inventario.php' ? 'active' : '' ?>" href="apps-inventario.php"><span class="nav-icon"><iconify-icon icon="solar:archive-broken"></iconify-icon></span><span class="nav-text">Inventario</span></a></li>
-               <li class="nav-item"><a class="nav-link <?= $currentPage === 'apps-bodega.php' ? 'active' : '' ?>" href="apps-bodega.php"><span class="nav-icon"><iconify-icon icon="solar:box-minimalistic-broken"></iconify-icon></span><span class="nav-text">Bodega</span></a></li>
-               <li class="nav-item"><a class="nav-link <?= $currentPage === 'apps-reportes.php' ? 'active' : '' ?>" href="apps-reportes.php"><span class="nav-icon"><iconify-icon icon="solar:chart-square-broken"></iconify-icon></span><span class="nav-text">Reportes</span></a></li>
-               <li class="nav-item"><a class="nav-link <?= $currentPage === 'apps-auditoria.php' ? 'active' : '' ?>" href="apps-auditoria.php"><span class="nav-icon"><iconify-icon icon="solar:document-text-broken"></iconify-icon></span><span class="nav-text">Auditoría</span></a></li>
-
-               <li class="menu-title">Sistema</li>
-               <li class="nav-item"><a class="nav-link <?= $currentPage === 'apps-usuarios.php' ? 'active' : '' ?>" href="apps-usuarios.php"><span class="nav-icon"><iconify-icon icon="solar:user-id-broken"></iconify-icon></span><span class="nav-text">Usuarios</span></a></li>
-               <li class="nav-item"><a class="nav-link <?= $currentPage === 'apps-mantenedores.php' ? 'active' : '' ?>" href="apps-mantenedores.php"><span class="nav-icon"><iconify-icon icon="solar:slider-horizontal-broken"></iconify-icon></span><span class="nav-text">Mantenedores</span></a></li>
-               <li class="nav-item"><a class="nav-link <?= $currentPage === 'apps-configuracion-empresa.php' ? 'active' : '' ?>" href="apps-configuracion-empresa.php"><span class="nav-icon"><iconify-icon icon="solar:settings-broken"></iconify-icon></span><span class="nav-text">Configuración</span></a></li>
-               <li class="nav-item mt-2"><a class="nav-link" href="logout-usuarios.php"><span class="nav-icon"><iconify-icon icon="solar:logout-2-broken"></iconify-icon></span><span class="nav-text">Cerrar sesión</span></a></li>
+                    <?php foreach ($menu as $section => $items): ?>
+                         <?php
+                         $visible = array_filter($items, static fn ($item) => AuthorizationService::can($item['perm']));
+                         if (empty($visible)) {
+                             continue;
+                         }
+                         ?>
+                         <li class="menu-title"><?= htmlspecialchars($section) ?></li>
+                         <?php foreach ($visible as $item): ?>
+                              <?php $activePages = $item['pages'] ?? [$item['page']]; ?>
+                              <li class="nav-item"><a class="nav-link <?= in_array($currentPage, $activePages, true) ? 'active' : '' ?>" href="<?= htmlspecialchars($item['page']) ?>"><span class="nav-icon"><iconify-icon icon="<?= htmlspecialchars($item['icon']) ?>"></iconify-icon></span><span class="nav-text"><?= htmlspecialchars($item['text']) ?></span></a></li>
+                         <?php endforeach; ?>
+                    <?php endforeach; ?>
+                    <li class="nav-item mt-2"><a class="nav-link" href="logout-usuarios.php"><span class="nav-icon"><iconify-icon icon="solar:logout-2-broken"></iconify-icon></span><span class="nav-text">Cerrar sesión</span></a></li>
                <?php endif; ?>
           </ul>
      </div>

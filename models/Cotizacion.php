@@ -6,7 +6,8 @@ class Cotizacion extends BaseModel
 {
     public function all(?int $clienteId = null): array
     {
-        $sql = 'SELECT c.id, c.cliente_id, cl.nombre AS cliente_nombre, c.usuario_id, u.nombre AS vendedor, c.estado, c.total, c.fecha
+        $sql = 'SELECT c.id, c.cliente_id, cl.nombre AS cliente_nombre, c.usuario_id, u.nombre AS vendedor, c.estado, c.total, c.fecha,
+                       c.contacto_nombre, c.contacto_email, c.contacto_telefono, c.direccion_entrega, c.observaciones
                 FROM cotizaciones c
                 INNER JOIN clientes cl ON cl.id = c.cliente_id
                 LEFT JOIN usuarios u ON u.id = c.usuario_id';
@@ -23,8 +24,6 @@ class Cotizacion extends BaseModel
         return $stmt->fetchAll();
     }
 
-
-
     public function findByIdAndCliente(int $id, int $clienteId): ?array
     {
         $stmt = $this->db->prepare('SELECT id, cliente_id, estado, total FROM cotizaciones WHERE id = :id AND cliente_id = :cliente_id LIMIT 1');
@@ -36,7 +35,8 @@ class Cotizacion extends BaseModel
     {
         $stmt = $this->db->prepare('SELECT c.id, c.cliente_id, cl.nombre AS cliente_nombre, cl.rut AS cliente_rut,
                 cl.empresa AS cliente_empresa, cl.email AS cliente_email, cl.telefono AS cliente_telefono,
-                cl.direccion AS cliente_direccion, c.usuario_id, u.nombre AS vendedor, c.estado, c.total, c.fecha
+                cl.direccion AS cliente_direccion, c.usuario_id, u.nombre AS vendedor, c.estado, c.total, c.fecha,
+                c.contacto_nombre, c.contacto_email, c.contacto_telefono, c.direccion_entrega, c.observaciones
             FROM cotizaciones c
             INNER JOIN clientes cl ON cl.id = c.cliente_id
             LEFT JOIN usuarios u ON u.id = c.usuario_id
@@ -46,14 +46,19 @@ class Cotizacion extends BaseModel
         return $stmt->fetch() ?: null;
     }
 
-    public function create(int $clienteId, int $usuarioId = 0, float $total = 0): int
+    public function create(int $clienteId, int $usuarioId = 0, float $total = 0, array $contacto = []): int
     {
-        $stmt = $this->db->prepare('INSERT INTO cotizaciones (cliente_id, usuario_id, estado, total) VALUES (:cliente_id, :usuario_id, :estado, :total)');
+        $stmt = $this->db->prepare('INSERT INTO cotizaciones (cliente_id, usuario_id, estado, total, contacto_nombre, contacto_email, contacto_telefono, direccion_entrega, observaciones) VALUES (:cliente_id, :usuario_id, :estado, :total, :contacto_nombre, :contacto_email, :contacto_telefono, :direccion_entrega, :observaciones)');
         $stmt->execute([
             'cliente_id' => $clienteId,
             'usuario_id' => $usuarioId ?: null,
             'estado' => 'borrador',
             'total' => $total,
+            'contacto_nombre' => $contacto['contacto_nombre'] ?? null,
+            'contacto_email' => $contacto['contacto_email'] ?? null,
+            'contacto_telefono' => $contacto['contacto_telefono'] ?? null,
+            'direccion_entrega' => $contacto['direccion_entrega'] ?? null,
+            'observaciones' => $contacto['observaciones'] ?? null,
         ]);
         return (int) $this->db->lastInsertId();
     }

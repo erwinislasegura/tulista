@@ -4,6 +4,8 @@ require_once __DIR__ . '/../models/CategoryModel.php';
 require_once __DIR__ . '/../models/BrandModel.php';
 require_once __DIR__ . '/../models/UnitModel.php';
 require_once __DIR__ . '/../models/ProductModel.php';
+require_once __DIR__ . '/../services/AuthService.php';
+require_once __DIR__ . '/../services/AuthorizationService.php';
 
 class ProductosController
 {
@@ -14,6 +16,8 @@ class ProductosController
 
     public function __construct()
     {
+        AuthService::startSession();
+        AuthorizationService::requirePermission('productos.view');
         $this->categories = new CategoryModel();
         $this->brands = new BrandModel();
         $this->units = new UnitModel();

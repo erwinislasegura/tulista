@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../models/DashboardModel.php';
 require_once __DIR__ . '/../models/LogSistema.php';
 require_once __DIR__ . '/../services/AuthService.php';
+require_once __DIR__ . '/../services/AuthorizationService.php';
 
 class DashboardController
 {
@@ -12,7 +13,7 @@ class DashboardController
     public function __construct()
     {
         AuthService::startSession();
-        AuthService::requireRole(['admin', 'supervisor', 'vendedor', 'bodega']);
+        AuthorizationService::requirePermission('dashboard.view');
         $this->dashboard = new DashboardModel();
         $this->log = new LogSistema();
     }

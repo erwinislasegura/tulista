@@ -7,6 +7,7 @@ require_once __DIR__ . '/../models/Cliente.php';
 require_once __DIR__ . '/../models/Pedido.php';
 require_once __DIR__ . '/../models/CompanyConfig.php';
 require_once __DIR__ . '/../services/AuthService.php';
+require_once __DIR__ . '/../services/AuthorizationService.php';
 require_once __DIR__ . '/../services/AuditService.php';
 
 class CotizacionController
@@ -64,7 +65,7 @@ class CotizacionController
 
     public function handleAdminRequest(): array
     {
-        AuthService::requireRole(['admin', 'supervisor', 'vendedor']);
+        AuthorizationService::requirePermission('cotizaciones.manage');
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $action = $_POST['action'] ?? '';
@@ -119,7 +120,14 @@ class CotizacionController
         }
 
         $usuario = AuthService::user();
-        $cotizacionId = $this->cotizaciones->create($clienteId, (int) ($usuario['id'] ?? 0), 0);
+        $contacto = [
+            'contacto_nombre' => trim($_POST['contacto_nombre'] ?? ''),
+            'contacto_email' => trim($_POST['contacto_email'] ?? ''),
+            'contacto_telefono' => trim($_POST['contacto_telefono'] ?? ''),
+            'direccion_entrega' => trim($_POST['direccion_entrega'] ?? ''),
+            'observaciones' => trim($_POST['observaciones'] ?? ''),
+        ];
+        $cotizacionId = $this->cotizaciones->create($clienteId, (int) ($usuario['id'] ?? 0), 0, $contacto);
         $productos = $this->productos->catalogByIds(array_map('intval', array_keys($items)));
         $total = 0;
         $lineas = 0;

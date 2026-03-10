@@ -1,0 +1,17 @@
+{
+  "name": "TuLista ERP",
+  "short_name": "TuLista",
+  "start_url": "/index.php",
+  "display": "standalone",
+  "background_color": "#F5F6FA",
+  "theme_color": "#3A136A",
+  "description": "ERP comercial y operativo para TuLista.",
+  "icons": [
+    {
+      "src": "assets/source/images/logo-tulista-mark.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
