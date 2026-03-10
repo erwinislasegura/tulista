@@ -51,8 +51,8 @@ class CotizacionController
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'cambiar_estado') {
             $id = (int) ($_POST['cotizacion_id'] ?? 0);
-            $estado = $_POST['estado'] ?? 'pendiente';
-            $allowed = ['pendiente', 'respondida', 'aprobada', 'rechazada'];
+            $estado = $_POST['estado'] ?? 'borrador';
+            $allowed = ['borrador', 'enviada', 'aprobada', 'rechazada'];
             if ($id > 0 && in_array($estado, $allowed, true)) {
                 $this->cotizaciones->updateEstado($id, $estado);
             }
@@ -72,7 +72,8 @@ class CotizacionController
             return;
         }
 
-        $cotizacionId = $this->cotizaciones->create($clienteId, 0);
+        $usuario = AuthService::user();
+        $cotizacionId = $this->cotizaciones->create($clienteId, (int) ($usuario['id'] ?? 0), 0);
         $productos = $this->productos->catalogByIds(array_map('intval', array_keys($items)));
         $total = 0;
 
