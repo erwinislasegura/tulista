@@ -125,7 +125,7 @@ textarea.form-control {
 .btn-success {
     background: linear-gradient(135deg, #4B1D8A 0%, #3A136A 55%, #2C0F52 100%);
     color: #fff;
-    box-shadow: 0 6px 16px rgba(58, 19, 106, 0.24);
+    box-shadow: none;
 }
 
 .btn-primary:hover,
@@ -141,7 +141,7 @@ textarea.form-control {
 .btn-danger {
     background: linear-gradient(135deg, #FB923C 0%, #F97316 55%, #EA580C 100%);
     color: #fff;
-    box-shadow: 0 6px 16px rgba(249, 115, 22, 0.24);
+    box-shadow: none;
 }
 
 .btn-secondary:hover,
@@ -352,89 +352,62 @@ textarea.form-control {
     padding-bottom: 0.65rem;
 }
 
-
-/* Minimal ERP forms inspired by reference mockup */
-.page-content {
-    background: #ececec !important;
+/* Formularios estilo pedidos: compactos, ordenados y minimalistas */
+.card form.row,
+.card .tl-minimal-form {
+    row-gap: 0.55rem;
 }
 
-.card,
-.auth-card,
-.tl-card {
-    border: 1px solid #d4d7dc;
-    border-radius: 4px;
-    box-shadow: none;
-    background: #efefef;
-}
-
-.tl-form-card {
-    border: 0;
-    border-radius: 0;
-    padding: 0;
-    background: transparent;
-}
-
-.tl-form-card-title {
-    color: #495057;
-    font-size: 0.95rem;
-    letter-spacing: 0;
-    text-transform: none;
-    margin-bottom: 0.75rem;
-}
-
-.tl-minimal-form .form-control,
-.tl-minimal-form .form-select {
-    background: transparent;
-    border: 0;
-    border-bottom: 1px solid #b7bcc3;
-    border-radius: 0;
-    min-height: 30px;
-    height: 30px;
-    padding-left: 0;
-    padding-right: 0;
-    box-shadow: none !important;
-}
-
-.tl-minimal-form .form-control:focus,
-.tl-minimal-form .form-select:focus {
-    border-bottom: 2px solid #6a6f76;
-}
-
+.card form .form-label,
 .tl-minimal-form .form-label {
-    font-size: 0.88rem;
-    color: #555;
+    font-size: 0.76rem;
     font-weight: 700;
+    color: #4b5563;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
     margin-bottom: 0.2rem;
 }
 
-.tl-minimal-form .input-group {
-    align-items: end;
+.card form .form-control,
+.card form .form-select,
+.tl-minimal-form .form-control,
+.tl-minimal-form .form-select {
+    min-height: 34px;
+    height: 34px;
+    border-radius: 7px;
+    border: 1px solid #d8deea;
+    background: #fff;
+    font-size: 0.84rem;
 }
 
-.tl-minimal-form .input-group .input-group-text {
-    border: 0;
-    border-bottom: 1px solid #b7bcc3;
-    border-radius: 0;
-    background: transparent;
-    padding: 0 0.35rem 0.2rem 0;
+.card form textarea.form-control,
+.tl-minimal-form textarea.form-control {
+    min-height: 86px;
+    height: auto;
 }
 
-.tl-minimal-form .tl-form-actions {
-    border-top: 1px solid #cfd4da;
-    margin-top: 1rem;
-    padding-top: 1rem;
+.card form .form-control:focus,
+.card form .form-select:focus,
+.tl-minimal-form .form-control:focus,
+.tl-minimal-form .form-select:focus {
+    border-color: #8A63C7;
+    box-shadow: 0 0 0 0.16rem rgba(138, 99, 199, 0.15);
 }
 
-.tl-minimal-form .btn-primary,
-.tl-minimal-form .btn-success {
-    background: #0f9d9a;
-    color: #fff;
-    border-radius: 0;
+.btn {
+    border-radius: 7px;
+    font-weight: 600;
 }
 
-.tl-minimal-form .btn-light,
-.tl-minimal-form .btn-secondary {
-    background: transparent;
-    color: #0f9d9a;
-    border: 0;
+.btn-light,
+.btn-outline-secondary {
+    border: 1px solid #d9dce3;
+    background: #fff;
+    color: #4b5563;
+}
+
+.btn-light:hover,
+.btn-outline-secondary:hover {
+    background: #f8f9fc;
+    color: #374151;
 }
