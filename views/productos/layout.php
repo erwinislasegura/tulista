@@ -3,7 +3,6 @@
         <div class="d-flex align-items-center justify-content-between mb-4">
             <div>
                 <h4 class="mb-1"><?= htmlspecialchars($pageTitle) ?></h4>
-                <p class="text-muted mb-0">Gestión de productos con arquitectura MVC + MySQL.</p>
             </div>
             <span class="badge bg-primary-subtle text-primary fs-6 px-3 py-2 rounded-pill">Módulo Productos</span>
         </div>

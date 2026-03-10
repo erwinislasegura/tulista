@@ -1,0 +1,13 @@
+<svg width="220" height="56" viewBox="0 0 220 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g1" x1="8" y1="8" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4B1D8A"/>
+      <stop offset="1" stop-color="#F97316"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="48" height="48" rx="14" fill="url(#g1)"/>
+  <path d="M18 19H39V24H31V39H26V24H18V19Z" fill="white"/>
+  <path d="M16 31H40V36H16V31Z" fill="white" fill-opacity="0.85"/>
+  <text x="64" y="29" fill="#2D1B50" font-family="Inter, Segoe UI, Arial, sans-serif" font-weight="700" font-size="21">TU LISTA</text>
+  <text x="64" y="44" fill="#F97316" font-family="Inter, Segoe UI, Arial, sans-serif" font-weight="600" font-size="10" letter-spacing="1.4">ERP COMERCIAL</text>
+</svg>
