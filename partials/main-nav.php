@@ -76,6 +76,34 @@
                <li class="menu-title">Apps</li>
 
                <li class="nav-item">
+                    <a class="nav-link menu-arrow" href="#sidebarProductos" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProductos">
+                         <span class="nav-icon">
+                              <iconify-icon icon="solar:box-broken"></iconify-icon>
+                         </span>
+                         <span class="nav-text"> Productos </span>
+                    </a>
+                    <div class="collapse" id="sidebarProductos">
+                         <ul class="nav sub-navbar-nav">
+                              <li class="sub-nav-item">
+                                   <a class="sub-nav-link" href="apps-productos.php#tab-productos">Ingreso de productos</a>
+                              </li>
+                              <li class="sub-nav-item">
+                                   <a class="sub-nav-link" href="apps-productos.php#tab-categorias">Ingreso de categorías</a>
+                              </li>
+                              <li class="sub-nav-item">
+                                   <a class="sub-nav-link" href="apps-productos.php#tab-marcas">Ingreso de marcas</a>
+                              </li>
+                              <li class="sub-nav-item">
+                                   <a class="sub-nav-link" href="apps-productos.php#tab-unidades">Ingreso unidad medida</a>
+                              </li>
+                              <li class="sub-nav-item">
+                                   <a class="sub-nav-link" href="apps-productos.php#tab-importacion">Importación productos</a>
+                              </li>
+                         </ul>
+                    </div>
+               </li>
+
+               <li class="nav-item">
                     <a class="nav-link" href="apps-chat.php">
                          <span class="nav-icon">
                               <iconify-icon icon="solar:chat-round-call-broken"></iconify-icon>

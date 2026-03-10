@@ -1,0 +1,33 @@
+<?php
+
+require_once __DIR__ . '/BaseModel.php';
+
+class ProductModel extends BaseModel
+{
+    public function all(): array
+    {
+        $sql = 'SELECT p.id, c.nombre AS categoria, p.nombre, p.sku, m.nombre AS marca, u.nombre AS unidad, p.precio_venta_total, p.existencia
+                FROM productos p
+                INNER JOIN categorias c ON c.id = p.categoria_id
+                LEFT JOIN marcas m ON m.id = p.marca_id
+                LEFT JOIN unidades_medida u ON u.id = p.unidad_id
+                ORDER BY p.id DESC';
+
+        return $this->db->query($sql)->fetchAll();
+    }
+
+    public function create(array $data): bool
+    {
+        $stmt = $this->db->prepare(
+            'INSERT INTO productos (
+                categoria_id, nombre, sku, marca_id, modelo, unidad_id, codigo_barras, tipo_item,
+                costo_neto, precio_venta_neto, precio_venta_total, stock_minimo, comision_vendedor, existencia
+            ) VALUES (
+                :categoria_id, :nombre, :sku, :marca_id, :modelo, :unidad_id, :codigo_barras, :tipo_item,
+                :costo_neto, :precio_venta_neto, :precio_venta_total, :stock_minimo, :comision_vendedor, :existencia
+            )'
+        );
+
+        return $stmt->execute($data);
+    }
+}
