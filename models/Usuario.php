@@ -37,10 +37,4 @@ class Usuario extends BaseModel
         }
         return $stmt->execute($data);
     }
-
-    public function delete(int $id): bool
-    {
-        $stmt = $this->db->prepare('DELETE FROM usuarios WHERE id = :id');
-        return $stmt->execute(['id' => $id]);
-    }
 }
