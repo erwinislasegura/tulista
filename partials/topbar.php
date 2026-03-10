@@ -4,7 +4,7 @@ require_once __DIR__ . '/../services/CompanyConfigService.php';
 
 $user = AuthService::user();
 $companyConfig = CompanyConfigService::get();
-$logoPath = $companyConfig['logo_path'] ?: 'assets/images/logo-dark.png';
+$logoPath = $companyConfig['logo_path'] ?: 'assets/source/images/logo-tulista-mark.svg';
 ?>
 <header class="topbar">
      <div class="container-fluid">
@@ -15,8 +15,10 @@ $logoPath = $companyConfig['logo_path'] ?: 'assets/images/logo-dark.png';
                               <iconify-icon icon="solar:hamburger-menu-broken" class="fs-24 align-middle"></iconify-icon>
                          </button>
                     </div>
-                    <img src="<?= htmlspecialchars($logoPath) ?>" alt="Logo empresa" style="height:28px; width:auto;">
-                    <span class="fw-semibold"><?= htmlspecialchars($companyConfig['nombre']) ?></span>
+                    <div class="tl-brand-block">
+                         <img src="<?= htmlspecialchars($logoPath) ?>" alt="Logo empresa" class="tl-brand-logo">
+                         <span class="tl-brand-name"><?= htmlspecialchars($companyConfig['nombre']) ?></span>
+                    </div>
                </div>
 
                <div class="d-flex align-items-center gap-1">
