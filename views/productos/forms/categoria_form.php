@@ -1,4 +1,4 @@
-<form method="post" class="row g-3">
+<form method="post" class="row g-3 tl-minimal-form">
     <input type="hidden" name="action" value="add_category">
     <input type="hidden" name="return_url" value="apps-productos-categorias.php">
     <div class="col-md-8"><label class="form-label">Nombre de categoría</label><input class="form-control" name="name" required></div>

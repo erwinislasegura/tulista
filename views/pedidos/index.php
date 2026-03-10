@@ -64,7 +64,7 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editPedido<?= (int) $pedido['id'] ?>">Editar</button></li>
                                 <li>
-                                    <form method="post" class="px-2 py-1">
+                                    <form method="post" class="px-2 py-1 tl-minimal-form">
                                         <input type="hidden" name="action" value="estado">
                                         <input type="hidden" name="id" value="<?= (int) $pedido['id'] ?>">
                                         <label class="form-label small mb-1">Editar estado</label>

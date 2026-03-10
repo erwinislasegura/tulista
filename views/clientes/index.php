@@ -4,9 +4,9 @@
 
 <div class="card mb-4">
     <h5 class="tl-section-title">Nuevo cliente</h5>
-    <form method="post" class="row g-3">
+    <form method="post" class="row g-3 tl-minimal-form">
         <input type="hidden" name="action" value="create">
-        <div class="col-12"><div class="tl-form-card"><h6 class="tl-form-card-title">Ficha de cliente</h6><div class="row g-2"><div class="col-md-2"><label class="form-label">RUT</label><input name="rut" class="form-control tl-compact-input" required></div>
+        <div class="col-12"><div class="tl-form-card"><h6 class="tl-form-card-title">Ficha de cliente</h6><div class="row g-2 tl-minimal-form"><div class="col-md-2"><label class="form-label">RUT</label><input name="rut" class="form-control tl-compact-input" required></div>
         <div class="col-md-3"><label class="form-label">Nombre</label><input name="nombre" class="form-control tl-compact-input" required></div>
         <div class="col-md-3"><label class="form-label">Empresa</label><input name="empresa" class="form-control tl-compact-input"></div>
         <div class="col-md-2"><label class="form-label">Teléfono</label><input name="telefono" class="form-control tl-compact-input"></div>
@@ -48,9 +48,9 @@
                 <div class="modal fade" id="editCliente<?= (int) $cliente['id'] ?>" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content"><div class="modal-body">
                         <h6 class="mb-3">Editar cliente #<?= (int) $cliente['id'] ?></h6>
-                        <form method="post" class="row g-3">
+                        <form method="post" class="row g-3 tl-minimal-form">
                             <input type="hidden" name="action" value="update"><input type="hidden" name="id" value="<?= (int) $cliente['id'] ?>">
-                            <div class="col-12"><div class="tl-form-card"><h6 class="tl-form-card-title">Editar información</h6><div class="row g-2"><div class="col-md-3"><label class="form-label">RUT</label><input name="rut" class="form-control tl-compact-input" value="<?= htmlspecialchars($cliente['rut']) ?>" required></div>
+                            <div class="col-12"><div class="tl-form-card"><h6 class="tl-form-card-title">Editar información</h6><div class="row g-2 tl-minimal-form"><div class="col-md-3"><label class="form-label">RUT</label><input name="rut" class="form-control tl-compact-input" value="<?= htmlspecialchars($cliente['rut']) ?>" required></div>
                             <div class="col-md-3"><label class="form-label">Nombre</label><input name="nombre" class="form-control tl-compact-input" value="<?= htmlspecialchars($cliente['nombre']) ?>" required></div>
                             <div class="col-md-3"><label class="form-label">Empresa</label><input name="empresa" class="form-control tl-compact-input" value="<?= htmlspecialchars($cliente['empresa'] ?? '') ?>"></div>
                             <div class="col-md-3"><label class="form-label">Email</label><input type="email" name="email" class="form-control tl-compact-input" value="<?= htmlspecialchars($cliente['email']) ?>" required></div>
