@@ -18,6 +18,25 @@ class ProductModel extends BaseModel
         return $this->db->query($sql)->fetchAll();
     }
 
+
+
+    public function catalog(): array
+    {
+        return $this->db->query('SELECT id, nombre, sku, precio_venta_total, existencia FROM productos ORDER BY nombre ASC')->fetchAll();
+    }
+
+    public function catalogByIds(array $ids): array
+    {
+        if (empty($ids)) {
+            return [];
+        }
+
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        $stmt = $this->db->prepare("SELECT id, nombre, precio_venta_total FROM productos WHERE id IN ($placeholders)");
+        $stmt->execute($ids);
+        return $stmt->fetchAll();
+    }
+
     public function create(array $data): bool
     {
         $stmt = $this->db->prepare(

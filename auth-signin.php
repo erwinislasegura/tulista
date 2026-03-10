@@ -1,34 +1,45 @@
 <?php include 'partials/main.php'; ?>
 <?php
-$_SESSION['error'] = null;
-if (isset($_POST['email'])) {
-    $email = $_POST['email'];
-    if (strlen($email) == 0) {
-        $_SESSION['error'] = "Please enter a email";
-        $_POST['email'] = null;
+require_once __DIR__ . '/models/Usuario.php';
+require_once __DIR__ . '/services/AuthService.php';
+
+AuthService::startSession();
+
+if (AuthService::user()) {
+    header('Location: index.php');
+    exit;
+}
+
+$error = null;
+$email = trim($_POST['email'] ?? '');
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $password = $_POST['password'] ?? '';
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL) || $password === '') {
+        $error = 'Debes ingresar email y contraseña válidos.';
     } else {
-        if (checkAuth($email) === true) {
-            header('Location: index.php');
-            die();
+        $usuarioModel = new Usuario();
+        $user = $usuarioModel->findByEmail($email);
+
+        if (!$user || (int) $user['estado'] !== 1 || !password_verify($password, $user['password'])) {
+            $error = 'Credenciales inválidas.';
         } else {
-            $_SESSION['error'] = "Email is not valid";
+            AuthService::loginUser($user);
+            $_SESSION['user'] = true; // compatibilidad con páginas existentes
+            header('Location: index.php');
+            exit;
         }
     }
 }
-
 ?>
 
 <head>
-    <?php
-    $title = "Sign In 2";
-    include 'partials/title-meta.php'; ?>
-
-    <?php include "partials/head-css.php" ?>
-
+    <?php $title = 'Sign In'; include 'partials/title-meta.php'; ?>
+    <?php include 'partials/head-css.php' ?>
 </head>
 
 <body class="authentication-bg">
-
 <div class="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5">
     <div class="container">
         <div class="row justify-content-center">
@@ -40,7 +51,6 @@ if (isset($_POST['email'])) {
                                 <img src="assets/images/logo-sm.png" height="30" class="me-1" alt="logo sm">
                                 <img src="assets/images/logo-dark.png" height="24" alt="logo dark">
                             </a>
-
                             <a href="index.php" class="logo-light">
                                 <img src="assets/images/logo-sm.png" height="30" class="me-1" alt="logo sm">
                                 <img src="assets/images/logo-light.png" height="24" alt="logo light">
@@ -48,62 +58,37 @@ if (isset($_POST['email'])) {
                         </div>
 
                         <h2 class="fw-bold text-center fs-18">Sign In</h2>
-                        <p class="text-muted text-center mt-1 mb-4">Enter your email address and password to access
-                            admin panel.</p>
+                        <p class="text-muted text-center mt-1 mb-4">Ingresa tu usuario y contraseña para acceder.</p>
 
                         <div class="px-4">
-                            <form method="POST" class="authentication-form">
+                            <form method="POST" class="authentication-form" novalidate>
                                 <div class="mb-3">
-                                    <label class="form-label" for="example-email">Email</label>
-                                    <input type="email" id="example-email" name="email" class="form-control"
-                                           placeholder="Enter your email"
-                                           value="<?php echo($_POST['email'] ?? "demo@customer.com") ?>">
-                                    <span class="text-danger"><?php echo $_SESSION['error'] ?></span>
+                                    <label class="form-label" for="email">Email</label>
+                                    <input type="email" id="email" name="email" class="form-control" placeholder="admin@tulista.local" value="<?= htmlspecialchars($email) ?>" required>
                                 </div>
                                 <div class="mb-3">
-                                    <a href="auth-password.php" class="float-end text-muted text-unline-dashed ms-1">Reset
-                                        password</a>
-                                    <label class="form-label" for="example-password">Password</label>
-                                    <input type="text" id="example-password" class="form-control"
-                                           placeholder="Enter your password">
+                                    <label class="form-label" for="password">Password</label>
+                                    <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" required>
                                 </div>
-                                <div class="mb-3">
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="checkbox-signin">
-                                        <label class="form-check-label" for="checkbox-signin">Remember me</label>
-                                    </div>
-                                </div>
+
+                                <?php if ($error): ?>
+                                    <div class="alert alert-danger py-2"><?= htmlspecialchars($error) ?></div>
+                                <?php endif; ?>
 
                                 <div class="mb-1 text-center d-grid">
                                     <button class="btn btn-primary" type="submit">Sign In</button>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
 
-                            <p class="mt-3 fw-semibold no-span">OR sign with</p>
-
-                            <div class="text-center">
-                                <a href="javascript:void(0);" class="btn btn-light shadow-none"><i
-                                            class='bx bxl-google fs-20'></i></a>
-                                <a href="javascript:void(0);" class="btn btn-light shadow-none"><i
-                                            class='bx bxl-facebook fs-20'></i></a>
-                                <a href="javascript:void(0);" class="btn btn-light shadow-none"><i
-                                            class='bx bxl-github fs-20'></i></a>
-                            </div>
-                        </div> <!-- end col -->
-                    </div> <!-- end card-body -->
-                </div> <!-- end card -->
-
-                <p class="mb-0 text-center">New here? <a href="auth-signup.php" class="text-reset fw-bold ms-1">Sign
-                        Up</a></p>
-
-            </div> <!-- end col -->
-        </div> <!-- end row -->
+                <p class="mb-0 text-center">New here? <a href="auth-signup.php" class="text-reset fw-bold ms-1">Sign Up</a></p>
+            </div>
+        </div>
     </div>
 </div>
 
-<?php include "partials/vendor-scripts.php" ?>
-
-
+<?php include 'partials/vendor-scripts.php' ?>
 </body>
-
 </html>
