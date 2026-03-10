@@ -6,12 +6,27 @@ class Pedido extends BaseModel
 {
     public function all(): array
     {
-        $sql = 'SELECT p.id, p.estado, p.total, p.fecha, c.nombre AS cliente_nombre, u.nombre AS vendedor
+        $sql = 'SELECT p.id, p.cliente_id, p.cotizacion_id, p.usuario_id, p.estado, p.total, p.fecha,
+                       c.nombre AS cliente_nombre, u.nombre AS vendedor
                 FROM pedidos p
                 INNER JOIN clientes c ON c.id = p.cliente_id
                 LEFT JOIN usuarios u ON u.id = p.usuario_id
                 ORDER BY p.id DESC';
         return $this->db->query($sql)->fetchAll();
+    }
+
+    public function create(array $data): int
+    {
+        $stmt = $this->db->prepare('INSERT INTO pedidos (cliente_id, cotizacion_id, usuario_id, estado, total, fecha) VALUES (:cliente_id, :cotizacion_id, :usuario_id, :estado, :total, :fecha)');
+        $stmt->execute($data);
+        return (int) $this->db->lastInsertId();
+    }
+
+    public function update(int $id, array $data): bool
+    {
+        $data['id'] = $id;
+        $stmt = $this->db->prepare('UPDATE pedidos SET cliente_id = :cliente_id, cotizacion_id = :cotizacion_id, usuario_id = :usuario_id, estado = :estado, total = :total, fecha = :fecha WHERE id = :id');
+        return $stmt->execute($data);
     }
 
     public function updateEstado(int $id, string $estado): bool
@@ -24,5 +39,26 @@ class Pedido extends BaseModel
     {
         $stmt = $this->db->prepare('DELETE FROM pedidos WHERE id = :id');
         return $stmt->execute(['id' => $id]);
+    }
+
+    public function clientesSource(): array
+    {
+        return $this->db->query('SELECT id, nombre, rut FROM clientes WHERE estado = 1 ORDER BY nombre ASC')->fetchAll();
+    }
+
+    public function vendedoresSource(): array
+    {
+        return $this->db->query("SELECT id, nombre FROM usuarios WHERE estado = 1 AND rol IN ('admin','supervisor','vendedor') ORDER BY nombre ASC")->fetchAll();
+    }
+
+    public function cotizacionesSource(): array
+    {
+        $sql = "SELECT c.id, c.cliente_id, c.total, c.estado, cl.nombre AS cliente_nombre
+                FROM cotizaciones c
+                INNER JOIN clientes cl ON cl.id = c.cliente_id
+                WHERE c.estado IN ('aprobada', 'enviada')
+                ORDER BY c.id DESC
+                LIMIT 100";
+        return $this->db->query($sql)->fetchAll();
     }
 }
