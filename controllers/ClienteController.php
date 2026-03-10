@@ -107,6 +107,7 @@ class ClienteController
         $email = trim($_POST['email'] ?? '');
         $telefono = trim($_POST['telefono'] ?? '');
         $direccion = trim($_POST['direccion'] ?? '');
+        $tipoCliente = trim($_POST['tipo_cliente'] ?? 'mayorista');
         $password = $_POST['password'] ?? '';
         $token = trim($_POST['token'] ?? bin2hex(random_bytes(5)));
         $estado = !empty($_POST['estado']) ? 1 : 0;
@@ -128,6 +129,7 @@ class ClienteController
             'email' => $email,
             'telefono' => $telefono,
             'direccion' => $direccion,
+            'tipo_cliente' => $tipoCliente !== '' ? $tipoCliente : 'mayorista',
             'password' => $password !== '' ? password_hash($password, PASSWORD_DEFAULT) : '',
             'token' => $token,
             'estado' => $estado,

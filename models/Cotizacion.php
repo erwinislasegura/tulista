@@ -23,6 +23,15 @@ class Cotizacion extends BaseModel
         return $stmt->fetchAll();
     }
 
+
+
+    public function findByIdAndCliente(int $id, int $clienteId): ?array
+    {
+        $stmt = $this->db->prepare('SELECT id, cliente_id, estado, total FROM cotizaciones WHERE id = :id AND cliente_id = :cliente_id LIMIT 1');
+        $stmt->execute(['id' => $id, 'cliente_id' => $clienteId]);
+        return $stmt->fetch() ?: null;
+    }
+
     public function create(int $clienteId, int $usuarioId = 0, float $total = 0): int
     {
         $stmt = $this->db->prepare('INSERT INTO cotizaciones (cliente_id, usuario_id, estado, total) VALUES (:cliente_id, :usuario_id, :estado, :total)');

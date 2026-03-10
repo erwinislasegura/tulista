@@ -22,6 +22,7 @@ class ProductosController
         if (!isset($_SESSION['productos_flash'])) {
             $_SESSION['productos_flash'] = [];
         }
+        $_SESSION['productos_last'] = $_SESSION['productos_last'] ?? [];
     }
 
     public function handleRequest(string $section): array
@@ -51,6 +52,8 @@ class ProductosController
 
         $flash = $_SESSION['productos_flash'];
         $_SESSION['productos_flash'] = [];
+        $last = $_SESSION['productos_last'];
+        $_SESSION['productos_last'] = [];
 
         return [
             'section' => $section,
@@ -59,6 +62,7 @@ class ProductosController
             'units' => $this->units->all(),
             'products' => $this->products->all(),
             'flash' => $flash,
+            'last' => $last,
         ];
     }
 
@@ -75,7 +79,8 @@ class ProductosController
             return;
         }
 
-        $this->categories->create($name);
+        $categoryId = $this->categories->create($name);
+        $_SESSION['productos_last']['categoria_id'] = $categoryId;
         $this->flash('success', 'Categoría creada correctamente.');
     }
 
@@ -92,7 +97,8 @@ class ProductosController
             return;
         }
 
-        $this->brands->create($name);
+        $brandId = $this->brands->create($name);
+        $_SESSION['productos_last']['marca_id'] = $brandId;
         $this->flash('success', 'Marca guardada correctamente.');
     }
 
@@ -111,7 +117,8 @@ class ProductosController
             return;
         }
 
-        $this->units->create($description, $abbreviation);
+        $unitId = $this->units->create($description, $abbreviation);
+        $_SESSION['productos_last']['unidad_id'] = $unitId;
         $this->flash('success', 'Unidad guardada correctamente.');
     }
 

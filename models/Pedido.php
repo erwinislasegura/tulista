@@ -51,6 +51,15 @@ class Pedido extends BaseModel
         return $this->db->query("SELECT id, nombre FROM usuarios WHERE estado = 1 AND rol IN ('admin','supervisor','vendedor') ORDER BY nombre ASC")->fetchAll();
     }
 
+
+
+    public function byCliente(int $clienteId): array
+    {
+        $stmt = $this->db->prepare('SELECT id, cotizacion_id, estado, total, fecha FROM pedidos WHERE cliente_id = :cliente_id ORDER BY id DESC');
+        $stmt->execute(['cliente_id' => $clienteId]);
+        return $stmt->fetchAll();
+    }
+
     public function cotizacionesSource(): array
     {
         $sql = "SELECT c.id, c.cliente_id, c.total, c.estado, cl.nombre AS cliente_nombre

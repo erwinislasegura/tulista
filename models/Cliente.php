@@ -24,7 +24,7 @@ class Cliente extends BaseModel
     public function all(): array
     {
         $token = $this->tokenSelect();
-        $sql = "SELECT c.id, c.rut, c.nombre, c.empresa, c.email, c.telefono, c.direccion, c.estado, c.created_at, c.{$token} AS token,
+        $sql = "SELECT c.id, c.rut, c.nombre, c.empresa, c.email, c.telefono, c.direccion, c.tipo_cliente, c.estado, c.created_at, c.{$token} AS token,
                        (SELECT COUNT(*) FROM cotizaciones ct WHERE ct.cliente_id = c.id) AS total_cotizaciones,
                        (SELECT COUNT(*) FROM pedidos p WHERE p.cliente_id = c.id) AS total_pedidos
                 FROM clientes c
@@ -72,7 +72,7 @@ class Cliente extends BaseModel
     public function create(array $data): bool
     {
         $field = $this->tokenSelect();
-        $stmt = $this->db->prepare("INSERT INTO clientes (rut, nombre, empresa, email, telefono, direccion, password, {$field}, estado) VALUES (:rut, :nombre, :empresa, :email, :telefono, :direccion, :password, :token, :estado)");
+        $stmt = $this->db->prepare("INSERT INTO clientes (rut, nombre, empresa, email, telefono, direccion, tipo_cliente, password, {$field}, estado) VALUES (:rut, :nombre, :empresa, :email, :telefono, :direccion, :tipo_cliente, :password, :token, :estado)");
         return $stmt->execute($data);
     }
 
@@ -80,7 +80,7 @@ class Cliente extends BaseModel
     {
         $field = $this->tokenSelect();
         $data['id'] = $id;
-        $sql = "UPDATE clientes SET rut=:rut, nombre=:nombre, empresa=:empresa, email=:email, telefono=:telefono, direccion=:direccion, {$field}=:token, estado=:estado";
+        $sql = "UPDATE clientes SET rut=:rut, nombre=:nombre, empresa=:empresa, email=:email, telefono=:telefono, direccion=:direccion, tipo_cliente=:tipo_cliente, {$field}=:token, estado=:estado";
         if (!empty($data['password'])) {
             $sql .= ', password=:password';
         }
