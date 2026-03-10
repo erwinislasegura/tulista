@@ -73,53 +73,44 @@
                     </div>
                </li>
 
+               <li class="menu-title">Operación Librería</li>
+
+               <li class="nav-item">
+                    <a class="nav-link menu-arrow" href="#sidebarGestionLibreria" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarGestionLibreria">
+                         <span class="nav-icon">
+                              <iconify-icon icon="solar:users-group-rounded-broken"></iconify-icon>
+                         </span>
+                         <span class="nav-text"> Gestión comercial </span>
+                    </a>
+                    <div class="collapse" id="sidebarGestionLibreria">
+                         <ul class="nav sub-navbar-nav">
+                              <li class="sub-nav-item"><a class="sub-nav-link" href="apps-clientes.php">Clientes</a></li>
+                              <li class="sub-nav-item"><a class="sub-nav-link" href="apps-cotizaciones.php">Cotizaciones</a></li>
+                              <li class="sub-nav-item"><a class="sub-nav-link" href="cliente-login.php">Portal clientes (login)</a></li>
+                              <li class="sub-nav-item"><a class="sub-nav-link" href="apps-usuarios.php">Usuarios del sistema</a></li>
+                         </ul>
+                    </div>
+               </li>
+
+               <li class="nav-item">
+                    <a class="nav-link menu-arrow" href="#sidebarProductos" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProductos">
+                         <span class="nav-icon">
+                              <iconify-icon icon="solar:box-broken"></iconify-icon>
+                         </span>
+                         <span class="nav-text"> Productos </span>
+                    </a>
+                    <div class="collapse" id="sidebarProductos">
+                         <ul class="nav sub-navbar-nav">
+                              <li class="sub-nav-item"><a class="sub-nav-link" href="apps-productos.php#tab-productos">Ingreso de productos</a></li>
+                              <li class="sub-nav-item"><a class="sub-nav-link" href="apps-productos.php#tab-categorias">Ingreso de categorías</a></li>
+                              <li class="sub-nav-item"><a class="sub-nav-link" href="apps-productos.php#tab-marcas">Ingreso de marcas</a></li>
+                              <li class="sub-nav-item"><a class="sub-nav-link" href="apps-productos.php#tab-unidades">Ingreso unidad medida</a></li>
+                              <li class="sub-nav-item"><a class="sub-nav-link" href="apps-productos.php#tab-importacion">Importación productos</a></li>
+                         </ul>
+                    </div>
+               </li>
+
                <li class="menu-title">Plantillas</li>
-
-               <li class="nav-item">
-                    <a class="nav-link menu-arrow" href="#sidebarProductos" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProductos">
-                         <span class="nav-icon">
-                              <iconify-icon icon="solar:box-broken"></iconify-icon>
-                         </span>
-                         <span class="nav-text"> Productos </span>
-                    </a>
-                    <div class="collapse" id="sidebarProductos">
-                         <ul class="nav sub-navbar-nav">
-                              <li class="sub-nav-item"><a class="sub-nav-link" href="apps-productos.php">Ingreso de productos</a></li>
-                              <li class="sub-nav-item"><a class="sub-nav-link" href="apps-productos-categorias.php">Ingreso de categorías</a></li>
-                              <li class="sub-nav-item"><a class="sub-nav-link" href="apps-productos-marcas.php">Ingreso de marcas</a></li>
-                              <li class="sub-nav-item"><a class="sub-nav-link" href="apps-productos-unidades.php">Ingreso unidad medida</a></li>
-                              <li class="sub-nav-item"><a class="sub-nav-link" href="apps-productos-importacion.php">Importación productos</a></li>
-                         </ul>
-                    </div>
-               </li>
-
-               <li class="nav-item">
-                    <a class="nav-link menu-arrow" href="#sidebarProductos" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProductos">
-                         <span class="nav-icon">
-                              <iconify-icon icon="solar:box-broken"></iconify-icon>
-                         </span>
-                         <span class="nav-text"> Productos </span>
-                    </a>
-                    <div class="collapse" id="sidebarProductos">
-                         <ul class="nav sub-navbar-nav">
-                              <li class="sub-nav-item">
-                                   <a class="sub-nav-link" href="apps-productos.php#tab-productos">Ingreso de productos</a>
-                              </li>
-                              <li class="sub-nav-item">
-                                   <a class="sub-nav-link" href="apps-productos.php#tab-categorias">Ingreso de categorías</a>
-                              </li>
-                              <li class="sub-nav-item">
-                                   <a class="sub-nav-link" href="apps-productos.php#tab-marcas">Ingreso de marcas</a>
-                              </li>
-                              <li class="sub-nav-item">
-                                   <a class="sub-nav-link" href="apps-productos.php#tab-unidades">Ingreso unidad medida</a>
-                              </li>
-                              <li class="sub-nav-item">
-                                   <a class="sub-nav-link" href="apps-productos.php#tab-importacion">Importación productos</a>
-                              </li>
-                         </ul>
-                    </div>
-               </li>
 
                <li class="nav-item">
                     <a class="nav-link" href="apps-chat.php">
