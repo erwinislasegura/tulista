@@ -39,7 +39,11 @@
                 </tbody>
             </table>
         </div>
-        <button class="btn btn-primary" type="submit">Enviar cotización</button>
+
+        <div class="d-flex justify-content-between align-items-center mt-3 gap-2 flex-wrap">
+            <small class="text-muted">Tip: usa el buscador y los botones +/- para armar tu cotización más rápido.</small>
+            <button class="btn btn-primary" type="submit">Enviar cotización</button>
+        </div>
     </form>
 </div>
 
