@@ -216,6 +216,32 @@ textarea.form-control {
     box-shadow: var(--tl-shadow);
 }
 
+.modal-footer {
+    border-top: 1px solid #ece8f7;
+    gap: 0.45rem;
+}
+
+.modal-footer .btn {
+    min-height: 32px;
+    padding: 0.35rem 0.75rem;
+    border-radius: 7px;
+    font-size: 0.82rem;
+    box-shadow: none !important;
+}
+
+.modal-footer .btn-primary,
+.modal-footer .btn-success {
+    background: #4b1d8a;
+}
+
+.modal-footer .btn-secondary,
+.modal-footer .btn-light,
+.modal-footer .btn-outline-secondary {
+    background: #fff;
+    color: #4b5563;
+    border: 1px solid #d9dce3;
+}
+
 .alert {
     border: 0;
     border-radius: 10px;
@@ -410,4 +436,40 @@ textarea.form-control {
 .btn-outline-secondary:hover {
     background: #f8f9fc;
     color: #374151;
+}
+
+@media (max-width: 767.98px) {
+    .form-control,
+    .form-select,
+    .card form .form-control,
+    .card form .form-select,
+    .tl-minimal-form .form-control,
+    .tl-minimal-form .form-select,
+    .tl-compact-input {
+        min-height: 31px !important;
+        height: 31px !important;
+        font-size: 0.8rem;
+        padding-top: 0.2rem;
+        padding-bottom: 0.2rem;
+    }
+
+    textarea.form-control,
+    .card form textarea.form-control,
+    .tl-minimal-form textarea.form-control {
+        min-height: 72px !important;
+        height: auto !important;
+    }
+
+    .form-label,
+    .card form .form-label,
+    .tl-minimal-form .form-label {
+        font-size: 0.72rem;
+        margin-bottom: 0.15rem;
+    }
+
+    .btn {
+        min-height: 32px;
+        font-size: 0.8rem;
+        padding: 0.35rem 0.7rem;
+    }
 }

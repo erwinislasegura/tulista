@@ -3,7 +3,6 @@
         <div class="d-flex align-items-center justify-content-between mb-3">
             <div>
                 <h4 class="mb-1">Productos</h4>
-                <p class="text-muted mb-0">Módulo MVC conectado a MySQL.</p>
             </div>
         </div>
 
