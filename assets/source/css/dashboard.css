@@ -1,8 +1,10 @@
 :root {
     --tl-purple: #3A136A;
     --tl-purple-light: #8A63C7;
+    --tl-purple-soft: #F2ECFF;
     --tl-orange: #F97316;
     --tl-orange-light: #FB923C;
+    --tl-orange-soft: #FFF1E8;
     --tl-ui-bg: #F5F6FA;
     --tl-white: #FFFFFF;
     --tl-text: #1F2937;
@@ -23,7 +25,13 @@ body,
 }
 
 .main-nav {
-    background: var(--tl-purple) !important;
+    background: linear-gradient(180deg, #34105F 0%, #220B3F 100%) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.main-nav .logo-box {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 0.5rem;
 }
 
 .main-nav .nav-link,
@@ -53,6 +61,11 @@ body,
     background: var(--tl-white);
 }
 
+.card-header {
+    background: linear-gradient(180deg, #fff 0%, #faf8ff 100%);
+    border-bottom: 1px solid #ede9f7;
+}
+
 .card .card,
 .auth-card .card {
     box-shadow: none;
@@ -71,8 +84,8 @@ body,
 .form-select,
 .form-control:focus,
 .form-select:focus {
-    min-height: 32px;
-    height: 32px;
+    min-height: 36px;
+    height: 36px;
     border-radius: 8px;
 }
 
@@ -86,7 +99,7 @@ body,
 }
 
 textarea.form-control {
-    min-height: 72px;
+    min-height: 92px;
     height: auto;
 }
 
@@ -101,7 +114,7 @@ textarea.form-control {
 }
 
 .btn {
-    min-height: 34px;
+    min-height: 36px;
     border-radius: 8px;
     font-weight: 600;
     padding: 0.45rem 0.9rem;
@@ -112,6 +125,7 @@ textarea.form-control {
 .btn-success {
     background: var(--tl-purple);
     color: #fff;
+    box-shadow: none;
 }
 
 .btn-primary:hover,
@@ -127,6 +141,7 @@ textarea.form-control {
 .btn-danger {
     background: var(--tl-orange);
     color: #fff;
+    box-shadow: none;
 }
 
 .btn-secondary:hover,
@@ -147,13 +162,23 @@ textarea.form-control {
 }
 
 .table thead th {
-    background: var(--tl-ui-bg);
+    background: linear-gradient(180deg, #f9f5ff 0%, #f3ebff 100%);
     border-bottom: 1px solid var(--tl-border);
     border-top: 0;
     color: var(--tl-text-muted);
     font-weight: 600;
     padding-top: 0.95rem;
     padding-bottom: 0.95rem;
+}
+
+.table tbody tr:nth-child(even) {
+    background: #fcfbff;
+}
+
+.table tbody td .badge {
+    border-radius: 999px;
+    padding: 0.35rem 0.6rem;
+    font-weight: 600;
 }
 
 .table tbody td {
@@ -196,6 +221,18 @@ textarea.form-control {
     border-radius: 10px;
 }
 
+.alert-info,
+.alert-primary {
+    background: var(--tl-purple-soft);
+    color: #3f2570;
+}
+
+.alert-warning,
+.alert-danger {
+    background: var(--tl-orange-soft);
+    color: #8d3b07;
+}
+
 .auth-shell {
     min-height: 100vh;
     display: flex;
@@ -218,10 +255,10 @@ textarea.form-control {
 
 
 .tl-form-card {
-    border: 1px solid #ECEFF5;
+    border: 1px solid #ECE6FF;
     border-radius: 12px;
     padding: 14px;
-    background: linear-gradient(180deg, #FFFFFF 0%, #FCFCFE 100%);
+    background: linear-gradient(180deg, #FFFFFF 0%, #FCFAFF 100%);
 }
 
 .tl-form-card-title {
@@ -240,10 +277,62 @@ textarea.form-control {
 }
 
 .tl-input-group .input-group-text {
-    background: #F7F7FB;
+    background: #F6F2FF;
     border-color: var(--tl-border);
     color: #7A8091;
     font-size: 0.78rem;
+}
+
+.topbar {
+    border-bottom: 1px solid #ece8f8;
+    background: linear-gradient(90deg, #ffffff 0%, #fbf8ff 60%, #fff6ef 100%);
+}
+
+.tl-brand-block {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.3rem 0.55rem;
+    border: 1px solid #ebe5fa;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.88);
+}
+
+.main-nav .tl-brand-block {
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.main-nav .tl-brand-name {
+    color: #fff;
+}
+
+.tl-brand-logo {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    padding: 0.2rem;
+    background: linear-gradient(160deg, #4B1D8A 0%, #F97316 100%);
+    box-shadow: 0 8px 18px rgba(58, 19, 106, 0.22);
+}
+
+.tl-brand-name {
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    color: #2b2059;
+}
+
+.tl-minimal-form {
+    border: 1px solid #ece6fa;
+    border-radius: 12px;
+    padding: 0.9rem;
+    background: linear-gradient(180deg, #fff 0%, #fcfaff 100%);
+}
+
+.table-responsive {
+    border: 1px solid #ede7fb;
+    border-radius: 12px;
+    overflow: hidden;
 }
 
 
@@ -263,89 +352,62 @@ textarea.form-control {
     padding-bottom: 0.65rem;
 }
 
-
-/* Minimal ERP forms inspired by reference mockup */
-.page-content {
-    background: #ececec !important;
+/* Formularios estilo pedidos: compactos, ordenados y minimalistas */
+.card form.row,
+.card .tl-minimal-form {
+    row-gap: 0.55rem;
 }
 
-.card,
-.auth-card,
-.tl-card {
-    border: 1px solid #d4d7dc;
-    border-radius: 4px;
-    box-shadow: none;
-    background: #efefef;
-}
-
-.tl-form-card {
-    border: 0;
-    border-radius: 0;
-    padding: 0;
-    background: transparent;
-}
-
-.tl-form-card-title {
-    color: #495057;
-    font-size: 0.95rem;
-    letter-spacing: 0;
-    text-transform: none;
-    margin-bottom: 0.75rem;
-}
-
-.tl-minimal-form .form-control,
-.tl-minimal-form .form-select {
-    background: transparent;
-    border: 0;
-    border-bottom: 1px solid #b7bcc3;
-    border-radius: 0;
-    min-height: 30px;
-    height: 30px;
-    padding-left: 0;
-    padding-right: 0;
-    box-shadow: none !important;
-}
-
-.tl-minimal-form .form-control:focus,
-.tl-minimal-form .form-select:focus {
-    border-bottom: 2px solid #6a6f76;
-}
-
+.card form .form-label,
 .tl-minimal-form .form-label {
-    font-size: 0.88rem;
-    color: #555;
+    font-size: 0.76rem;
     font-weight: 700;
+    color: #4b5563;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
     margin-bottom: 0.2rem;
 }
 
-.tl-minimal-form .input-group {
-    align-items: end;
+.card form .form-control,
+.card form .form-select,
+.tl-minimal-form .form-control,
+.tl-minimal-form .form-select {
+    min-height: 34px;
+    height: 34px;
+    border-radius: 7px;
+    border: 1px solid #d8deea;
+    background: #fff;
+    font-size: 0.84rem;
 }
 
-.tl-minimal-form .input-group .input-group-text {
-    border: 0;
-    border-bottom: 1px solid #b7bcc3;
-    border-radius: 0;
-    background: transparent;
-    padding: 0 0.35rem 0.2rem 0;
+.card form textarea.form-control,
+.tl-minimal-form textarea.form-control {
+    min-height: 86px;
+    height: auto;
 }
 
-.tl-minimal-form .tl-form-actions {
-    border-top: 1px solid #cfd4da;
-    margin-top: 1rem;
-    padding-top: 1rem;
+.card form .form-control:focus,
+.card form .form-select:focus,
+.tl-minimal-form .form-control:focus,
+.tl-minimal-form .form-select:focus {
+    border-color: #8A63C7;
+    box-shadow: 0 0 0 0.16rem rgba(138, 99, 199, 0.15);
 }
 
-.tl-minimal-form .btn-primary,
-.tl-minimal-form .btn-success {
-    background: #0f9d9a;
-    color: #fff;
-    border-radius: 0;
+.btn {
+    border-radius: 7px;
+    font-weight: 600;
 }
 
-.tl-minimal-form .btn-light,
-.tl-minimal-form .btn-secondary {
-    background: transparent;
-    color: #0f9d9a;
-    border: 0;
+.btn-light,
+.btn-outline-secondary {
+    border: 1px solid #d9dce3;
+    background: #fff;
+    color: #4b5563;
+}
+
+.btn-light:hover,
+.btn-outline-secondary:hover {
+    background: #f8f9fc;
+    color: #374151;
 }

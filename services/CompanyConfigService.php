@@ -11,7 +11,7 @@ class CompanyConfigService
 
         return [
             'nombre' => $config['nombre'] ?? 'TU LISTA',
-            'logo_path' => $config['logo_path'] ?? 'assets/images/logo-dark.png',
+            'logo_path' => $config['logo_path'] ?? 'assets/source/images/logo-tulista-mark.svg',
         ];
     }
 }
