@@ -79,9 +79,9 @@
 </div>
 
 <div class="row g-3">
-    <div class="col-lg-7">
+    <div class="col-lg-7" id="aprobar-cotizacion">
         <div class="card h-100">
-            <h5 class="tl-section-title">Seguimiento de cotizaciones</h5>
+            <h5 class="tl-section-title">Aprobar cotización (transforma en pedido)</h5>
             <div class="table-responsive">
                 <table class="table align-middle">
                     <thead><tr><th>ID</th><th>Estado</th><th>Total</th><th>Fecha</th><th>Acción</th></tr></thead>
@@ -111,9 +111,9 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-5">
+    <div class="col-lg-5" id="seguimiento-pedido">
         <div class="card h-100">
-            <h5 class="tl-section-title">Seguimiento de pedidos</h5>
+            <h5 class="tl-section-title">Seguimiento de pedido</h5>
             <div class="table-responsive">
                 <table class="table align-middle">
                     <thead><tr><th>ID</th><th>Cotización</th><th>Estado</th><th>Total</th><th>Fecha</th></tr></thead>
