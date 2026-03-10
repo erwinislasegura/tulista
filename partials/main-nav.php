@@ -2,13 +2,13 @@
 require_once __DIR__ . '/../services/CompanyConfigService.php';
 $companyConfig = CompanyConfigService::get();
 $currentPage = basename($_SERVER['PHP_SELF'] ?? 'index.php');
-$logoPath = $companyConfig['logo_path'] ?: 'assets/images/logo-dark.png';
+$logoPath = $companyConfig['logo_path'] ?: 'assets/source/images/logo-tulista-mark.svg';
 ?>
 <div class="main-nav">
      <div class="logo-box py-3 px-3">
-          <a href="index.php" class="logo-dark d-flex align-items-center gap-2 text-decoration-none">
-               <img src="<?= htmlspecialchars($logoPath) ?>" class="logo-sm" alt="logo" style="height:32px; width:auto;">
-               <span class="fw-semibold text-white"><?= htmlspecialchars($companyConfig['nombre']) ?></span>
+          <a href="index.php" class="logo-dark d-flex align-items-center gap-2 text-decoration-none tl-brand-block">
+               <img src="<?= htmlspecialchars($logoPath) ?>" class="logo-sm tl-brand-logo" alt="logo" style="height:34px; width:34px;">
+               <span class="fw-semibold tl-brand-name text-white"><?= htmlspecialchars($companyConfig['nombre']) ?></span>
           </a>
      </div>
 
