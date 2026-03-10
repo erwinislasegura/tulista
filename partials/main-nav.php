@@ -17,20 +17,74 @@
 
      <div class="scrollbar" data-simplebar>
           <ul class="navbar-nav" id="navbar-nav">
-               <li class="menu-title">Módulos</li>
+
+               <li class="menu-title">Menu</li>
 
                <li class="nav-item">
-                    <a class="nav-link menu-arrow" href="#sidebarProductos" data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="sidebarProductos">
-                         <span class="nav-icon"><iconify-icon icon="solar:box-broken"></iconify-icon></span>
-                         <span class="nav-text">Productos</span>
+                    <a class="nav-link" href="index.php">
+                         <span class="nav-icon">
+                              <iconify-icon icon="solar:home-2-broken"></iconify-icon>
+                         </span>
+                         <span class="nav-text"> Dashboard </span>
+                         <span class="badge bg-success badge-pill text-end">9+</span>
                     </a>
-                    <div class="collapse show" id="sidebarProductos">
+               </li>
+
+               <li class="nav-item">
+                    <a class="nav-link menu-arrow" href="#sidebarLayouts" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarLayouts">
+                         <span class="nav-icon">
+                              <iconify-icon icon="solar:siderbar-broken"></iconify-icon>
+                         </span>
+                         <span class="nav-text"> Layouts </span>
+                    </a>
+                    <div class="collapse" id="sidebarLayouts">
                          <ul class="nav sub-navbar-nav">
-                              <li class="sub-nav-item"><a class="sub-nav-link" href="apps-productos.php">Ingreso de productos</a></li>
-                              <li class="sub-nav-item"><a class="sub-nav-link" href="apps-productos-categorias.php">Ingreso de categorías</a></li>
-                              <li class="sub-nav-item"><a class="sub-nav-link" href="apps-productos-marcas.php">Ingreso de marcas</a></li>
-                              <li class="sub-nav-item"><a class="sub-nav-link" href="apps-productos-unidades.php">Ingreso unidad medida</a></li>
-                              <li class="sub-nav-item"><a class="sub-nav-link" href="apps-productos-importacion.php">Importación productos</a></li>
+                              <li class="sub-nav-item">
+                                   <a class="sub-nav-link" href="layouts-light-sidenav.php" target="_blank">Light Sidenav</a>
+                              </li>
+                              <li class="sub-nav-item">
+                                   <a class="sub-nav-link" href="layouts-dark-topnav.php" target="_blank">Dark Topnav</a>
+                              </li>
+                              <li class="sub-nav-item">
+                                   <a class="sub-nav-link" href="layouts-simple-sidenav.php" target="_blank">Simple Sidenav</a>
+                              </li>
+                              <li class="sub-nav-item">
+                                   <a class="sub-nav-link" href="layouts-small-sidenav.php" target="_blank">Small Sidenav</a>
+                              </li>
+                              <li class="sub-nav-item">
+                                   <a class="sub-nav-link" href="layouts-small-hover.php" target="_blank">Small Hover</a>
+                              </li>
+                              <li class="sub-nav-item">
+                                   <a class="sub-nav-link disabled" href="javascript:void(0);">Small Hover Active</a>
+                              </li>
+                              <li class="sub-nav-item">
+                                   <a class="sub-nav-link" href="layouts-hidden-sidenav.php" target="_blank">Hidden Sidenav</a>
+                              </li>
+                              <li class="sub-nav-item">
+                                   <a class="sub-nav-link" target="_blank" href="layouts-dark.php">
+                                        <span class="nav-text">Dark Mode</span>
+                                        <span class="badge badge-soft-danger badge-pill text-end">Hot</span>
+                                   </a>
+                              </li>
+                         </ul>
+                    </div>
+               </li>
+
+               <li class="menu-title">Operación Librería</li>
+
+               <li class="nav-item">
+                    <a class="nav-link menu-arrow" href="#sidebarGestionLibreria" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarGestionLibreria">
+                         <span class="nav-icon">
+                              <iconify-icon icon="solar:users-group-rounded-broken"></iconify-icon>
+                         </span>
+                         <span class="nav-text"> Gestión comercial </span>
+                    </a>
+                    <div class="collapse" id="sidebarGestionLibreria">
+                         <ul class="nav sub-navbar-nav">
+                              <li class="sub-nav-item"><a class="sub-nav-link" href="apps-clientes.php">Clientes</a></li>
+                              <li class="sub-nav-item"><a class="sub-nav-link" href="apps-cotizaciones.php">Cotizaciones</a></li>
+                              <li class="sub-nav-item"><a class="sub-nav-link" href="cliente-login.php">Portal clientes (login)</a></li>
+                              <li class="sub-nav-item"><a class="sub-nav-link" href="apps-usuarios.php">Usuarios del sistema</a></li>
                          </ul>
                     </div>
                </li>
@@ -44,24 +98,16 @@
                     </a>
                     <div class="collapse" id="sidebarProductos">
                          <ul class="nav sub-navbar-nav">
-                              <li class="sub-nav-item">
-                                   <a class="sub-nav-link" href="apps-productos.php#tab-productos">Ingreso de productos</a>
-                              </li>
-                              <li class="sub-nav-item">
-                                   <a class="sub-nav-link" href="apps-productos.php#tab-categorias">Ingreso de categorías</a>
-                              </li>
-                              <li class="sub-nav-item">
-                                   <a class="sub-nav-link" href="apps-productos.php#tab-marcas">Ingreso de marcas</a>
-                              </li>
-                              <li class="sub-nav-item">
-                                   <a class="sub-nav-link" href="apps-productos.php#tab-unidades">Ingreso unidad medida</a>
-                              </li>
-                              <li class="sub-nav-item">
-                                   <a class="sub-nav-link" href="apps-productos.php#tab-importacion">Importación productos</a>
-                              </li>
+                              <li class="sub-nav-item"><a class="sub-nav-link" href="apps-productos.php#tab-productos">Ingreso de productos</a></li>
+                              <li class="sub-nav-item"><a class="sub-nav-link" href="apps-productos.php#tab-categorias">Ingreso de categorías</a></li>
+                              <li class="sub-nav-item"><a class="sub-nav-link" href="apps-productos.php#tab-marcas">Ingreso de marcas</a></li>
+                              <li class="sub-nav-item"><a class="sub-nav-link" href="apps-productos.php#tab-unidades">Ingreso unidad medida</a></li>
+                              <li class="sub-nav-item"><a class="sub-nav-link" href="apps-productos.php#tab-importacion">Importación productos</a></li>
                          </ul>
                     </div>
                </li>
+
+               <li class="menu-title">Plantillas</li>
 
                <li class="nav-item">
                     <a class="nav-link menu-arrow" href="#sidebarGestionLibreria" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarGestionLibreria">
