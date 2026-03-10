@@ -89,3 +89,9 @@ CREATE TABLE IF NOT EXISTS cotizacion_detalle (
     CONSTRAINT fk_detalle_cotizacion FOREIGN KEY (cotizacion_id) REFERENCES cotizaciones(id) ON DELETE CASCADE,
     CONSTRAINT fk_detalle_producto FOREIGN KEY (producto_id) REFERENCES productos(id)
 );
+
+INSERT INTO usuarios (nombre, email, password, rol, estado)
+SELECT 'Super Administrador', 'superadmin@tulista.local', '$2y$12$RfmGss4UGywSyo0mofOzHeuEPkHH7NZVYk5Xn.7NXpKYePN0/zmdS', 'admin', 1
+WHERE NOT EXISTS (
+    SELECT 1 FROM usuarios WHERE email = 'superadmin@tulista.local'
+);

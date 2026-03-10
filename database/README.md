@@ -4,6 +4,7 @@
 - `migrations/001_create_productos_module.sql`: creación inicial de tablas de productos.
 - `migrations/002_add_unique_index_to_productos_sku.sql`: actualización para índice único de SKU.
 - `migrations/003_create_usuarios_clientes_cotizaciones.sql`: creación de usuarios, clientes, cotizaciones y detalle.
+- `migrations/004_seed_super_admin_usuario.sql`: crea usuario super administrador por defecto (si no existe).
 
 ## Notas de estructura
 
@@ -23,4 +24,5 @@ Actualización incremental:
 
 ```bash
 mysql -u root -p tulista < database/migrations/003_create_usuarios_clientes_cotizaciones.sql
+mysql -u root -p tulista < database/migrations/004_seed_super_admin_usuario.sql
 ```

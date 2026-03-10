@@ -24,12 +24,14 @@ class AuthService
             'email' => $user['email'],
             'rol' => $user['rol'],
         ];
+        $_SESSION['user'] = true;
     }
 
     public static function logoutUser(): void
     {
         self::startSession();
         unset($_SESSION['auth_user']);
+        $_SESSION['user'] = false;
         session_regenerate_id(true);
     }
 

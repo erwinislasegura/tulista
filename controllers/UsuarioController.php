@@ -57,7 +57,7 @@ class UsuarioController
     public function logout(): void
     {
         AuthService::logoutUser();
-        header('Location: auth-login-usuarios.php');
+        header('Location: auth-signin.php');
         exit;
     }
 
