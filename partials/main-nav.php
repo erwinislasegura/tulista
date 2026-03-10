@@ -1,12 +1,16 @@
 <?php
+require_once __DIR__ . '/../services/AuthService.php';
 require_once __DIR__ . '/../services/CompanyConfigService.php';
 $companyConfig = CompanyConfigService::get();
 $currentPage = basename($_SERVER['PHP_SELF'] ?? 'index.php');
 $logoPath = $companyConfig['logo_path'] ?: 'assets/source/images/logo-tulista-mark.svg';
+$cliente = AuthService::cliente();
+$user = AuthService::user();
+$isClientePortal = $cliente !== null && $user === null;
 ?>
 <div class="main-nav">
      <div class="logo-box py-3 px-3">
-          <a href="index.php" class="logo-dark d-flex align-items-center gap-2 text-decoration-none tl-brand-block">
+          <a href="<?= $isClientePortal ? 'cotizar.php' : 'index.php' ?>" class="logo-dark d-flex align-items-center gap-2 text-decoration-none tl-brand-block">
                <img src="<?= htmlspecialchars($logoPath) ?>" class="logo-sm tl-brand-logo" alt="logo" style="height:34px; width:34px;">
                <span class="fw-semibold tl-brand-name text-white"><?= htmlspecialchars($companyConfig['nombre']) ?></span>
           </a>
@@ -18,6 +22,14 @@ $logoPath = $companyConfig['logo_path'] ?: 'assets/source/images/logo-tulista-ma
 
      <div class="scrollbar" data-simplebar>
           <ul class="navbar-nav" id="navbar-nav">
+               <?php if ($isClientePortal): ?>
+                    <li class="menu-title">Portal cliente</li>
+                    <li class="nav-item"><a class="nav-link" href="<?= $currentPage ?>#hacer-cotizacion"><span class="nav-icon"><iconify-icon icon="solar:bill-list-broken"></iconify-icon></span><span class="nav-text">Hacer cotización</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?= $currentPage ?>#aprobar-cotizacion"><span class="nav-icon"><iconify-icon icon="solar:check-circle-broken"></iconify-icon></span><span class="nav-text">Aprobar cotización</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?= $currentPage ?>#seguimiento-pedido"><span class="nav-icon"><iconify-icon icon="solar:delivery-broken"></iconify-icon></span><span class="nav-text">Seguimiento de pedido</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?= $currentPage ?>#estado-pagos"><span class="nav-icon"><iconify-icon icon="solar:wallet-money-broken"></iconify-icon></span><span class="nav-text">Pedidos pagados / por pagar</span></a></li>
+                    <li class="nav-item mt-2"><a class="nav-link" href="logout-clientes.php"><span class="nav-icon"><iconify-icon icon="solar:logout-2-broken"></iconify-icon></span><span class="nav-text">Cerrar sesión</span></a></li>
+               <?php else: ?>
                <li class="menu-title">Principal</li>
                <li class="nav-item"><a class="nav-link <?= $currentPage === 'index.php' ? 'active' : '' ?>" href="index.php"><span class="nav-icon"><iconify-icon icon="solar:widget-2-broken"></iconify-icon></span><span class="nav-text">Dashboard</span></a></li>
 
@@ -37,6 +49,7 @@ $logoPath = $companyConfig['logo_path'] ?: 'assets/source/images/logo-tulista-ma
                <li class="nav-item"><a class="nav-link <?= $currentPage === 'apps-mantenedores.php' ? 'active' : '' ?>" href="apps-mantenedores.php"><span class="nav-icon"><iconify-icon icon="solar:slider-horizontal-broken"></iconify-icon></span><span class="nav-text">Mantenedores</span></a></li>
                <li class="nav-item"><a class="nav-link <?= $currentPage === 'apps-configuracion-empresa.php' ? 'active' : '' ?>" href="apps-configuracion-empresa.php"><span class="nav-icon"><iconify-icon icon="solar:settings-broken"></iconify-icon></span><span class="nav-text">Configuración</span></a></li>
                <li class="nav-item mt-2"><a class="nav-link" href="logout-usuarios.php"><span class="nav-icon"><iconify-icon icon="solar:logout-2-broken"></iconify-icon></span><span class="nav-text">Cerrar sesión</span></a></li>
+               <?php endif; ?>
           </ul>
      </div>
 </div>

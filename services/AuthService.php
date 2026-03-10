@@ -55,9 +55,12 @@ class AuthService
         self::startSession();
         session_regenerate_id(true);
         $_SESSION['auth_cliente'] = [
-            'id' => (int) $cliente['id'],
-            'rut' => $cliente['rut'],
-            'nombre' => $cliente['nombre'],
+            'id' => (int) ($cliente['id'] ?? 0),
+            'rut' => $cliente['rut'] ?? '',
+            'nombre' => $cliente['nombre'] ?? '',
+            'email' => $cliente['email'] ?? '',
+            'empresa' => $cliente['empresa'] ?? '',
+            'telefono' => $cliente['telefono'] ?? '',
         ];
     }
 
