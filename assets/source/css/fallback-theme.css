@@ -44,6 +44,19 @@ h1, h2, h3, h4, h5, h6,
   color: var(--rsk-heading);
 }
 
+
+/* show only one logo variant */
+.logo-dark { display: inline-flex; }
+.logo-light { display: none !important; }
+
+html[data-bs-theme="dark"] .logo-dark { display: none !important; }
+html[data-bs-theme="dark"] .logo-light { display: inline-flex !important; }
+
+.auth-logo .logo-dark,
+.auth-logo .logo-light {
+  justify-content: center;
+}
+
 /* ---------- Sidebar ---------- */
 .main-nav {
   position: fixed;
