@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS cotizacion_detalle (
     producto_id INT UNSIGNED NOT NULL,
     cantidad INT NOT NULL,
     precio DECIMAL(12,2) NOT NULL,
+    descuento_pct DECIMAL(5,2) NOT NULL DEFAULT 0,
     subtotal DECIMAL(12,2) NOT NULL,
     CONSTRAINT fk_detalle_cotizacion FOREIGN KEY (cotizacion_id) REFERENCES cotizaciones(id) ON DELETE CASCADE,
     CONSTRAINT fk_detalle_producto FOREIGN KEY (producto_id) REFERENCES productos(id)

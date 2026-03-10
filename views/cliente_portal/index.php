@@ -19,20 +19,21 @@
     </div>
 </div>
 
-<div class="card mb-4">
-    <h5 class="tl-section-title">Nueva cotización</h5>
+<div class="card mb-4" id="hacer-cotizacion">
+    <h5 class="tl-section-title">Hacer cotización</h5>
     <form method="post" class="tl-minimal-form">
         <input type="hidden" name="action" value="crear_cotizacion">
         <input type="hidden" name="return_url" value="<?= htmlspecialchars($_SERVER['REQUEST_URI'] ?? 'cliente-portal.php') ?>">
         <div class="table-responsive">
             <table class="table align-middle">
-                <thead><tr><th>Producto</th><th>Precio</th><th>Cantidad</th></tr></thead>
+                <thead><tr><th>Producto</th><th>Precio</th><th>Cantidad</th><th>Desc. %</th></tr></thead>
                 <tbody>
                     <?php foreach ($data['productos'] as $producto): ?>
                         <tr>
                             <td><?= htmlspecialchars($producto['nombre']) ?></td>
                             <td>$<?= number_format((float) $producto['precio_venta_total'], 0, ',', '.') ?></td>
-                            <td><input type="number" min="0" class="form-control tl-compact-input" name="items[<?= (int) $producto['id'] ?>]" value="0"></td>
+                            <td><input type="number" min="0" class="form-control tl-compact-input" name="items[<?= (int) $producto['id'] ?>][cantidad]" value="0"></td>
+                            <td><input type="number" step="0.01" min="0" max="100" class="form-control tl-compact-input" name="items[<?= (int) $producto['id'] ?>][descuento]" value="0"></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -43,9 +44,9 @@
 </div>
 
 <div class="row g-3">
-    <div class="col-lg-7">
+    <div class="col-lg-7" id="aprobar-cotizacion">
         <div class="card h-100">
-            <h5 class="tl-section-title">Seguimiento de cotizaciones</h5>
+            <h5 class="tl-section-title">Aprobar cotización (transforma en pedido)</h5>
             <div class="table-responsive">
                 <table class="table align-middle">
                     <thead><tr><th>ID</th><th>Estado</th><th>Total</th><th>Fecha</th><th>Acción</th></tr></thead>
@@ -75,9 +76,9 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-5">
+    <div class="col-lg-5" id="seguimiento-pedido">
         <div class="card h-100">
-            <h5 class="tl-section-title">Seguimiento de pedidos</h5>
+            <h5 class="tl-section-title">Seguimiento de pedido</h5>
             <div class="table-responsive">
                 <table class="table align-middle">
                     <thead><tr><th>ID</th><th>Cotización</th><th>Estado</th><th>Total</th><th>Fecha</th></tr></thead>
@@ -95,5 +96,25 @@
                 </table>
             </div>
         </div>
+    </div>
+</div>
+
+<div class="card mt-3" id="estado-pagos">
+    <h5 class="tl-section-title">Pedidos pagados o por pagar</h5>
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead><tr><th>ID</th><th>Estado pedido</th><th>Total</th><th>Estado pago</th></tr></thead>
+            <tbody>
+            <?php foreach ($data['pedidos'] as $pedido): ?>
+                <?php $pagado = in_array($pedido['estado'], ['entregado'], true); ?>
+                <tr>
+                    <td>#<?= (int) $pedido['id'] ?></td>
+                    <td class="text-capitalize"><?= htmlspecialchars($pedido['estado']) ?></td>
+                    <td>$<?= number_format((float) $pedido['total'], 0, ',', '.') ?></td>
+                    <td><span class="badge <?= $pagado ? 'bg-success-subtle text-success' : 'bg-warning-subtle text-warning' ?>"><?= $pagado ? 'Pagado' : 'Por pagar' ?></span></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
     </div>
 </div>
