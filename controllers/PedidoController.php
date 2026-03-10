@@ -40,6 +40,8 @@ class PedidoController
             'clientes' => $this->pedidos->clientesSource(),
             'vendedores' => $this->pedidos->vendedoresSource(),
             'cotizaciones' => $this->pedidos->cotizacionesSource(),
+            'cotizaciones_aprobadas' => $this->pedidos->cotizacionesAceptadasPendientesBodega(),
+            'estados_operacion' => Pedido::ESTADOS_OPERACION,
             'flash' => $flash,
         ];
     }
@@ -83,7 +85,7 @@ class PedidoController
     {
         $id = (int) ($_POST['id'] ?? 0);
         $estado = $_POST['estado'] ?? 'pendiente';
-        $allowed = ['pendiente', 'preparacion', 'enviado', 'entregado', 'cancelado'];
+        $allowed = Pedido::ESTADOS_OPERACION;
 
         if ($id <= 0 || !in_array($estado, $allowed, true)) {
             $this->flash('warning', 'Datos de actualización inválidos.');
@@ -121,7 +123,7 @@ class PedidoController
         $total = (float) ($_POST['total'] ?? 0);
         $fecha = trim($_POST['fecha'] ?? '');
 
-        $allowed = ['pendiente', 'preparacion', 'enviado', 'entregado', 'cancelado'];
+        $allowed = Pedido::ESTADOS_OPERACION;
         if ($clienteId <= 0 || $total < 0 || !in_array($estado, $allowed, true)) {
             $this->flash('warning', 'Completa cliente, estado y total válido.');
             return null;

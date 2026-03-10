@@ -295,8 +295,8 @@ class CotizacionController
             return;
         }
 
-        if (!in_array($cotizacion['estado'], ['aprobada', 'enviada'], true)) {
-            $this->flash('warning', 'Solo cotizaciones enviadas o aprobadas pueden convertirse en pedido.');
+        if ($cotizacion['estado'] !== 'aprobada') {
+            $this->flash('warning', 'Solo cotizaciones aprobadas pueden convertirse en pedido.');
             return;
         }
 
@@ -305,7 +305,7 @@ class CotizacionController
             'cliente_id' => $clienteId,
             'cotizacion_id' => $cotizacionId,
             'usuario_id' => (int) ($usuario['id'] ?? 0) ?: null,
-            'estado' => 'pendiente',
+            'estado' => 'empaquetado',
             'total' => (float) $cotizacion['total'],
             'fecha' => date('Y-m-d H:i:s'),
         ]);

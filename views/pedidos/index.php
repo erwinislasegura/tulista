@@ -34,10 +34,39 @@
             </select>
         </div>
         <div class="col-md-2"><label class="form-label">Total</label><input type="number" step="0.01" min="0" name="total" class="form-control tl-compact-input" required></div>
-        <div class="col-md-2"><label class="form-label">Estado</label><select name="estado" class="form-select tl-compact-input"><?php foreach (['pendiente','preparacion','enviado','entregado','cancelado'] as $estado): ?><option value="<?= $estado ?>"><?= ucfirst($estado) ?></option><?php endforeach; ?></select></div>
+        <div class="col-md-2"><label class="form-label">Estado</label><select name="estado" class="form-select tl-compact-input"><?php foreach (($data['estados_operacion'] ?? []) as $estado): ?><option value="<?= $estado ?>"><?= ucfirst($estado) ?></option><?php endforeach; ?></select></div>
         <div class="col-md-3"><label class="form-label">Fecha</label><input type="datetime-local" name="fecha" class="form-control tl-compact-input"></div>
         <div class="col-12"><button class="btn btn-primary" type="submit">Guardar pedido</button></div>
     </form>
+</div>
+
+
+<div class="card mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="tl-section-title mb-0">Cotizaciones aceptadas para bodega</h5>
+        <span class="badge bg-light text-dark">Total: <?= count($data['cotizaciones_aprobadas'] ?? []) ?></span>
+    </div>
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead><tr><th>Cotización</th><th>Cliente</th><th>Total</th><th>Estado cotización</th><th>Pedido asociado</th><th>Estado pedido</th><th>Fecha</th></tr></thead>
+            <tbody>
+            <?php foreach (($data['cotizaciones_aprobadas'] ?? []) as $cot): ?>
+                <tr>
+                    <td>#<?= (int) $cot['id'] ?></td>
+                    <td><?= htmlspecialchars($cot['cliente_nombre']) ?></td>
+                    <td>$<?= number_format((float) $cot['total'], 0, ',', '.') ?></td>
+                    <td><span class="badge bg-success-subtle text-success text-capitalize"><?= htmlspecialchars($cot['estado']) ?></span></td>
+                    <td><?= !empty($cot['pedido_id']) ? ('#' . (int) $cot['pedido_id']) : 'Sin generar' ?></td>
+                    <td><?= !empty($cot['pedido_estado']) ? htmlspecialchars($cot['pedido_estado']) : '-' ?></td>
+                    <td><?= htmlspecialchars($cot['pedido_fecha'] ?: $cot['fecha']) ?></td>
+                </tr>
+            <?php endforeach; ?>
+            <?php if (empty($data['cotizaciones_aprobadas'])): ?>
+                <tr><td colspan="7" class="text-center text-muted py-3">No hay cotizaciones aprobadas pendientes para bodega.</td></tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <div class="card">
@@ -69,7 +98,7 @@
                                         <input type="hidden" name="id" value="<?= (int) $pedido['id'] ?>">
                                         <label class="form-label small mb-1">Editar estado</label>
                                         <select name="estado" class="form-select form-select-sm tl-compact-input mb-2">
-                                            <?php foreach (['pendiente','preparacion','enviado','entregado','cancelado'] as $estado): ?>
+                                            <?php foreach (($data['estados_operacion'] ?? []) as $estado): ?>
                                                 <option value="<?= $estado ?>" <?= $estado === $pedido['estado'] ? 'selected' : '' ?>><?= ucfirst($estado) ?></option>
                                             <?php endforeach; ?>
                                         </select>
@@ -92,7 +121,7 @@
                             <div class="col-md-4"><label class="form-label">Cliente</label><select name="cliente_id" class="form-select tl-compact-input" required><?php foreach ($data['clientes'] as $cliente): ?><option value="<?= (int) $cliente['id'] ?>" <?= (int) $cliente['id'] === (int) $pedido['cliente_id'] ? 'selected' : '' ?>><?= htmlspecialchars($cliente['nombre']) ?></option><?php endforeach; ?></select></div>
                             <div class="col-md-3"><label class="form-label">Cotización</label><select name="cotizacion_id" class="form-select tl-compact-input"><option value="">Sin cotización</option><?php foreach ($data['cotizaciones'] as $cotizacion): ?><option value="<?= (int) $cotizacion['id'] ?>" <?= (int) $cotizacion['id'] === (int) ($pedido['cotizacion_id'] ?? 0) ? 'selected' : '' ?>>#<?= (int) $cotizacion['id'] ?></option><?php endforeach; ?></select></div>
                             <div class="col-md-3"><label class="form-label">Vendedor</label><select name="usuario_id" class="form-select tl-compact-input"><option value="">Sin asignar</option><?php foreach ($data['vendedores'] as $vendedor): ?><option value="<?= (int) $vendedor['id'] ?>" <?= (int) $vendedor['id'] === (int) ($pedido['usuario_id'] ?? 0) ? 'selected' : '' ?>><?= htmlspecialchars($vendedor['nombre']) ?></option><?php endforeach; ?></select></div>
-                            <div class="col-md-2"><label class="form-label">Estado</label><select name="estado" class="form-select tl-compact-input"><?php foreach (['pendiente','preparacion','enviado','entregado','cancelado'] as $estado): ?><option value="<?= $estado ?>" <?= $estado === $pedido['estado'] ? 'selected' : '' ?>><?= ucfirst($estado) ?></option><?php endforeach; ?></select></div>
+                            <div class="col-md-2"><label class="form-label">Estado</label><select name="estado" class="form-select tl-compact-input"><?php foreach (($data['estados_operacion'] ?? []) as $estado): ?><option value="<?= $estado ?>" <?= $estado === $pedido['estado'] ? 'selected' : '' ?>><?= ucfirst($estado) ?></option><?php endforeach; ?></select></div>
                             <div class="col-md-3"><label class="form-label">Total</label><input type="number" step="0.01" min="0" name="total" class="form-control tl-compact-input" value="<?= htmlspecialchars((string) $pedido['total']) ?>" required></div>
                             <div class="col-md-4"><label class="form-label">Fecha</label><input type="datetime-local" name="fecha" class="form-control tl-compact-input" value="<?= htmlspecialchars(date('Y-m-d\TH:i', strtotime($pedido['fecha']))) ?>"></div>
                             <div class="col-12 d-flex justify-content-end gap-2 mt-3"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary" type="submit">Guardar cambios</button></div>
