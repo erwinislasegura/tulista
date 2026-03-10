@@ -1,0 +1,132 @@
+/* Fallback visual layer when compiled theme assets are not available */
+:root {
+  --rsk-sidebar-width: 260px;
+  --rsk-sidebar-bg: #2f4054;
+  --rsk-sidebar-text: #aeb9c6;
+  --rsk-sidebar-text-active: #ffffff;
+  --rsk-topbar-height: 70px;
+}
+
+body {
+  background: #f5f6f8;
+}
+
+.wrapper {
+  min-height: 100vh;
+}
+
+.topbar {
+  position: fixed;
+  left: var(--rsk-sidebar-width);
+  right: 0;
+  top: 0;
+  height: var(--rsk-topbar-height);
+  background: #fff;
+  border-bottom: 1px solid #e6e9ef;
+  z-index: 1000;
+}
+
+.main-nav {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--rsk-sidebar-width);
+  background: var(--rsk-sidebar-bg);
+  color: var(--rsk-sidebar-text);
+  z-index: 1001;
+  overflow: hidden;
+}
+
+.logo-box {
+  height: var(--rsk-topbar-height);
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.logo-box img.logo-sm {
+  height: 28px;
+}
+
+.logo-box img.logo-lg {
+  height: 22px;
+  margin-left: .5rem;
+}
+
+.main-nav .scrollbar {
+  height: calc(100% - var(--rsk-topbar-height));
+  overflow-y: auto;
+  padding: .75rem 0;
+}
+
+#navbar-nav {
+  padding-left: .65rem;
+  padding-right: .65rem;
+}
+
+.menu-title {
+  color: #7e93aa;
+  text-transform: uppercase;
+  font-size: .72rem;
+  letter-spacing: .08em;
+  margin: .75rem .6rem;
+}
+
+.navbar-nav .nav-link {
+  color: var(--rsk-sidebar-text);
+  border-radius: .45rem;
+  padding: .55rem .75rem;
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+  color: var(--rsk-sidebar-text-active);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.navbar-nav .nav-icon {
+  width: 1.15rem;
+  display: inline-flex;
+  justify-content: center;
+}
+
+.sub-navbar-nav {
+  padding-left: 1.7rem;
+}
+
+.sub-nav-link {
+  color: #95a9be;
+  padding: .35rem .25rem;
+  display: block;
+  text-decoration: none;
+}
+
+.sub-nav-link:hover {
+  color: #fff;
+}
+
+.page-content {
+  margin-left: var(--rsk-sidebar-width);
+  padding-top: calc(var(--rsk-topbar-height) + 1rem);
+}
+
+.container-fluid {
+  padding: 1rem;
+}
+
+@media (max-width: 1140px) {
+  .main-nav {
+    transform: translateX(-100%);
+  }
+
+  .topbar,
+  .page-content {
+    margin-left: 0;
+    left: 0;
+  }
+}

@@ -12,5 +12,6 @@ $hasBuiltJs = file_exists($assetRoot . '/js/vendor.js') && file_exists($assetRoo
 <?php else: ?>
     <!-- Fallback JS when precompiled assets are not available -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>
     <script src="assets/source/js/app.js"></script>
 <?php endif; ?>
