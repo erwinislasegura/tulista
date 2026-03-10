@@ -2,14 +2,14 @@
 <?php require_once __DIR__ . '/controllers/ProductosController.php'; ?>
 <?php
 $controller = new ProductosController();
-$data = $controller->handleRequest('apps-productos.php');
-$pageTitle = 'Ingreso de productos';
-$formTitle = 'Registrar producto';
-$formFile = __DIR__ . '/views/productos/forms/producto_form.php';
-$listFile = __DIR__ . '/views/productos/forms/producto_list.php';
+$data = $controller->handleRequest('apps-productos-unidades.php');
+$pageTitle = 'Ingreso de unidades de medida';
+$formTitle = 'Registrar unidad';
+$formFile = __DIR__ . '/views/productos/forms/unidad_form.php';
+$listFile = __DIR__ . '/views/productos/forms/unidad_list.php';
 ?>
 <head>
-    <?php $title = 'Productos'; include 'partials/title-meta.php'; include 'partials/head-css.php'; ?>
+    <?php $title = 'Unidades'; include 'partials/title-meta.php'; include 'partials/head-css.php'; ?>
 </head>
 <body>
 <div class="wrapper">

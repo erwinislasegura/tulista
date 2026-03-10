@@ -16,6 +16,14 @@ class BrandModel extends BaseModel
         return $stmt->execute(['nombre' => $name]);
     }
 
+    public function findByName(string $name): ?array
+    {
+        $stmt = $this->db->prepare('SELECT id, nombre FROM marcas WHERE nombre = :nombre LIMIT 1');
+        $stmt->execute(['nombre' => $name]);
+        $brand = $stmt->fetch();
+        return $brand ?: null;
+    }
+
     public function findOrCreate(string $name): ?int
     {
         $name = trim($name);
@@ -23,11 +31,9 @@ class BrandModel extends BaseModel
             return null;
         }
 
-        $stmt = $this->db->prepare('SELECT id FROM marcas WHERE nombre = :nombre LIMIT 1');
-        $stmt->execute(['nombre' => $name]);
-        $item = $stmt->fetch();
-        if ($item) {
-            return (int) $item['id'];
+        $brand = $this->findByName($name);
+        if ($brand) {
+            return (int) $brand['id'];
         }
 
         $this->create($name);

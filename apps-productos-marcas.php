@@ -2,14 +2,14 @@
 <?php require_once __DIR__ . '/controllers/ProductosController.php'; ?>
 <?php
 $controller = new ProductosController();
-$data = $controller->handleRequest('apps-productos.php');
-$pageTitle = 'Ingreso de productos';
-$formTitle = 'Registrar producto';
-$formFile = __DIR__ . '/views/productos/forms/producto_form.php';
-$listFile = __DIR__ . '/views/productos/forms/producto_list.php';
+$data = $controller->handleRequest('apps-productos-marcas.php');
+$pageTitle = 'Ingreso de marcas';
+$formTitle = 'Registrar marca';
+$formFile = __DIR__ . '/views/productos/forms/marca_form.php';
+$listFile = __DIR__ . '/views/productos/forms/marca_list.php';
 ?>
 <head>
-    <?php $title = 'Productos'; include 'partials/title-meta.php'; include 'partials/head-css.php'; ?>
+    <?php $title = 'Marcas'; include 'partials/title-meta.php'; include 'partials/head-css.php'; ?>
 </head>
 <body>
 <div class="wrapper">

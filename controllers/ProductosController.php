@@ -24,7 +24,7 @@ class ProductosController
         }
     }
 
-    public function handleRequest(): array
+    public function handleRequest(string $section): array
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $action = $_POST['action'] ?? '';
@@ -45,7 +45,7 @@ class ProductosController
                 $this->flash('danger', 'Error: ' . $e->getMessage());
             }
 
-            header('Location: apps-productos.php' . $this->buildTabHash());
+            header('Location: ' . $this->buildReturnUrl($section));
             exit;
         }
 
@@ -53,6 +53,7 @@ class ProductosController
         $_SESSION['productos_flash'] = [];
 
         return [
+            'section' => $section,
             'categories' => $this->categories->all(),
             'brands' => $this->brands->all(),
             'units' => $this->units->all(),
@@ -86,19 +87,31 @@ class ProductosController
             return;
         }
 
-        $this->brands->findOrCreate($name);
+        if ($this->brands->findByName($name)) {
+            $this->flash('warning', 'La marca ya existe.');
+            return;
+        }
+
+        $this->brands->create($name);
         $this->flash('success', 'Marca guardada correctamente.');
     }
 
     private function addUnit(): void
     {
-        $name = trim($_POST['name'] ?? '');
-        if ($name === '') {
-            $this->flash('warning', 'Debes indicar la unidad de medida.');
+        $description = trim($_POST['descripcion'] ?? '');
+        $abbreviation = strtoupper(trim($_POST['abreviatura'] ?? ''));
+
+        if ($description === '' || $abbreviation === '') {
+            $this->flash('warning', 'Debes indicar descripción y abreviatura.');
             return;
         }
 
-        $this->units->findOrCreate($name);
+        if ($this->units->findByAbbreviation($abbreviation)) {
+            $this->flash('warning', 'La abreviatura de unidad ya existe.');
+            return;
+        }
+
+        $this->units->create($description, $abbreviation);
         $this->flash('success', 'Unidad guardada correctamente.');
     }
 
@@ -131,10 +144,12 @@ class ProductosController
         }
 
         $missingCategories = [];
+        $missingBrands = [];
         $imported = 0;
 
         foreach ($rows as $row) {
             $categoryName = trim((string) ($row['Categoria'] ?? ''));
+            $brandName = trim((string) ($row['Marca'] ?? ''));
             $name = trim((string) ($row['Nombre'] ?? ''));
 
             if ($categoryName === '' || $name === '') {
@@ -147,8 +162,24 @@ class ProductosController
                 continue;
             }
 
-            $brandId = $this->brands->findOrCreate((string) ($row['Marca'] ?? ''));
-            $unitId = $this->units->findOrCreate((string) ($row['Unidad'] ?? ''));
+            $brandId = null;
+            if ($brandName !== '') {
+                $brand = $this->brands->findByName($brandName);
+                if (!$brand) {
+                    $missingBrands[$brandName] = true;
+                    continue;
+                }
+                $brandId = (int) $brand['id'];
+            }
+
+            $unitId = null;
+            $abbreviation = strtoupper(trim((string) ($row['Unidad'] ?? '')));
+            if ($abbreviation !== '') {
+                $unit = $this->units->findByAbbreviation($abbreviation);
+                if ($unit) {
+                    $unitId = (int) $unit['id'];
+                }
+            }
 
             $data = $this->mapProductData([
                 'categoria_id' => $category['id'],
@@ -171,14 +202,15 @@ class ProductosController
             $imported++;
         }
 
-        $message = "Importación finalizada. Productos importados: {$imported}.";
+        $messages = ["Importación finalizada. Productos importados: {$imported}."];
         if (!empty($missingCategories)) {
-            $message .= ' Categorías faltantes: ' . implode(', ', array_keys($missingCategories)) . '.';
-            $this->flash('warning', $message);
-            return;
+            $messages[] = 'Categorías faltantes: ' . implode(', ', array_keys($missingCategories)) . '.';
+        }
+        if (!empty($missingBrands)) {
+            $messages[] = 'Marcas faltantes: ' . implode(', ', array_keys($missingBrands)) . '.';
         }
 
-        $this->flash('success', $message);
+        $this->flash(empty($missingCategories) && empty($missingBrands) ? 'success' : 'warning', implode(' ', $messages));
     }
 
     private function mapProductData(array $source): array
@@ -215,9 +247,9 @@ class ProductosController
         $_SESSION['productos_flash'][] = ['type' => $type, 'message' => $message];
     }
 
-    private function buildTabHash(): string
+    private function buildReturnUrl(string $fallback): string
     {
-        $tab = trim($_POST['return_tab'] ?? '');
-        return $tab !== '' ? '#' . $tab : '';
+        $url = trim($_POST['return_url'] ?? '');
+        return $url !== '' ? $url : $fallback;
     }
 }

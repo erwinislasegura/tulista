@@ -6,31 +6,24 @@ class UnitModel extends BaseModel
 {
     public function all(): array
     {
-        $stmt = $this->db->query('SELECT id, nombre FROM unidades_medida ORDER BY nombre ASC');
+        $stmt = $this->db->query('SELECT id, descripcion, abreviatura FROM unidades_medida ORDER BY descripcion ASC');
         return $stmt->fetchAll();
     }
 
-    public function create(string $name): bool
+    public function create(string $descripcion, string $abreviatura): bool
     {
-        $stmt = $this->db->prepare('INSERT INTO unidades_medida (nombre) VALUES (:nombre)');
-        return $stmt->execute(['nombre' => $name]);
+        $stmt = $this->db->prepare('INSERT INTO unidades_medida (descripcion, abreviatura) VALUES (:descripcion, :abreviatura)');
+        return $stmt->execute([
+            'descripcion' => $descripcion,
+            'abreviatura' => $abreviatura,
+        ]);
     }
 
-    public function findOrCreate(string $name): ?int
+    public function findByAbbreviation(string $abbreviation): ?array
     {
-        $name = trim($name);
-        if ($name === '') {
-            return null;
-        }
-
-        $stmt = $this->db->prepare('SELECT id FROM unidades_medida WHERE nombre = :nombre LIMIT 1');
-        $stmt->execute(['nombre' => $name]);
-        $item = $stmt->fetch();
-        if ($item) {
-            return (int) $item['id'];
-        }
-
-        $this->create($name);
-        return (int) $this->db->lastInsertId();
+        $stmt = $this->db->prepare('SELECT id, descripcion, abreviatura FROM unidades_medida WHERE abreviatura = :abreviatura LIMIT 1');
+        $stmt->execute(['abreviatura' => $abbreviation]);
+        $unit = $stmt->fetch();
+        return $unit ?: null;
     }
 }

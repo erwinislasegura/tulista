@@ -6,7 +6,9 @@ class ProductModel extends BaseModel
 {
     public function all(): array
     {
-        $sql = 'SELECT p.id, c.nombre AS categoria, p.nombre, p.sku, m.nombre AS marca, u.nombre AS unidad, p.precio_venta_total, p.existencia
+        $sql = 'SELECT p.id, c.nombre AS categoria, p.nombre, p.sku, m.nombre AS marca,
+                       CONCAT(u.descripcion, " (", u.abreviatura, ")") AS unidad,
+                       p.precio_venta_total, p.existencia
                 FROM productos p
                 INNER JOIN categorias c ON c.id = p.categoria_id
                 LEFT JOIN marcas m ON m.id = p.marca_id
