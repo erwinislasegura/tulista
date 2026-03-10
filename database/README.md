@@ -1,28 +1,33 @@
-# Base de datos del sistema (Productos + Usuarios + Clientes + Cotizaciones)
+# Base de datos ERP (Librería Mayorista)
 
-- `schema.sql`: definición completa de la base de datos y tablas para un entorno nuevo.
-- `migrations/001_create_productos_module.sql`: creación inicial de tablas de productos.
-- `migrations/002_add_unique_index_to_productos_sku.sql`: actualización para índice único de SKU.
-- `migrations/003_create_usuarios_clientes_cotizaciones.sql`: creación de usuarios, clientes, cotizaciones y detalle.
-- `migrations/004_seed_super_admin_usuario.sql`: crea usuario super administrador por defecto (si no existe).
+- `schema.sql`: definición completa para instalación nueva.
+- `migrations/001_create_productos_module.sql`: módulo productos inicial.
+- `migrations/002_add_unique_index_to_productos_sku.sql`: índice único SKU.
+- `migrations/003_create_usuarios_clientes_cotizaciones.sql`: usuarios, clientes, cotizaciones.
+- `migrations/004_seed_super_admin_usuario.sql`: super administrador por defecto.
+- `migrations/005_expand_erp_core.sql`: expansión ERP (pedidos, comisiones, inventario, auditoría, mantenedores y configuración).
+- `migrations/006_add_usuario_profile_fields.sql`: agrega teléfono, dirección, cargo y notas en usuarios.
 
 ## Notas de estructura
 
-- `usuarios` usa hash seguro en `password` (`password_hash`).
-- `clientes` soporta acceso por login (`rut` + `password`) y por URL pública (`url_token`).
-- `cotizaciones` se relaciona a `clientes` y `cotizacion_detalle` a `cotizaciones`/`productos`.
+- `usuarios` soporta roles (`admin`, `supervisor`, `vendedor`, `bodega`) y comisión por vendedor.
+- `clientes` permite login con `rut + password` y acceso por `token_acceso`.
+- `cotizaciones` registra responsable (`usuario_id`) y estados de ciclo comercial.
+- `pedidos` concentra operación logística y venta.
+- `ventas_resumen` y `comisiones` habilitan dashboard financiero.
+- `movimientos_stock` y `log_sistema` entregan trazabilidad operativa.
 
-## Ejecución
-
-Instalación completa:
+## Instalación completa
 
 ```bash
 mysql -u root -p < database/schema.sql
 ```
 
-Actualización incremental:
+## Actualización incremental
 
 ```bash
 mysql -u root -p tulista < database/migrations/003_create_usuarios_clientes_cotizaciones.sql
 mysql -u root -p tulista < database/migrations/004_seed_super_admin_usuario.sql
+mysql -u root -p tulista < database/migrations/005_expand_erp_core.sql
+mysql -u root -p tulista < database/migrations/006_add_usuario_profile_fields.sql
 ```

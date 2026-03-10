@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../models/Usuario.php';
 require_once __DIR__ . '/../services/AuthService.php';
+require_once __DIR__ . '/../services/AuditService.php';
 
 class UsuarioController
 {
@@ -16,6 +17,7 @@ class UsuarioController
 
     public function handleRequest(): array
     {
+        AuthService::requireRole(['admin', 'supervisor']);
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $action = $_POST['action'] ?? '';
             if ($action === 'create') {
@@ -50,12 +52,15 @@ class UsuarioController
         }
 
         AuthService::loginUser($user);
-        header('Location: apps-usuarios.php');
+        AuditService::log('login', 'usuarios', (int) $user['id'], 'Inicio de sesión exitoso');
+        header('Location: index.php');
         exit;
     }
 
     public function logout(): void
     {
+        $user = AuthService::user();
+        AuditService::log('logout', 'usuarios', (int) ($user['id'] ?? 0), 'Cierre de sesión');
         AuthService::logoutUser();
         header('Location: auth-signin.php');
         exit;
@@ -74,6 +79,7 @@ class UsuarioController
         }
 
         $this->usuarios->create($payload);
+        AuditService::log('crear', 'usuarios', null, 'Usuario creado', null, $payload);
         $this->flash('success', 'Usuario creado correctamente.');
     }
 
@@ -91,6 +97,7 @@ class UsuarioController
         }
 
         $this->usuarios->update($id, $payload);
+        AuditService::log('editar', 'usuarios', $id, 'Usuario actualizado', null, $payload);
         $this->flash('success', 'Usuario actualizado.');
     }
 
@@ -98,11 +105,11 @@ class UsuarioController
     {
         $id = (int) ($_POST['id'] ?? 0);
         if ($id <= 0) {
-            $this->flash('danger', 'Usuario inválido.');
+            $this->flash('warning', 'Usuario inválido.');
             return;
         }
-
         $this->usuarios->delete($id);
+        AuditService::log('eliminar', 'usuarios', $id, 'Usuario eliminado');
         $this->flash('success', 'Usuario eliminado.');
     }
 
@@ -110,12 +117,18 @@ class UsuarioController
     {
         $nombre = trim($_POST['nombre'] ?? '');
         $email = trim($_POST['email'] ?? '');
+        $telefono = trim($_POST['telefono'] ?? '');
+        $direccion = trim($_POST['direccion'] ?? '');
+        $cargo = trim($_POST['cargo'] ?? '');
+        $notas = trim($_POST['notas'] ?? '');
         $password = $_POST['password'] ?? '';
-        $rol = ($_POST['rol'] ?? 'vendedor') === 'admin' ? 'admin' : 'vendedor';
+        $rol = $_POST['rol'] ?? 'vendedor';
         $estado = !empty($_POST['estado']) ? 1 : 0;
+        $porcentajeComision = (float) ($_POST['porcentaje_comision'] ?? 0);
+        $rolesValidos = ['admin', 'supervisor', 'vendedor', 'bodega'];
 
-        if ($nombre === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $this->flash('warning', 'Nombre y email válido son obligatorios.');
+        if ($nombre === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || !in_array($rol, $rolesValidos, true)) {
+            $this->flash('warning', 'Completa nombre, email válido y rol.');
             return null;
         }
 
@@ -127,8 +140,13 @@ class UsuarioController
         return [
             'nombre' => $nombre,
             'email' => $email,
+            'telefono' => $telefono,
+            'direccion' => $direccion,
+            'cargo' => $cargo,
+            'notas' => $notas,
             'password' => $password !== '' ? password_hash($password, PASSWORD_DEFAULT) : '',
             'rol' => $rol,
+            'porcentaje_comision' => max(0, min(100, $porcentajeComision)),
             'estado' => $estado,
         ];
     }

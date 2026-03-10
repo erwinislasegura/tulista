@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../models/Cliente.php';
 require_once __DIR__ . '/../services/AuthService.php';
+require_once __DIR__ . '/../services/AuditService.php';
 
 class ClienteController
 {
@@ -16,7 +17,7 @@ class ClienteController
 
     public function handleRequest(): array
     {
-        AuthService::requireRole(['admin', 'vendedor']);
+        AuthService::requireRole(['admin', 'supervisor', 'vendedor']);
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $action = $_POST['action'] ?? '';
@@ -31,10 +32,28 @@ class ClienteController
             exit;
         }
 
+        $clienteSeleccionado = null;
+        $cotizaciones = [];
+        $pedidos = [];
+        $clienteId = (int) ($_GET['cliente_id'] ?? 0);
+        if ($clienteId > 0) {
+            $clienteSeleccionado = $this->clientes->find($clienteId);
+            if ($clienteSeleccionado) {
+                $cotizaciones = $this->clientes->cotizacionesByCliente($clienteId);
+                $pedidos = $this->clientes->pedidosByCliente($clienteId);
+            }
+        }
+
         $flash = $_SESSION['clientes_flash'];
         $_SESSION['clientes_flash'] = [];
 
-        return ['clientes' => $this->clientes->all(), 'flash' => $flash];
+        return [
+            'clientes' => $this->clientes->all(),
+            'flash' => $flash,
+            'cliente_seleccionado' => $clienteSeleccionado,
+            'cotizaciones_cliente' => $cotizaciones,
+            'pedidos_cliente' => $pedidos,
+        ];
     }
 
     private function create(): void
@@ -45,6 +64,7 @@ class ClienteController
         }
 
         $this->clientes->create($payload);
+        AuditService::log('crear', 'clientes', null, 'Cliente creado', null, $payload);
         $this->flash('success', 'Cliente creado.');
     }
 
@@ -62,6 +82,7 @@ class ClienteController
         }
 
         $this->clientes->update($id, $payload);
+        AuditService::log('editar', 'clientes', $id, 'Cliente actualizado', null, $payload);
         $this->flash('success', 'Cliente actualizado.');
     }
 
@@ -74,6 +95,7 @@ class ClienteController
         }
 
         $this->clientes->delete($id);
+        AuditService::log('eliminar', 'clientes', $id, 'Cliente eliminado');
         $this->flash('success', 'Cliente eliminado.');
     }
 
@@ -86,7 +108,7 @@ class ClienteController
         $telefono = trim($_POST['telefono'] ?? '');
         $direccion = trim($_POST['direccion'] ?? '');
         $password = $_POST['password'] ?? '';
-        $urlToken = trim($_POST['url_token'] ?? bin2hex(random_bytes(5)));
+        $token = trim($_POST['token'] ?? bin2hex(random_bytes(5)));
         $estado = !empty($_POST['estado']) ? 1 : 0;
 
         if ($rut === '' || $nombre === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -107,7 +129,7 @@ class ClienteController
             'telefono' => $telefono,
             'direccion' => $direccion,
             'password' => $password !== '' ? password_hash($password, PASSWORD_DEFAULT) : '',
-            'url_token' => $urlToken,
+            'token' => $token,
             'estado' => $estado,
         ];
     }
