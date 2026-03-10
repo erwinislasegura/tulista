@@ -15,6 +15,7 @@
         <div class="col-md-4"><label class="form-label">Dirección</label><input name="direccion" class="form-control tl-compact-input"></div>
         <div class="col-md-4"><label class="form-label">Notas</label><input name="notas" class="form-control tl-compact-input"></div>
         <div class="col-md-2"><label class="form-label">Contraseña</label><input type="password" name="password" class="form-control tl-compact-input" required></div>
+        <div class="col-md-2 form-check mt-4 ms-2"><input type="checkbox" name="estado" class="form-check-input" checked><label class="form-check-label">Activo</label></div>
         <div class="col-12"><button class="btn btn-primary" type="submit">Crear usuario</button></div>
     </form>
 </div>
