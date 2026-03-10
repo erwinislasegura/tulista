@@ -24,8 +24,6 @@ class UsuarioController
                 $this->create();
             } elseif ($action === 'update') {
                 $this->update();
-            } elseif ($action === 'delete') {
-                $this->delete();
             }
             header('Location: apps-usuarios.php');
             exit;
