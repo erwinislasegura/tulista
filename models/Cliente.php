@@ -4,14 +4,38 @@ require_once __DIR__ . '/BaseModel.php';
 
 class Cliente extends BaseModel
 {
+    private ?bool $hasTokenAcceso = null;
+
+    private function hasTokenAcceso(): bool
+    {
+        if ($this->hasTokenAcceso !== null) {
+            return $this->hasTokenAcceso;
+        }
+        $stmt = $this->db->query("SHOW COLUMNS FROM clientes LIKE 'token_acceso'");
+        $this->hasTokenAcceso = (bool) $stmt->fetch();
+        return $this->hasTokenAcceso;
+    }
+
+    private function tokenSelect(): string
+    {
+        return $this->hasTokenAcceso() ? 'token_acceso' : 'url_token';
+    }
+
     public function all(): array
     {
-        return $this->db->query('SELECT id, rut, nombre, empresa, email, telefono, direccion, url_token, estado, created_at FROM clientes ORDER BY id DESC')->fetchAll();
+        $token = $this->tokenSelect();
+        $sql = "SELECT c.id, c.rut, c.nombre, c.empresa, c.email, c.telefono, c.direccion, c.estado, c.created_at, c.{$token} AS token,
+                       (SELECT COUNT(*) FROM cotizaciones ct WHERE ct.cliente_id = c.id) AS total_cotizaciones,
+                       (SELECT COUNT(*) FROM pedidos p WHERE p.cliente_id = c.id) AS total_pedidos
+                FROM clientes c
+                ORDER BY c.id DESC";
+        return $this->db->query($sql)->fetchAll();
     }
 
     public function find(int $id): ?array
     {
-        $stmt = $this->db->prepare('SELECT * FROM clientes WHERE id = :id LIMIT 1');
+        $token = $this->tokenSelect();
+        $stmt = $this->db->prepare("SELECT *, {$token} AS token FROM clientes WHERE id = :id LIMIT 1");
         $stmt->execute(['id' => $id]);
         return $stmt->fetch() ?: null;
     }
@@ -25,21 +49,38 @@ class Cliente extends BaseModel
 
     public function findByToken(string $token): ?array
     {
-        $stmt = $this->db->prepare('SELECT * FROM clientes WHERE url_token = :token AND estado = 1 LIMIT 1');
+        $field = $this->tokenSelect();
+        $stmt = $this->db->prepare("SELECT * FROM clientes WHERE {$field} = :token AND estado = 1 LIMIT 1");
         $stmt->execute(['token' => $token]);
         return $stmt->fetch() ?: null;
     }
 
+    public function cotizacionesByCliente(int $clienteId): array
+    {
+        $stmt = $this->db->prepare('SELECT id, estado, total, fecha FROM cotizaciones WHERE cliente_id=:id ORDER BY id DESC');
+        $stmt->execute(['id' => $clienteId]);
+        return $stmt->fetchAll();
+    }
+
+    public function pedidosByCliente(int $clienteId): array
+    {
+        $stmt = $this->db->prepare('SELECT id, estado, total, fecha FROM pedidos WHERE cliente_id=:id ORDER BY id DESC');
+        $stmt->execute(['id' => $clienteId]);
+        return $stmt->fetchAll();
+    }
+
     public function create(array $data): bool
     {
-        $stmt = $this->db->prepare('INSERT INTO clientes (rut, nombre, empresa, email, telefono, direccion, password, url_token, estado) VALUES (:rut, :nombre, :empresa, :email, :telefono, :direccion, :password, :url_token, :estado)');
+        $field = $this->tokenSelect();
+        $stmt = $this->db->prepare("INSERT INTO clientes (rut, nombre, empresa, email, telefono, direccion, password, {$field}, estado) VALUES (:rut, :nombre, :empresa, :email, :telefono, :direccion, :password, :token, :estado)");
         return $stmt->execute($data);
     }
 
     public function update(int $id, array $data): bool
     {
+        $field = $this->tokenSelect();
         $data['id'] = $id;
-        $sql = 'UPDATE clientes SET rut=:rut, nombre=:nombre, empresa=:empresa, email=:email, telefono=:telefono, direccion=:direccion, url_token=:url_token, estado=:estado';
+        $sql = "UPDATE clientes SET rut=:rut, nombre=:nombre, empresa=:empresa, email=:email, telefono=:telefono, direccion=:direccion, {$field}=:token, estado=:estado";
         if (!empty($data['password'])) {
             $sql .= ', password=:password';
         }

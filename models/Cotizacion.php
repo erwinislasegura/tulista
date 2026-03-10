@@ -6,9 +6,10 @@ class Cotizacion extends BaseModel
 {
     public function all(?int $clienteId = null): array
     {
-        $sql = 'SELECT c.id, c.cliente_id, cl.nombre AS cliente_nombre, c.estado, c.total, c.created_at
+        $sql = 'SELECT c.id, c.cliente_id, cl.nombre AS cliente_nombre, c.usuario_id, u.nombre AS vendedor, c.estado, c.total, c.fecha
                 FROM cotizaciones c
-                INNER JOIN clientes cl ON cl.id = c.cliente_id';
+                INNER JOIN clientes cl ON cl.id = c.cliente_id
+                LEFT JOIN usuarios u ON u.id = c.usuario_id';
         $params = [];
 
         if ($clienteId) {
@@ -22,17 +23,15 @@ class Cotizacion extends BaseModel
         return $stmt->fetchAll();
     }
 
-    public function find(int $id): ?array
+    public function create(int $clienteId, int $usuarioId = 0, float $total = 0): int
     {
-        $stmt = $this->db->prepare('SELECT * FROM cotizaciones WHERE id=:id LIMIT 1');
-        $stmt->execute(['id' => $id]);
-        return $stmt->fetch() ?: null;
-    }
-
-    public function create(int $clienteId, float $total = 0): int
-    {
-        $stmt = $this->db->prepare('INSERT INTO cotizaciones (cliente_id, estado, total) VALUES (:cliente_id, :estado, :total)');
-        $stmt->execute(['cliente_id' => $clienteId, 'estado' => 'pendiente', 'total' => $total]);
+        $stmt = $this->db->prepare('INSERT INTO cotizaciones (cliente_id, usuario_id, estado, total) VALUES (:cliente_id, :usuario_id, :estado, :total)');
+        $stmt->execute([
+            'cliente_id' => $clienteId,
+            'usuario_id' => $usuarioId ?: null,
+            'estado' => 'borrador',
+            'total' => $total,
+        ]);
         return (int) $this->db->lastInsertId();
     }
 
@@ -46,5 +45,11 @@ class Cotizacion extends BaseModel
     {
         $stmt = $this->db->prepare('UPDATE cotizaciones SET total = :total WHERE id = :id');
         return $stmt->execute(['total' => $total, 'id' => $id]);
+    }
+
+    public function delete(int $id): bool
+    {
+        $stmt = $this->db->prepare('DELETE FROM cotizaciones WHERE id = :id');
+        return $stmt->execute(['id' => $id]);
     }
 }

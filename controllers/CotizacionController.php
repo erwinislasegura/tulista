@@ -3,13 +3,16 @@
 require_once __DIR__ . '/../models/Cotizacion.php';
 require_once __DIR__ . '/../models/CotizacionDetalle.php';
 require_once __DIR__ . '/../models/ProductModel.php';
+require_once __DIR__ . '/../models/Cliente.php';
 require_once __DIR__ . '/../services/AuthService.php';
+require_once __DIR__ . '/../services/AuditService.php';
 
 class CotizacionController
 {
     private Cotizacion $cotizaciones;
     private CotizacionDetalle $detalles;
     private ProductModel $productos;
+    private Cliente $clientes;
 
     public function __construct()
     {
@@ -17,6 +20,7 @@ class CotizacionController
         $this->cotizaciones = new Cotizacion();
         $this->detalles = new CotizacionDetalle();
         $this->productos = new ProductModel();
+        $this->clientes = new Cliente();
         $_SESSION['cotizaciones_flash'] = $_SESSION['cotizaciones_flash'] ?? [];
     }
 
@@ -47,32 +51,55 @@ class CotizacionController
 
     public function handleAdminRequest(): array
     {
-        AuthService::requireRole(['admin', 'vendedor']);
+        AuthService::requireRole(['admin', 'supervisor', 'vendedor']);
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'cambiar_estado') {
-            $id = (int) ($_POST['cotizacion_id'] ?? 0);
-            $estado = $_POST['estado'] ?? 'pendiente';
-            $allowed = ['pendiente', 'respondida', 'aprobada', 'rechazada'];
-            if ($id > 0 && in_array($estado, $allowed, true)) {
-                $this->cotizaciones->updateEstado($id, $estado);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $action = $_POST['action'] ?? '';
+            if ($action === 'cambiar_estado') {
+                $id = (int) ($_POST['cotizacion_id'] ?? 0);
+                $estado = $_POST['estado'] ?? 'borrador';
+                $allowed = ['borrador', 'enviada', 'aprobada', 'rechazada'];
+                if ($id > 0 && in_array($estado, $allowed, true)) {
+                    $this->cotizaciones->updateEstado($id, $estado);
+                    AuditService::log('editar', 'cotizaciones', $id, "Cotización actualizada a estado {$estado}");
+                }
+            } elseif ($action === 'crear_admin') {
+                $this->crearCotizacion((int) ($_POST['cliente_id'] ?? 0));
+            } elseif ($action === 'eliminar') {
+                $id = (int) ($_POST['cotizacion_id'] ?? 0);
+                if ($id > 0) {
+                    $this->cotizaciones->delete($id);
+                    AuditService::log('eliminar', 'cotizaciones', $id, 'Cotización eliminada');
+                }
             }
             header('Location: apps-cotizaciones.php');
             exit;
         }
 
-        $clienteId = (int) ($_GET['cliente_id'] ?? 0);
-        return ['cotizaciones' => $this->cotizaciones->all($clienteId > 0 ? $clienteId : null)];
+        $flash = $_SESSION['cotizaciones_flash'];
+        $_SESSION['cotizaciones_flash'] = [];
+        return [
+            'cotizaciones' => $this->cotizaciones->all(),
+            'productos' => $this->productos->catalog(),
+            'clientes' => $this->clientes->all(),
+            'flash' => $flash,
+        ];
     }
 
     private function crearCotizacion(int $clienteId): void
     {
         $items = $_POST['items'] ?? [];
+        if ($clienteId <= 0) {
+            $this->flash('warning', 'Debes seleccionar un cliente.');
+            return;
+        }
         if (!is_array($items) || empty($items)) {
             $this->flash('warning', 'Debes agregar al menos un producto.');
             return;
         }
 
-        $cotizacionId = $this->cotizaciones->create($clienteId, 0);
+        $usuario = AuthService::user();
+        $cotizacionId = $this->cotizaciones->create($clienteId, (int) ($usuario['id'] ?? 0), 0);
         $productos = $this->productos->catalogByIds(array_map('intval', array_keys($items)));
         $total = 0;
 
@@ -90,7 +117,8 @@ class CotizacionController
         }
 
         $this->cotizaciones->updateTotal($cotizacionId, $total);
-        $this->flash('success', 'Cotización enviada exitosamente.');
+        AuditService::log('crear', 'cotizaciones', $cotizacionId, 'Cotización creada', null, ['cliente_id' => $clienteId, 'total' => $total]);
+        $this->flash('success', 'Cotización creada exitosamente.');
     }
 
     private function flash(string $type, string $message): void

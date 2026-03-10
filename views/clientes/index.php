@@ -1,39 +1,96 @@
 <?php foreach ($data['flash'] as $alert): ?>
-    <div class="alert alert-<?= htmlspecialchars($alert['type']) ?>"><?= htmlspecialchars($alert['message']) ?></div>
+<div class="alert alert-<?= htmlspecialchars($alert['type']) ?> py-2"><?= htmlspecialchars($alert['message']) ?></div>
 <?php endforeach; ?>
 
 <div class="card mb-4">
     <h5 class="tl-section-title">Nuevo cliente</h5>
-    <form method="post" class="row g-3">
+    <form method="post" class="row g-2">
         <input type="hidden" name="action" value="create">
-        <div class="col-md-3"><label class="form-label">RUT</label><input name="rut" class="form-control" placeholder="RUT" required></div>
-        <div class="col-md-3"><label class="form-label">Nombre</label><input name="nombre" class="form-control" placeholder="Nombre" required></div>
-        <div class="col-md-3"><label class="form-label">Empresa</label><input name="empresa" class="form-control" placeholder="Empresa"></div>
-        <div class="col-md-3"><label class="form-label">Email</label><input type="email" name="email" class="form-control" placeholder="Email" required></div>
-        <div class="col-md-3"><label class="form-label">Teléfono</label><input name="telefono" class="form-control" placeholder="Teléfono"></div>
-        <div class="col-md-3"><label class="form-label">Dirección</label><input name="direccion" class="form-control" placeholder="Dirección"></div>
-        <div class="col-md-3"><label class="form-label">Contraseña</label><input type="password" name="password" class="form-control" placeholder="Contraseña" required></div>
-        <div class="col-md-3"><label class="form-label">Token URL</label><input name="url_token" class="form-control" placeholder="Token URL"></div>
+        <div class="col-md-2"><label class="form-label">RUT</label><input name="rut" class="form-control tl-compact-input" required></div>
+        <div class="col-md-3"><label class="form-label">Nombre</label><input name="nombre" class="form-control tl-compact-input" required></div>
+        <div class="col-md-3"><label class="form-label">Empresa</label><input name="empresa" class="form-control tl-compact-input"></div>
+        <div class="col-md-2"><label class="form-label">Teléfono</label><input name="telefono" class="form-control tl-compact-input"></div>
+        <div class="col-md-2"><label class="form-label">Email</label><input type="email" name="email" class="form-control tl-compact-input" required></div>
+        <div class="col-md-4"><label class="form-label">Dirección</label><input name="direccion" class="form-control tl-compact-input"></div>
+        <div class="col-md-2"><label class="form-label">Clave portal</label><input type="password" name="password" class="form-control tl-compact-input" required></div>
+        <div class="col-md-2"><label class="form-label">Token acceso</label><input name="token" class="form-control tl-compact-input" value="<?= bin2hex(random_bytes(5)) ?>"></div>
         <div class="col-12"><button class="btn btn-primary" type="submit">Crear cliente</button></div>
     </form>
 </div>
 
-<div class="card">
-    <h5 class="tl-section-title">Clientes registrados</h5>
+<div class="card mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="tl-section-title mb-0">Clientes</h5>
+        <span class="text-muted small">Selecciona un cliente para ver su historial</span>
+    </div>
     <div class="table-responsive">
         <table class="table align-middle">
-            <thead><tr><th>RUT</th><th>Nombre</th><th>Empresa</th><th>Email</th><th>Token</th><th>Acciones</th></tr></thead>
+            <thead><tr><th>Cliente</th><th>Contacto</th><th>Cotizaciones</th><th>Pedidos</th><th>Estado</th><th>Acciones</th></tr></thead>
             <tbody>
             <?php foreach ($data['clientes'] as $cliente): ?>
                 <tr>
-                    <td><?= htmlspecialchars($cliente['rut']) ?></td><td><?= htmlspecialchars($cliente['nombre']) ?></td><td><?= htmlspecialchars($cliente['empresa']) ?></td>
-                    <td><?= htmlspecialchars($cliente['email']) ?></td><td><?= htmlspecialchars($cliente['url_token']) ?></td>
+                    <td><strong><?= htmlspecialchars($cliente['nombre']) ?></strong><div class="small text-muted"><?= htmlspecialchars($cliente['rut']) ?> · <?= htmlspecialchars($cliente['empresa'] ?: '-') ?></div></td>
+                    <td><?= htmlspecialchars($cliente['email']) ?><div class="small text-muted"><?= htmlspecialchars($cliente['telefono'] ?: '-') ?></div></td>
+                    <td><?= (int) $cliente['total_cotizaciones'] ?></td>
+                    <td><?= (int) $cliente['total_pedidos'] ?></td>
+                    <td><?= (int) $cliente['estado'] ? 'Activo' : 'Inactivo' ?></td>
                     <td>
-                        <form method="post"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="<?= (int) $cliente['id'] ?>"><button class="btn btn-sm btn-danger" type="submit">Eliminar</button></form>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" type="button">Acciones</button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="apps-clientes.php?cliente_id=<?= (int) $cliente['id'] ?>">Ver</a></li>
+                                <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editCliente<?= (int) $cliente['id'] ?>">Editar</button></li>
+                                <li><form method="post" onsubmit="return confirm('¿Eliminar cliente?');"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="<?= (int) $cliente['id'] ?>"><button class="dropdown-item text-danger" type="submit">Eliminar</button></form></li>
+                            </ul>
+                        </div>
                     </td>
                 </tr>
+
+                <div class="modal fade" id="editCliente<?= (int) $cliente['id'] ?>" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content"><div class="modal-body">
+                        <h6 class="mb-3">Editar cliente #<?= (int) $cliente['id'] ?></h6>
+                        <form method="post" class="row g-2">
+                            <input type="hidden" name="action" value="update"><input type="hidden" name="id" value="<?= (int) $cliente['id'] ?>">
+                            <div class="col-md-3"><label class="form-label">RUT</label><input name="rut" class="form-control tl-compact-input" value="<?= htmlspecialchars($cliente['rut']) ?>" required></div>
+                            <div class="col-md-3"><label class="form-label">Nombre</label><input name="nombre" class="form-control tl-compact-input" value="<?= htmlspecialchars($cliente['nombre']) ?>" required></div>
+                            <div class="col-md-3"><label class="form-label">Empresa</label><input name="empresa" class="form-control tl-compact-input" value="<?= htmlspecialchars($cliente['empresa'] ?? '') ?>"></div>
+                            <div class="col-md-3"><label class="form-label">Email</label><input type="email" name="email" class="form-control tl-compact-input" value="<?= htmlspecialchars($cliente['email']) ?>" required></div>
+                            <div class="col-md-3"><label class="form-label">Teléfono</label><input name="telefono" class="form-control tl-compact-input" value="<?= htmlspecialchars($cliente['telefono'] ?? '') ?>"></div>
+                            <div class="col-md-5"><label class="form-label">Dirección</label><input name="direccion" class="form-control tl-compact-input" value="<?= htmlspecialchars($cliente['direccion'] ?? '') ?>"></div>
+                            <div class="col-md-4"><label class="form-label">Token acceso</label><input name="token" class="form-control tl-compact-input" value="<?= htmlspecialchars($cliente['token']) ?>"></div>
+                            <div class="col-md-3"><label class="form-label">Nueva clave</label><input type="password" name="password" class="form-control tl-compact-input" placeholder="Opcional"></div>
+                            <div class="col-md-2 form-check mt-4 ms-2"><input type="checkbox" name="estado" class="form-check-input" <?= (int) $cliente['estado'] ? 'checked' : '' ?>><label class="form-check-label">Activo</label></div>
+                            <div class="col-12 d-flex justify-content-end gap-2 mt-3"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary" type="submit">Guardar</button></div>
+                        </form>
+                    </div></div></div>
+                </div>
             <?php endforeach; ?>
             </tbody>
         </table>
     </div>
 </div>
+
+<?php if (!empty($data['cliente_seleccionado'])): ?>
+<div class="row g-3">
+    <div class="col-lg-6">
+        <div class="card">
+            <h5 class="tl-section-title">Cotizaciones de <?= htmlspecialchars($data['cliente_seleccionado']['nombre']) ?></h5>
+            <div class="table-responsive"><table class="table align-middle"><thead><tr><th>#</th><th>Estado</th><th>Total</th><th>Fecha</th></tr></thead><tbody>
+            <?php foreach ($data['cotizaciones_cliente'] as $cotizacion): ?>
+                <tr><td>#<?= (int) $cotizacion['id'] ?></td><td class="text-capitalize"><?= htmlspecialchars($cotizacion['estado']) ?></td><td>$<?= number_format((float) $cotizacion['total'], 0, ',', '.') ?></td><td><?= htmlspecialchars($cotizacion['fecha']) ?></td></tr>
+            <?php endforeach; ?>
+            </tbody></table></div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card">
+            <h5 class="tl-section-title">Pedidos de <?= htmlspecialchars($data['cliente_seleccionado']['nombre']) ?></h5>
+            <div class="table-responsive"><table class="table align-middle"><thead><tr><th>#</th><th>Estado</th><th>Total</th><th>Fecha</th></tr></thead><tbody>
+            <?php foreach ($data['pedidos_cliente'] as $pedido): ?>
+                <tr><td>#<?= (int) $pedido['id'] ?></td><td class="text-capitalize"><?= htmlspecialchars($pedido['estado']) ?></td><td>$<?= number_format((float) $pedido['total'], 0, ',', '.') ?></td><td><?= htmlspecialchars($pedido['fecha']) ?></td></tr>
+            <?php endforeach; ?>
+            </tbody></table></div>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
