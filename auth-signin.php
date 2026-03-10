@@ -4,6 +4,8 @@ require_once __DIR__ . '/models/Usuario.php';
 require_once __DIR__ . '/services/AuthService.php';
 
 AuthService::startSession();
+require_once __DIR__ . '/services/CompanyConfigService.php';
+$company = CompanyConfigService::get();
 
 if (AuthService::user()) {
     header('Location: index.php');
@@ -48,12 +50,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="card-body px-3 py-5">
                         <div class="mx-auto mb-4 text-center auth-logo">
                             <a href="index.php" class="logo-dark">
-                                <img src="assets/images/logo-sm.png" height="30" class="me-1" alt="logo sm">
-                                <img src="assets/images/logo-dark.png" height="24" alt="logo dark">
+                                <img src="<?= htmlspecialchars($company['logo_path']) ?>" height="40" alt="logo">
                             </a>
                             <a href="index.php" class="logo-light">
-                                <img src="assets/images/logo-sm.png" height="30" class="me-1" alt="logo sm">
-                                <img src="assets/images/logo-light.png" height="24" alt="logo light">
+                                <img src="<?= htmlspecialchars($company['logo_path']) ?>" height="40" alt="logo">
                             </a>
                         </div>
 
