@@ -4,6 +4,8 @@ require_once __DIR__ . '/BaseModel.php';
 
 class Pedido extends BaseModel
 {
+    public const ESTADOS_OPERACION = ['pendiente', 'empaquetado', 'despachado', 'transito', 'entregado', 'cancelado'];
+
     public function all(): array
     {
         $sql = 'SELECT p.id, p.cliente_id, p.cotizacion_id, p.usuario_id, p.estado, p.total, p.fecha,
@@ -53,6 +55,15 @@ class Pedido extends BaseModel
 
 
 
+
+
+    public function findById(int $id): ?array
+    {
+        $stmt = $this->db->prepare('SELECT p.id, p.cliente_id, p.cotizacion_id, p.usuario_id, p.estado, p.total, p.fecha, c.nombre AS cliente_nombre FROM pedidos p INNER JOIN clientes c ON c.id = p.cliente_id WHERE p.id = :id LIMIT 1');
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch() ?: null;
+    }
+
     public function byCliente(int $clienteId): array
     {
         $stmt = $this->db->prepare('SELECT id, cotizacion_id, estado, total, fecha FROM pedidos WHERE cliente_id = :cliente_id ORDER BY id DESC');
@@ -68,6 +79,18 @@ class Pedido extends BaseModel
                 WHERE c.estado IN ('aprobada', 'enviada')
                 ORDER BY c.id DESC
                 LIMIT 100";
+        return $this->db->query($sql)->fetchAll();
+    }
+
+    public function cotizacionesAceptadasPendientesBodega(): array
+    {
+        $sql = "SELECT c.id, c.total, c.fecha, c.estado, cl.nombre AS cliente_nombre,
+                       p.id AS pedido_id, p.estado AS pedido_estado, p.fecha AS pedido_fecha
+                FROM cotizaciones c
+                INNER JOIN clientes cl ON cl.id = c.cliente_id
+                LEFT JOIN pedidos p ON p.cotizacion_id = c.id
+                WHERE c.estado = 'aprobada'
+                ORDER BY c.id DESC";
         return $this->db->query($sql)->fetchAll();
     }
 }

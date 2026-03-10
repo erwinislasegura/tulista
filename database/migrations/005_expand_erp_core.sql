@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS pedidos (
     cliente_id INT UNSIGNED NOT NULL,
     cotizacion_id INT UNSIGNED DEFAULT NULL,
     usuario_id INT UNSIGNED DEFAULT NULL,
-    estado ENUM('pendiente','preparacion','enviado','entregado','cancelado') NOT NULL DEFAULT 'pendiente',
+    estado ENUM('pendiente','empaquetado','despachado','transito','entregado','cancelado') NOT NULL DEFAULT 'pendiente',
     total DECIMAL(12,2) NOT NULL DEFAULT 0,
     fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -96,6 +96,32 @@ CREATE TABLE IF NOT EXISTS movimientos_stock (
 );
 
 CREATE INDEX IF NOT EXISTS idx_movimientos_producto_fecha ON movimientos_stock (producto_id, fecha);
+
+
+CREATE TABLE IF NOT EXISTS pedido_empaque_detalle (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    pedido_id INT UNSIGNED NOT NULL,
+    cotizacion_detalle_id INT UNSIGNED DEFAULT NULL,
+    producto_id INT UNSIGNED NOT NULL,
+    cantidad_solicitada INT UNSIGNED NOT NULL DEFAULT 0,
+    stock_disponible_snapshot INT NOT NULL DEFAULT 0,
+    accion ENUM('pendiente','confirmado','reemplazado','omitido') NOT NULL DEFAULT 'pendiente',
+    producto_reemplazo_id INT UNSIGNED DEFAULT NULL,
+    cantidad_empaquetada INT UNSIGNED NOT NULL DEFAULT 0,
+    notas VARCHAR(255) DEFAULT NULL,
+    updated_by INT UNSIGNED DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_empaque_pedido FOREIGN KEY (pedido_id) REFERENCES pedidos(id) ON DELETE CASCADE,
+    CONSTRAINT fk_empaque_cot_detalle FOREIGN KEY (cotizacion_detalle_id) REFERENCES cotizacion_detalle(id) ON DELETE SET NULL,
+    CONSTRAINT fk_empaque_producto FOREIGN KEY (producto_id) REFERENCES productos(id),
+    CONSTRAINT fk_empaque_producto_reemplazo FOREIGN KEY (producto_reemplazo_id) REFERENCES productos(id),
+    CONSTRAINT fk_empaque_updated_by FOREIGN KEY (updated_by) REFERENCES usuarios(id)
+);
+
+CREATE UNIQUE INDEX idx_empaque_pedido_producto ON pedido_empaque_detalle (pedido_id, producto_id);
+CREATE INDEX idx_empaque_accion ON pedido_empaque_detalle (accion);
+CREATE INDEX idx_empaque_updated_at ON pedido_empaque_detalle (updated_at);
 
 -- 8) Auditoría
 CREATE TABLE IF NOT EXISTS log_sistema (
@@ -169,7 +195,8 @@ INSERT IGNORE INTO roles_usuario (codigo, nombre) VALUES
 ('bodega', 'Bodega');
 INSERT IGNORE INTO estados_pedido (codigo, nombre, orden_visual) VALUES
 ('pendiente', 'Pendiente', 1),
-('preparacion', 'Preparación', 2),
-('enviado', 'Enviado', 3),
-('entregado', 'Entregado', 4),
+('empaquetado', 'Empaquetado', 2),
+('despachado', 'Despachado', 3),
+('transito', 'En tránsito', 4),
+('entregado', 'Entregado', 5),
 ('cancelado', 'Cancelado', 5);

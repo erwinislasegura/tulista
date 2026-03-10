@@ -30,9 +30,13 @@ class InventarioController
         $flash = $_SESSION['inventario_flash'];
         $_SESSION['inventario_flash'] = [];
 
+        $stockQuery = trim($_GET['stock_q'] ?? '');
+
         return [
             'productos' => $this->productos->catalog(),
             'movimientos' => $this->movimientos->recent(),
+            'stock_query' => $stockQuery,
+            'stock_resultados' => $this->productos->stockLookup($stockQuery),
             'flash' => $flash,
         ];
     }
