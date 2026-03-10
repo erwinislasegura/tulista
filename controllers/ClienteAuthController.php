@@ -15,6 +15,11 @@ class ClienteAuthController
 
     public function login(): ?string
     {
+        return $this->attemptLogin('cliente-portal.php');
+    }
+
+    public function attemptLogin(string $redirectTo = 'cliente-portal.php'): ?string
+    {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             return null;
         }
@@ -28,7 +33,7 @@ class ClienteAuthController
         }
 
         AuthService::loginCliente($cliente);
-        header('Location: cliente-portal.php');
+        header('Location: ' . $redirectTo);
         exit;
     }
 
@@ -37,10 +42,15 @@ class ClienteAuthController
         return $this->clientes->findByToken($token);
     }
 
-    public function logout(): void
+    public function logoutTo(string $redirectTo = 'cliente-login.php'): void
     {
         AuthService::logoutCliente();
-        header('Location: cliente-login.php');
+        header('Location: ' . $redirectTo);
         exit;
+    }
+
+    public function logout(): void
+    {
+        $this->logoutTo('cliente-login.php');
     }
 }
