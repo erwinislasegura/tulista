@@ -4,7 +4,7 @@
 
 <div class="card mb-4">
     <h5 class="tl-section-title">Nuevo usuario interno</h5>
-    <form method="post" class="row g-2">
+    <form method="post" class="row g-2 tl-minimal-form">
         <input type="hidden" name="action" value="create">
         <div class="col-md-3"><label class="form-label">Nombre</label><input name="nombre" class="form-control tl-compact-input" required></div>
         <div class="col-md-3"><label class="form-label">Email</label><input type="email" name="email" class="form-control tl-compact-input" required></div>
@@ -49,7 +49,7 @@
                 <div class="modal fade" id="editUsuario<?= (int) $usuario['id'] ?>" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content"><div class="modal-body">
                         <h6 class="mb-3">Editar usuario #<?= (int) $usuario['id'] ?></h6>
-                        <form method="post" class="row g-2">
+                        <form method="post" class="row g-2 tl-minimal-form">
                             <input type="hidden" name="action" value="update">
                             <input type="hidden" name="id" value="<?= (int) $usuario['id'] ?>">
                             <div class="col-md-4"><label class="form-label">Nombre</label><input name="nombre" class="form-control tl-compact-input" value="<?= htmlspecialchars($usuario['nombre']) ?>" required></div>

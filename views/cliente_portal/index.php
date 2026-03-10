@@ -21,7 +21,7 @@
 
 <div class="card mb-4">
     <h5 class="tl-section-title">Nueva cotización</h5>
-    <form method="post">
+    <form method="post" class="tl-minimal-form">
         <input type="hidden" name="action" value="crear_cotizacion">
         <input type="hidden" name="return_url" value="<?= htmlspecialchars($_SERVER['REQUEST_URI'] ?? 'cliente-portal.php') ?>">
         <div class="table-responsive">

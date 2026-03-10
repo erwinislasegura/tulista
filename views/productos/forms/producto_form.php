@@ -1,4 +1,4 @@
-<form method="post" class="row g-3">
+<form method="post" class="row g-3 tl-minimal-form">
     <input type="hidden" name="action" value="add_product">
     <input type="hidden" name="return_url" value="apps-productos.php">
 
@@ -55,7 +55,7 @@
     <div class="col-12 col-xl-6">
         <div class="tl-form-card h-100">
             <h6 class="tl-form-card-title">Precios y control</h6>
-            <div class="row g-2">
+            <div class="row g-2 tl-minimal-form">
                 <div class="col-md-6 tl-input-group">
                     <label class="form-label">Costo neto</label>
                     <div class="input-group input-group-sm"><span class="input-group-text">$</span><input class="form-control tl-compact-input" name="costo_neto" type="number" step="0.01"></div>
