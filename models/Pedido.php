@@ -4,6 +4,8 @@ require_once __DIR__ . '/BaseModel.php';
 
 class Pedido extends BaseModel
 {
+    public const ESTADOS_OPERACION = ['pendiente', 'empaquetado', 'despachado', 'transito', 'entregado', 'cancelado'];
+
     public function all(): array
     {
         $sql = 'SELECT p.id, p.cliente_id, p.cotizacion_id, p.usuario_id, p.estado, p.total, p.fecha,
@@ -68,6 +70,18 @@ class Pedido extends BaseModel
                 WHERE c.estado IN ('aprobada', 'enviada')
                 ORDER BY c.id DESC
                 LIMIT 100";
+        return $this->db->query($sql)->fetchAll();
+    }
+
+    public function cotizacionesAceptadasPendientesBodega(): array
+    {
+        $sql = "SELECT c.id, c.total, c.fecha, c.estado, cl.nombre AS cliente_nombre,
+                       p.id AS pedido_id, p.estado AS pedido_estado, p.fecha AS pedido_fecha
+                FROM cotizaciones c
+                INNER JOIN clientes cl ON cl.id = c.cliente_id
+                LEFT JOIN pedidos p ON p.cotizacion_id = c.id
+                WHERE c.estado = 'aprobada'
+                ORDER BY c.id DESC";
         return $this->db->query($sql)->fetchAll();
     }
 }

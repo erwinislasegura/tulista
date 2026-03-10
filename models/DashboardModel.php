@@ -18,7 +18,7 @@ class DashboardModel extends BaseModel
             'ganancia_mes' => $this->scalar("SELECT COALESCE(SUM(ganancia),0) FROM ventas_resumen vr INNER JOIN pedidos p ON p.id=vr.pedido_id WHERE YEAR(p.fecha)=YEAR(CURDATE()) AND MONTH(p.fecha)=MONTH(CURDATE())"),
             'comisiones_mes' => $this->scalar("SELECT COALESCE(SUM(monto_comision),0) FROM comisiones WHERE YEAR(fecha)=YEAR(CURDATE()) AND MONTH(fecha)=MONTH(CURDATE())"),
             'cotizaciones_pendientes' => $this->scalar("SELECT COUNT(*) FROM cotizaciones WHERE estado IN ('borrador','enviada')"),
-            'pedidos_proceso' => $this->scalar("SELECT COUNT(*) FROM pedidos WHERE estado IN ('pendiente','preparacion','enviado')"),
+            'pedidos_proceso' => $this->scalar("SELECT COUNT(*) FROM pedidos WHERE estado IN ('pendiente','empaquetado','despachado','transito')"),
             'stock_bajo' => $this->scalar('SELECT COUNT(*) FROM productos WHERE existencia <= stock_minimo'),
             'clientes_nuevos' => $this->scalar('SELECT COUNT(*) FROM clientes WHERE DATE(created_at) >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)'),
         ];

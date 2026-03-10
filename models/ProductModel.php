@@ -37,6 +37,25 @@ class ProductModel extends BaseModel
         return $stmt->fetchAll();
     }
 
+
+
+    public function stockLookup(string $term = ''): array
+    {
+        $term = trim($term);
+        $sql = 'SELECT id, nombre, sku, existencia, stock_minimo, precio_venta_total FROM productos';
+        $params = [];
+
+        if ($term !== '') {
+            $sql .= ' WHERE nombre LIKE :term OR sku LIKE :term';
+            $params['term'] = '%' . $term . '%';
+        }
+
+        $sql .= ' ORDER BY nombre ASC LIMIT 100';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll();
+    }
+
     public function create(array $data): bool
     {
         $stmt = $this->db->prepare(
