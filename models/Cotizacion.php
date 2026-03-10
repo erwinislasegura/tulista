@@ -6,9 +6,10 @@ class Cotizacion extends BaseModel
 {
     public function all(?int $clienteId = null): array
     {
-        $sql = 'SELECT c.id, c.cliente_id, cl.nombre AS cliente_nombre, c.estado, c.total, c.fecha
+        $sql = 'SELECT c.id, c.cliente_id, cl.nombre AS cliente_nombre, c.usuario_id, u.nombre AS vendedor, c.estado, c.total, c.fecha
                 FROM cotizaciones c
-                INNER JOIN clientes cl ON cl.id = c.cliente_id';
+                INNER JOIN clientes cl ON cl.id = c.cliente_id
+                LEFT JOIN usuarios u ON u.id = c.usuario_id';
         $params = [];
 
         if ($clienteId) {
@@ -44,5 +45,11 @@ class Cotizacion extends BaseModel
     {
         $stmt = $this->db->prepare('UPDATE cotizaciones SET total = :total WHERE id = :id');
         return $stmt->execute(['total' => $total, 'id' => $id]);
+    }
+
+    public function delete(int $id): bool
+    {
+        $stmt = $this->db->prepare('DELETE FROM cotizaciones WHERE id = :id');
+        return $stmt->execute(['id' => $id]);
     }
 }

@@ -15,5 +15,6 @@ run_migration() {
 run_migration "database/migrations/003_create_usuarios_clientes_cotizaciones.sql"
 run_migration "database/migrations/004_seed_super_admin_usuario.sql"
 run_migration "database/migrations/005_expand_erp_core.sql"
+run_migration "database/migrations/006_add_usuario_profile_fields.sql"
 
 echo "Migraciones ERP aplicadas correctamente en ${DB_NAME}."

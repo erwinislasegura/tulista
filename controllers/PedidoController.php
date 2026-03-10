@@ -18,8 +18,13 @@ class PedidoController
 
     public function handleRequest(): array
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'estado') {
-            $this->updateEstado();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $action = $_POST['action'] ?? '';
+            if ($action === 'estado') {
+                $this->updateEstado();
+            } elseif ($action === 'delete') {
+                $this->delete();
+            }
             header('Location: apps-pedidos.php');
             exit;
         }
@@ -48,6 +53,18 @@ class PedidoController
         }
 
         $this->flash('danger', 'No fue posible actualizar el estado del pedido.');
+    }
+
+    private function delete(): void
+    {
+        $id = (int) ($_POST['id'] ?? 0);
+        if ($id <= 0) {
+            $this->flash('warning', 'Pedido inválido.');
+            return;
+        }
+        $this->pedidos->delete($id);
+        AuditService::log('eliminar', 'pedidos', $id, 'Pedido eliminado');
+        $this->flash('success', 'Pedido eliminado.');
     }
 
     private function flash(string $type, string $message): void

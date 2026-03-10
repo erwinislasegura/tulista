@@ -19,4 +19,10 @@ class Pedido extends BaseModel
         $stmt = $this->db->prepare('UPDATE pedidos SET estado = :estado WHERE id = :id');
         return $stmt->execute(['estado' => $estado, 'id' => $id]);
     }
+
+    public function delete(int $id): bool
+    {
+        $stmt = $this->db->prepare('DELETE FROM pedidos WHERE id = :id');
+        return $stmt->execute(['id' => $id]);
+    }
 }

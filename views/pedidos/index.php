@@ -9,7 +9,7 @@
     </div>
     <div class="table-responsive">
         <table class="table align-middle">
-            <thead><tr><th>#</th><th>Cliente</th><th>Vendedor</th><th>Total</th><th>Fecha</th><th>Estado</th><th></th></tr></thead>
+            <thead><tr><th>#</th><th>Cliente</th><th>Vendedor</th><th>Total</th><th>Fecha</th><th>Estado</th><th>Acciones</th></tr></thead>
             <tbody>
             <?php foreach ($data['pedidos'] as $pedido): ?>
                 <tr>
@@ -20,16 +20,27 @@
                     <td><?= htmlspecialchars($pedido['fecha']) ?></td>
                     <td><span class="badge bg-light text-dark text-capitalize"><?= htmlspecialchars($pedido['estado']) ?></span></td>
                     <td>
-                        <form method="post" class="d-flex gap-2">
-                            <input type="hidden" name="action" value="estado">
-                            <input type="hidden" name="id" value="<?= (int) $pedido['id'] ?>">
-                            <select name="estado" class="form-select form-select-sm tl-compact-input">
-                                <?php foreach (['pendiente','preparacion','enviado','entregado','cancelado'] as $estado): ?>
-                                    <option value="<?= $estado ?>" <?= $estado === $pedido['estado'] ? 'selected' : '' ?>><?= ucfirst($estado) ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                            <button class="btn btn-sm btn-primary" type="submit">Guardar</button>
-                        </form>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" type="button">Acciones</button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><span class="dropdown-item-text">Pedido #<?= (int) $pedido['id'] ?></span></li>
+                                <li>
+                                    <form method="post" class="px-2 py-1">
+                                        <input type="hidden" name="action" value="estado">
+                                        <input type="hidden" name="id" value="<?= (int) $pedido['id'] ?>">
+                                        <label class="form-label small mb-1">Editar estado</label>
+                                        <select name="estado" class="form-select form-select-sm tl-compact-input mb-2">
+                                            <?php foreach (['pendiente','preparacion','enviado','entregado','cancelado'] as $estado): ?>
+                                                <option value="<?= $estado ?>" <?= $estado === $pedido['estado'] ? 'selected' : '' ?>><?= ucfirst($estado) ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        <button class="btn btn-primary btn-sm w-100" type="submit">Guardar</button>
+                                    </form>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><form method="post" onsubmit="return confirm('¿Eliminar pedido?');"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="<?= (int) $pedido['id'] ?>"><button class="dropdown-item text-danger" type="submit">Eliminar</button></form></li>
+                            </ul>
+                        </div>
                     </td>
                 </tr>
             <?php endforeach; ?>

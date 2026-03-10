@@ -99,10 +99,26 @@ class UsuarioController
         $this->flash('success', 'Usuario actualizado.');
     }
 
+    private function delete(): void
+    {
+        $id = (int) ($_POST['id'] ?? 0);
+        if ($id <= 0) {
+            $this->flash('warning', 'Usuario inválido.');
+            return;
+        }
+        $this->usuarios->delete($id);
+        AuditService::log('eliminar', 'usuarios', $id, 'Usuario eliminado');
+        $this->flash('success', 'Usuario eliminado.');
+    }
+
     private function payloadFromPost(bool $requiredPassword): ?array
     {
         $nombre = trim($_POST['nombre'] ?? '');
         $email = trim($_POST['email'] ?? '');
+        $telefono = trim($_POST['telefono'] ?? '');
+        $direccion = trim($_POST['direccion'] ?? '');
+        $cargo = trim($_POST['cargo'] ?? '');
+        $notas = trim($_POST['notas'] ?? '');
         $password = $_POST['password'] ?? '';
         $rol = $_POST['rol'] ?? 'vendedor';
         $estado = !empty($_POST['estado']) ? 1 : 0;
@@ -122,6 +138,10 @@ class UsuarioController
         return [
             'nombre' => $nombre,
             'email' => $email,
+            'telefono' => $telefono,
+            'direccion' => $direccion,
+            'cargo' => $cargo,
+            'notas' => $notas,
             'password' => $password !== '' ? password_hash($password, PASSWORD_DEFAULT) : '',
             'rol' => $rol,
             'porcentaje_comision' => max(0, min(100, $porcentajeComision)),
