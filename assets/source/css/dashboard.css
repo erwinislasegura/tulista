@@ -33,8 +33,44 @@ body,
 }
 
 .page-content {
-    background: transparent;
-    padding: 1.1rem 0.6rem 1.2rem;
+    padding: 32px 12px 24px;
+}
+
+.page-content > .container-fluid {
+    padding-top: 0.35rem;
+}
+
+.main-nav {
+    background: #28415f !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.main-nav .logo-box {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 0.5rem;
+}
+
+.main-nav .nav-link,
+.main-nav .nav-text,
+.main-nav .menu-title,
+.main-nav .sub-nav-link,
+.main-nav .nav-icon,
+.main-nav .logo-box,
+.main-nav iconify-icon {
+    color: #fff !important;
+}
+
+.main-nav .nav-link:hover,
+.main-nav .sub-nav-link:hover,
+.main-nav .nav-link.active {
+    background: rgba(255, 255, 255, 0.12) !important;
+    border-radius: 10px;
+}
+
+.main-nav .tl-submenu-list {
+    padding-left: 1.6rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.4rem;
 }
 
 .page-content .container-fluid {

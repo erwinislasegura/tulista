@@ -8,26 +8,19 @@
     <h5 class="tl-section-title">Nuevo cliente</h5>
     <form method="post" class="row g-3 tl-minimal-form">
         <input type="hidden" name="action" value="create">
-        <div class="col-12">
-            <div class="tl-form-card">
-                <h6 class="tl-form-card-title">Ficha de cliente</h6>
-                <div class="row g-2">
-                    <div class="col-md-2"><label class="form-label">RUT</label><input name="rut" class="form-control tl-compact-input" required autocomplete="off" placeholder="76.123.456-7"></div>
-                    <div class="col-md-3"><label class="form-label">Nombre</label><input name="nombre" class="form-control tl-compact-input" required autocomplete="name"></div>
-                    <div class="col-md-3"><label class="form-label">Empresa</label><input name="empresa" class="form-control tl-compact-input"></div>
-                    <div class="col-md-2"><label class="form-label">Giro</label><input name="giro" class="form-control tl-compact-input"></div>
-                    <div class="col-md-2"><label class="form-label">Comuna</label><input name="comuna" class="form-control tl-compact-input"></div>
-                    <div class="col-md-2"><label class="form-label">Teléfono</label><input name="telefono" class="form-control tl-compact-input" inputmode="tel" autocomplete="tel"></div>
-                    <div class="col-md-2"><label class="form-label">Email</label><input type="email" name="email" class="form-control tl-compact-input" required autocomplete="email"></div>
-                    <div class="col-md-4"><label class="form-label">Dirección</label><input name="direccion" class="form-control tl-compact-input" autocomplete="street-address"></div>
-                    <div class="col-md-2"><label class="form-label">Tipo cliente</label><select name="tipo_cliente" class="form-select tl-compact-input"><option value="mayorista">Mayorista</option><option value="minorista">Minorista</option><option value="institucional">Institucional</option></select></div>
-                    <div class="col-md-2"><label class="form-label">Clave portal</label><input type="password" name="password" class="form-control tl-compact-input" required></div>
-                    <div class="col-md-2"><label class="form-label">Token acceso</label><input id="cliente_token" name="token" class="form-control tl-compact-input" value="<?= bin2hex(random_bytes(5)) ?>"><small class="text-muted">Se autogenera según nombre/empresa.</small></div>
-                    <div class="col-md-2 form-check mt-4 ms-2"><input type="checkbox" name="estado" class="form-check-input" checked><label class="form-check-label">Activo</label></div>
-                </div>
-                <div class="tl-form-actions d-flex justify-content-end"><button class="btn btn-primary" type="submit">Crear cliente</button></div>
-            </div>
-        </div>
+        <div class="col-md-2"><label class="form-label">RUT</label><input name="rut" class="form-control tl-compact-input" required autocomplete="off" placeholder="76.123.456-7"></div>
+        <div class="col-md-3"><label class="form-label">Nombre</label><input name="nombre" class="form-control tl-compact-input" required autocomplete="name"></div>
+        <div class="col-md-3"><label class="form-label">Empresa</label><input name="empresa" class="form-control tl-compact-input"></div>
+        <div class="col-md-2"><label class="form-label">Giro</label><input name="giro" class="form-control tl-compact-input"></div>
+        <div class="col-md-2"><label class="form-label">Comuna</label><input name="comuna" class="form-control tl-compact-input"></div>
+        <div class="col-md-2"><label class="form-label">Teléfono</label><input name="telefono" class="form-control tl-compact-input" inputmode="tel" autocomplete="tel"></div>
+        <div class="col-md-2"><label class="form-label">Email</label><input type="email" name="email" class="form-control tl-compact-input" required autocomplete="email"></div>
+        <div class="col-md-4"><label class="form-label">Dirección</label><input name="direccion" class="form-control tl-compact-input" autocomplete="street-address"></div>
+        <div class="col-md-2"><label class="form-label">Tipo cliente</label><select name="tipo_cliente" class="form-select tl-compact-input"><option value="mayorista">Mayorista</option><option value="minorista">Minorista</option><option value="institucional">Institucional</option></select></div>
+        <div class="col-md-2"><label class="form-label">Clave portal</label><input type="password" name="password" class="form-control tl-compact-input" required></div>
+        <div class="col-md-2"><label class="form-label">Token acceso</label><input id="cliente_token" name="token" class="form-control tl-compact-input" value="<?= bin2hex(random_bytes(5)) ?>"><small class="text-muted">Se autogenera según nombre/empresa.</small></div>
+        <div class="col-md-2 form-check mt-4 ms-2"><input type="checkbox" name="estado" class="form-check-input" checked><label class="form-check-label">Activo</label></div>
+        <div class="col-12 d-flex justify-content-end"><button class="btn btn-primary" type="submit">Crear cliente</button></div>
     </form>
 </div>
 
