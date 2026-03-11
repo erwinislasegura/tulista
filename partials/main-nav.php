@@ -28,7 +28,7 @@ $menu = [
         ['page' => 'apps-auditoria.php', 'text' => 'Auditoría', 'icon' => 'solar:document-text-broken', 'perm' => 'auditoria.view'],
     ],
     'Sistema' => [
-        ['page' => 'apps-usuarios.php', 'text' => 'Usuarios y permisos', 'icon' => 'solar:user-id-broken', 'perm' => 'usuarios.manage'],
+        ['page' => 'apps-usuarios.php', 'text' => 'Usuarios', 'icon' => 'solar:user-id-broken', 'perm' => 'usuarios.manage'],
         ['page' => 'apps-mantenedores.php', 'text' => 'Mantenedores', 'icon' => 'solar:slider-horizontal-broken', 'perm' => 'usuarios.manage'],
         ['page' => 'apps-configuracion-empresa.php', 'text' => 'Configuración', 'icon' => 'solar:settings-broken', 'perm' => 'configuracion.view'],
     ],
