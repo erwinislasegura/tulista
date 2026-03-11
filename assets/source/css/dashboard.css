@@ -1,11 +1,11 @@
 :root {
-    --tl-purple: #1F3A5F;
-    --tl-purple-light: #355880;
-    --tl-purple-soft: #EAF0F7;
-    --tl-orange: #8B5E3C;
-    --tl-orange-light: #A97852;
-    --tl-orange-soft: #F5EEE8;
-    --tl-ui-bg: #F1F4F8;
+    --tl-purple: #2f4b6b;
+    --tl-purple-light: #4d6f93;
+    --tl-purple-soft: #edf2f8;
+    --tl-orange: #9a6d4c;
+    --tl-orange-light: #b28666;
+    --tl-orange-soft: #f8f2ed;
+    --tl-ui-bg: #f5f7fa;
     --tl-white: #FFFFFF;
     --tl-text: #1F2937;
     --tl-text-muted: #6B7280;
@@ -25,8 +25,8 @@ body,
 }
 
 .main-nav {
-    background: #1E2D40 !important;
-    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    background: #28415f !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .main-nav .logo-box {
@@ -47,8 +47,34 @@ body,
 .main-nav .nav-link:hover,
 .main-nav .sub-nav-link:hover,
 .main-nav .nav-link.active {
-    background: rgba(255, 255, 255, 0.08) !important;
+    background: rgba(255, 255, 255, 0.12) !important;
     border-radius: 10px;
+}
+
+.main-nav .tl-submenu-list {
+    padding-left: 1.6rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.4rem;
+}
+
+.main-nav .sub-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: rgba(255, 255, 255, 0.88) !important;
+    padding: 0.35rem 0.6rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+}
+
+.main-nav .sub-nav-link.active {
+    background: rgba(255, 255, 255, 0.16) !important;
+    color: #fff !important;
+}
+
+.main-nav .tl-submenu-caret {
+    font-size: 0.9rem;
+    opacity: 0.8;
 }
 
 .card,
