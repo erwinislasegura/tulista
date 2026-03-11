@@ -1,10 +1,5 @@
 <div class="page-content">
     <div class="container-fluid">
-        <div class="d-flex align-items-center justify-content-between mb-3">
-            <div>
-                <h4 class="mb-1">Productos</h4>
-            </div>
-        </div>
 
         <?php foreach ($data['flash'] as $alert): ?>
             <div class="alert alert-<?= htmlspecialchars($alert['type']) ?> alert-dismissible fade show" role="alert">
