@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     cargo VARCHAR(120) DEFAULT NULL,
     notas VARCHAR(255) DEFAULT NULL,
     password VARCHAR(255) NOT NULL,
-    rol ENUM('admin','supervisor','vendedor','bodega') NOT NULL DEFAULT 'vendedor',
+    rol VARCHAR(30) NOT NULL DEFAULT 'vendedor',
     porcentaje_comision DECIMAL(5,2) NOT NULL DEFAULT 0.00,
     estado TINYINT(1) NOT NULL DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -269,6 +269,9 @@ INSERT IGNORE INTO roles_usuario (codigo, nombre) VALUES
 ('supervisor', 'Supervisor'),
 ('vendedor', 'Vendedor'),
 ('bodega', 'Bodega');
+
+ALTER TABLE usuarios
+    ADD CONSTRAINT fk_usuarios_rol FOREIGN KEY (rol) REFERENCES roles_usuario(codigo);
 INSERT IGNORE INTO estados_pedido (codigo, nombre, orden_visual) VALUES
 ('pendiente', 'Pendiente', 1),
 ('empaquetado', 'Empaquetado', 2),
