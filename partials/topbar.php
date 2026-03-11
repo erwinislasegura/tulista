@@ -12,6 +12,7 @@ $logoutUrl = $isClientePortal ? 'logout-clientes.php' : 'logout-usuarios.php';
 $homeUrl = $isClientePortal ? 'cotizar.php' : 'index.php';
 $profileInitial = strtoupper(substr(trim((string) $profileName), 0, 1));
 $currentTitle = isset($title) && trim((string) $title) !== '' ? (string) $title : 'Dashboard';
+$topbarContext = $isClientePortal ? 'Portal cliente' : ($companyConfig['nombre'] ?? 'Tulista');
 ?>
 <header class="topbar tl-topbar-clean">
      <div class="container-fluid">
@@ -24,7 +25,7 @@ $currentTitle = isset($title) && trim((string) $title) !== '' ? (string) $title 
                     </div>
                     <div class="tl-topbar-title-wrap min-w-0">
                          <span class="tl-topbar-title text-truncate"><?= htmlspecialchars($currentTitle) ?></span>
-                         <span class="tl-topbar-context text-truncate"><?= htmlspecialchars($companyConfig['nombre'] ?? 'Tulista') ?></span>
+                         <span class="tl-topbar-context text-truncate"><?= htmlspecialchars($topbarContext) ?></span>
                     </div>
                </div>
 
@@ -42,7 +43,7 @@ $currentTitle = isset($title) && trim((string) $title) !== '' ? (string) $title 
                     </button>
 
                     <div class="dropdown topbar-item">
-                         <a type="button" class="topbar-button tl-user-trigger" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                         <a type="button" class="topbar-button tl-user-trigger" id="user-menu-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               <span class="tl-user-avatar"><?= htmlspecialchars($profileInitial) ?></span>
                               <span class="tl-user-meta d-none d-lg-flex">
                                    <strong class="tl-user-name text-truncate"><?= htmlspecialchars($profileName) ?></strong>
