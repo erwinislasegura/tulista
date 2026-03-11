@@ -202,8 +202,7 @@ small {
 }
 
 textarea.form-control {
-    min-height: 92px;
-    height: auto;
+    min-height: 94px;
 }
 
 .form-control::placeholder {
