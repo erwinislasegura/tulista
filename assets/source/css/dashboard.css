@@ -348,6 +348,120 @@ textarea.form-control {
     color: #2b2059;
 }
 
+.tl-brand-subtitle {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: #7a6da7;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.tl-topbar-brand {
+    max-width: min(58vw, 360px);
+}
+
+.tl-menu-toggle {
+    margin-right: 0 !important;
+}
+
+.tl-user-trigger {
+    width: auto;
+    min-width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    border: 1px solid #ece6fa;
+    background: rgba(255, 255, 255, 0.85);
+    padding: 0.25rem 0.65rem;
+}
+
+.tl-user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(160deg, #4B1D8A 0%, #F97316 100%);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.78rem;
+}
+
+.tl-user-name {
+    max-width: 180px;
+    font-size: 0.8rem;
+    line-height: 1.15;
+    color: #2b2059;
+}
+
+.tl-user-role {
+    max-width: 180px;
+    font-size: 0.68rem;
+    line-height: 1.15;
+    color: #7a7197;
+}
+
+.tl-user-dropdown {
+    min-width: 245px;
+    border: 1px solid #ece6fa;
+    border-radius: 12px;
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+}
+
+.tl-topbar-shortcut {
+    border-radius: 999px;
+    border-color: #e8e1f8;
+    color: #5c3d93;
+}
+
+@media (max-width: 767.98px) {
+    .topbar .container-fluid {
+        padding-left: 0.65rem;
+        padding-right: 0.65rem;
+    }
+
+    .tl-topbar-brand {
+        max-width: calc(100vw - 150px);
+        padding: 0.25rem 0.45rem;
+    }
+
+    .tl-brand-logo {
+        width: 30px;
+        height: 30px;
+    }
+
+    .tl-brand-name {
+        font-size: 0.84rem;
+    }
+
+    .tl-brand-subtitle {
+        font-size: 0.62rem;
+    }
+
+    .tl-user-trigger {
+        padding: 0.2rem;
+        width: 40px;
+        height: 40px;
+        justify-content: center;
+    }
+
+    .tl-user-avatar {
+        width: 30px;
+        height: 30px;
+        font-size: 0.72rem;
+    }
+
+    .tl-user-dropdown {
+        position: fixed !important;
+        top: 66px !important;
+        left: 0.7rem !important;
+        right: 0.7rem !important;
+        width: auto;
+        min-width: 0;
+    }
+}
+
 .tl-minimal-form {
     border: 1px solid #ece6fa;
     border-radius: 12px;
