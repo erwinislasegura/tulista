@@ -5,6 +5,20 @@ require_once __DIR__ . '/../conexion/Database.php';
 
 class AuthorizationService
 {
+    private const MENU_PERMISSIONS = [
+        'dashboard' => ['label' => 'Dashboard', 'actions' => ['view' => 'Ver', 'edit' => 'Editar', 'delete' => 'Eliminar']],
+        'cotizaciones' => ['label' => 'Cotizaciones', 'actions' => ['view' => 'Ver', 'edit' => 'Editar', 'delete' => 'Eliminar']],
+        'pedidos' => ['label' => 'Pedidos', 'actions' => ['view' => 'Ver', 'edit' => 'Editar', 'delete' => 'Eliminar']],
+        'clientes' => ['label' => 'Clientes', 'actions' => ['view' => 'Ver', 'edit' => 'Editar', 'delete' => 'Eliminar']],
+        'productos' => ['label' => 'Productos', 'actions' => ['view' => 'Ver', 'edit' => 'Editar', 'delete' => 'Eliminar']],
+        'inventario' => ['label' => 'Inventario', 'actions' => ['view' => 'Ver', 'edit' => 'Editar', 'delete' => 'Eliminar']],
+        'bodega' => ['label' => 'Bodega', 'actions' => ['view' => 'Ver', 'edit' => 'Editar', 'delete' => 'Eliminar']],
+        'reportes' => ['label' => 'Reportes', 'actions' => ['view' => 'Ver', 'edit' => 'Editar', 'delete' => 'Eliminar']],
+        'auditoria' => ['label' => 'Auditoría', 'actions' => ['view' => 'Ver', 'edit' => 'Editar', 'delete' => 'Eliminar']],
+        'usuarios' => ['label' => 'Usuarios', 'actions' => ['view' => 'Ver', 'edit' => 'Editar', 'delete' => 'Eliminar']],
+        'configuracion' => ['label' => 'Configuración', 'actions' => ['view' => 'Ver', 'edit' => 'Editar', 'delete' => 'Eliminar']],
+    ];
+
     private const DEFAULT_PERMISSIONS = [
         'admin' => ['*'],
         'supervisor' => [
@@ -42,12 +56,38 @@ class AuthorizationService
             return true;
         }
 
+        if (str_ends_with($permission, '.manage')) {
+            $edit = substr($permission, 0, -7) . '.edit';
+            if (in_array($edit, $rolePermissions, true)) {
+                return true;
+            }
+        }
+
         if (str_ends_with($permission, '.view')) {
             $manage = substr($permission, 0, -5) . '.manage';
-            return in_array($manage, $rolePermissions, true);
+            $edit = substr($permission, 0, -5) . '.edit';
+            return in_array($manage, $rolePermissions, true) || in_array($edit, $rolePermissions, true);
         }
 
         return false;
+    }
+
+    public static function permissionCatalog(): array
+    {
+        return self::MENU_PERMISSIONS;
+    }
+
+    public static function permissionForMenuAction(string $menuKey, string $action): string
+    {
+        if (!isset(self::MENU_PERMISSIONS[$menuKey]['actions'][$action])) {
+            return '';
+        }
+
+        return match ($action) {
+            'edit' => $menuKey . '.manage',
+            'delete' => $menuKey . '.delete',
+            default => $menuKey . '.view',
+        };
     }
 
     public static function requirePermission(string $permission): void

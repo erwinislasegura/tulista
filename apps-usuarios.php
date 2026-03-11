@@ -1,8 +1,8 @@
 <?php include 'partials/main.php'; ?>
 <?php
 require_once __DIR__ . '/controllers/UsuarioController.php';
-require_once __DIR__ . '/services/AuthService.php';
-AuthService::requireRole(['admin']);
+require_once __DIR__ . '/services/AuthorizationService.php';
+AuthorizationService::requirePermission('usuarios.manage');
 $controller = new UsuarioController();
 $data = $controller->handleRequest();
 ?>
