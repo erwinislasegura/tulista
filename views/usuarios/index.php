@@ -37,7 +37,7 @@
                     <td><?= (int) $usuario['estado'] ? 'Activo' : 'Inactivo' ?></td>
                     <td>
                         <div class="dropdown">
-                            <button class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" type="button">Acciones</button>
+                            <button class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" data-bs-boundary="viewport" data-bs-display="static" type="button">Acciones</button>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editUsuario<?= (int) $usuario['id'] ?>">Editar</button></li>
                                 <li><form method="post" onsubmit="return confirm('¿Eliminar usuario?');"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="<?= (int) $usuario['id'] ?>"><button class="dropdown-item text-danger" type="submit">Eliminar</button></form></li>

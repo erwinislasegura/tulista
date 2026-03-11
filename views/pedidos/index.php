@@ -96,7 +96,7 @@
                     <td><span class="badge bg-light text-dark text-capitalize"><?= htmlspecialchars($pedido['estado']) ?></span></td>
                     <td>
                         <div class="dropdown">
-                            <button class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" type="button">Acciones</button>
+                            <button class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" data-bs-boundary="viewport" data-bs-display="static" type="button">Acciones</button>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editPedido<?= (int) $pedido['id'] ?>">Editar</button></li>
                                 <li>

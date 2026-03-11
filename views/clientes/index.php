@@ -2,6 +2,8 @@
 <div class="alert alert-<?= htmlspecialchars($alert['type']) ?> py-2"><?= htmlspecialchars($alert['message']) ?></div>
 <?php endforeach; ?>
 
+
+
 <div class="card mb-4">
     <h5 class="tl-section-title">Nuevo cliente</h5>
     <form method="post" class="row g-3 tl-minimal-form">
@@ -49,7 +51,7 @@
                     <td><?= (int) $cliente['estado'] ? 'Activo' : 'Inactivo' ?></td>
                     <td>
                         <div class="dropdown">
-                            <button class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" type="button">Acciones</button>
+                            <button class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" data-bs-boundary="viewport" data-bs-display="static" type="button">Acciones</button>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="apps-clientes.php?cliente_id=<?= (int) $cliente['id'] ?>">Ver</a></li>
                                 <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editCliente<?= (int) $cliente['id'] ?>">Editar</button></li>
