@@ -3,8 +3,14 @@
 <?php endforeach; ?>
 
 <style>
+  .tl-clientes-list-card {
+    min-height: 32rem;
+    overflow: visible;
+  }
+
   .tl-clientes-table-wrap {
-    overflow-y: visible;
+    overflow: visible;
+    min-height: 24rem;
     padding-bottom: .25rem;
   }
 
@@ -61,7 +67,7 @@
     </form>
 </div>
 
-<div class="card mb-4">
+<div class="card mb-4 tl-clientes-list-card">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h5 class="tl-section-title mb-0">Clientes</h5>
         <span class="text-muted small">Selecciona un cliente para ver su historial</span>
@@ -81,7 +87,7 @@
                     <td><?= (int) $cliente['estado'] ? 'Activo' : 'Inactivo' ?></td>
                     <td>
                         <div class="dropdown">
-                            <button class="btn btn-sm tl-action-btn dropdown-toggle" data-bs-toggle="dropdown" data-bs-boundary="viewport" type="button">Acciones</button>
+                            <button class="btn btn-sm tl-action-btn dropdown-toggle" data-bs-toggle="dropdown" data-bs-boundary="viewport" data-bs-display="static" type="button">Acciones</button>
                             <ul class="dropdown-menu dropdown-menu-end tl-action-menu">
                                 <li><a class="dropdown-item" href="apps-clientes.php?cliente_id=<?= (int) $cliente['id'] ?>">Ver</a></li>
                                 <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editCliente<?= (int) $cliente['id'] ?>">Editar</button></li>
