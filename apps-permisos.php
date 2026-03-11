@@ -12,7 +12,6 @@ $data = $controller->handleRequest();
     <?php include 'partials/menu.php'; ?>
     <div class="page-content">
         <div class="container-fluid">
-            <h4 class="mb-3">Mantenedor de permisos por rol</h4>
             <?php include __DIR__ . '/views/permisos/index.php'; ?>
         </div>
         <?php include 'partials/footer.php'; ?>
