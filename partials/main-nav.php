@@ -20,6 +20,7 @@ $menu = [
     ],
     'Operación' => [
         ['page' => 'apps-productos.php', 'text' => 'Productos', 'icon' => 'solar:box-broken', 'perm' => 'productos.view', 'pages' => ['apps-productos.php','apps-productos-categorias.php','apps-productos-marcas.php','apps-productos-unidades.php','apps-productos-importacion.php']],
+        ['page' => 'apps-proveedores.php', 'text' => 'Proveedores', 'icon' => 'solar:buildings-2-broken', 'perm' => 'proveedores.view'],
         ['page' => 'apps-inventario.php', 'text' => 'Inventario', 'icon' => 'solar:archive-broken', 'perm' => 'inventario.view'],
         ['page' => 'apps-bodega.php', 'text' => 'Bodega', 'icon' => 'solar:box-minimalistic-broken', 'perm' => 'bodega.view'],
     ],

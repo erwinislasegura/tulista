@@ -12,17 +12,17 @@
             <div class="tl-form-card">
                 <h6 class="tl-form-card-title">Ficha de cliente</h6>
                 <div class="row g-2">
-                    <div class="col-md-2"><label class="form-label">RUT</label><input name="rut" class="form-control tl-compact-input" required></div>
-                    <div class="col-md-3"><label class="form-label">Nombre</label><input name="nombre" class="form-control tl-compact-input" required></div>
+                    <div class="col-md-2"><label class="form-label">RUT</label><input name="rut" class="form-control tl-compact-input" required autocomplete="off" placeholder="76.123.456-7"></div>
+                    <div class="col-md-3"><label class="form-label">Nombre</label><input name="nombre" class="form-control tl-compact-input" required autocomplete="name"></div>
                     <div class="col-md-3"><label class="form-label">Empresa</label><input name="empresa" class="form-control tl-compact-input"></div>
                     <div class="col-md-2"><label class="form-label">Giro</label><input name="giro" class="form-control tl-compact-input"></div>
                     <div class="col-md-2"><label class="form-label">Comuna</label><input name="comuna" class="form-control tl-compact-input"></div>
-                    <div class="col-md-2"><label class="form-label">Teléfono</label><input name="telefono" class="form-control tl-compact-input"></div>
-                    <div class="col-md-2"><label class="form-label">Email</label><input type="email" name="email" class="form-control tl-compact-input" required></div>
-                    <div class="col-md-4"><label class="form-label">Dirección</label><input name="direccion" class="form-control tl-compact-input"></div>
+                    <div class="col-md-2"><label class="form-label">Teléfono</label><input name="telefono" class="form-control tl-compact-input" inputmode="tel" autocomplete="tel"></div>
+                    <div class="col-md-2"><label class="form-label">Email</label><input type="email" name="email" class="form-control tl-compact-input" required autocomplete="email"></div>
+                    <div class="col-md-4"><label class="form-label">Dirección</label><input name="direccion" class="form-control tl-compact-input" autocomplete="street-address"></div>
                     <div class="col-md-2"><label class="form-label">Tipo cliente</label><select name="tipo_cliente" class="form-select tl-compact-input"><option value="mayorista">Mayorista</option><option value="minorista">Minorista</option><option value="institucional">Institucional</option></select></div>
                     <div class="col-md-2"><label class="form-label">Clave portal</label><input type="password" name="password" class="form-control tl-compact-input" required></div>
-                    <div class="col-md-2"><label class="form-label">Token acceso</label><input id="cliente_token" name="token" class="form-control tl-compact-input" value="<?= bin2hex(random_bytes(5)) ?>"></div>
+                    <div class="col-md-2"><label class="form-label">Token acceso</label><input id="cliente_token" name="token" class="form-control tl-compact-input" value="<?= bin2hex(random_bytes(5)) ?>"><small class="text-muted">Se autogenera según nombre/empresa.</small></div>
                     <div class="col-md-2 form-check mt-4 ms-2"><input type="checkbox" name="estado" class="form-check-input" checked><label class="form-check-label">Activo</label></div>
                 </div>
                 <div class="tl-form-actions d-flex justify-content-end"><button class="btn btn-primary" type="submit">Crear cliente</button></div>
@@ -45,7 +45,7 @@
                 <tr>
                     <td><strong><?= htmlspecialchars($cliente['nombre']) ?></strong><div class="small text-muted"><?= htmlspecialchars($cliente['rut']) ?> · <?= htmlspecialchars($cliente['empresa'] ?: '-') ?> · <?= htmlspecialchars($cliente['comuna'] ?: '-') ?></div></td>
                     <td><?= htmlspecialchars($cliente['email']) ?><div class="small text-muted"><?= htmlspecialchars($cliente['telefono'] ?: '-') ?> · <?= htmlspecialchars($cliente['tipo_cliente'] ?: '-') ?></div></td>
-                    <td><input class="form-control form-control-sm" readonly value="<?= htmlspecialchars($portalUrl) ?>"></td>
+                    <td><div class="input-group input-group-sm"><input class="form-control" readonly value="<?= htmlspecialchars($portalUrl) ?>"><button class="btn btn-outline-secondary js-copy-portal" type="button" data-url="<?= htmlspecialchars($portalUrl) ?>">Copiar</button></div></td>
                     <td><?= (int) $cliente['total_cotizaciones'] ?></td>
                     <td><?= (int) $cliente['total_pedidos'] ?></td>
                     <td><?= (int) $cliente['estado'] ? 'Activo' : 'Inactivo' ?></td>
@@ -128,4 +128,17 @@
   nombre?.addEventListener('input', refreshToken);
   empresa?.addEventListener('input', refreshToken);
 })();
+
+  document.querySelectorAll('.js-copy-portal').forEach(function (btn) {
+    btn.addEventListener('click', async function () {
+      const url = this.dataset.url || '';
+      try {
+        await navigator.clipboard.writeText(url);
+        this.textContent = 'Copiado';
+        setTimeout(() => this.textContent = 'Copiar', 1200);
+      } catch (e) {
+        window.prompt('Copia el enlace del portal:', url);
+      }
+    });
+  });
 </script>

@@ -11,6 +11,7 @@ class AuthorizationService
         'pedidos' => ['label' => 'Pedidos', 'actions' => ['view' => 'Ver', 'edit' => 'Editar', 'delete' => 'Eliminar']],
         'clientes' => ['label' => 'Clientes', 'actions' => ['view' => 'Ver', 'edit' => 'Editar', 'delete' => 'Eliminar']],
         'productos' => ['label' => 'Productos', 'actions' => ['view' => 'Ver', 'edit' => 'Editar', 'delete' => 'Eliminar']],
+        'proveedores' => ['label' => 'Proveedores', 'actions' => ['view' => 'Ver', 'edit' => 'Editar', 'delete' => 'Eliminar']],
         'inventario' => ['label' => 'Inventario', 'actions' => ['view' => 'Ver', 'edit' => 'Editar', 'delete' => 'Eliminar']],
         'bodega' => ['label' => 'Bodega', 'actions' => ['view' => 'Ver', 'edit' => 'Editar', 'delete' => 'Eliminar']],
         'reportes' => ['label' => 'Reportes', 'actions' => ['view' => 'Ver', 'edit' => 'Editar', 'delete' => 'Eliminar']],
@@ -22,15 +23,15 @@ class AuthorizationService
     private const DEFAULT_PERMISSIONS = [
         'admin' => ['*'],
         'supervisor' => [
-            'dashboard.view', 'cotizaciones.manage', 'pedidos.manage', 'clientes.manage', 'productos.manage',
+            'dashboard.view', 'cotizaciones.manage', 'pedidos.manage', 'clientes.manage', 'productos.manage', 'proveedores.manage',
             'inventario.manage', 'bodega.view', 'reportes.view', 'auditoria.view', 'usuarios.manage', 'configuracion.view',
         ],
         'vendedor' => [
-            'dashboard.view', 'cotizaciones.manage', 'pedidos.manage', 'clientes.manage', 'productos.manage',
+            'dashboard.view', 'cotizaciones.manage', 'pedidos.manage', 'clientes.manage', 'productos.manage', 'proveedores.manage',
             'inventario.view', 'bodega.view', 'reportes.basic',
         ],
         'bodega' => [
-            'dashboard.view', 'pedidos.view', 'inventario.manage', 'bodega.view', 'productos.view',
+            'dashboard.view', 'pedidos.view', 'inventario.manage', 'bodega.view', 'productos.view', 'proveedores.view',
         ],
     ];
 

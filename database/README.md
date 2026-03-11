@@ -7,10 +7,7 @@
 - `migrations/004_seed_super_admin_usuario.sql`: super administrador por defecto.
 - `migrations/005_expand_erp_core.sql`: expansión ERP (pedidos, comisiones, inventario, auditoría, mantenedores y configuración).
 - `migrations/006_add_usuario_profile_fields.sql`: agrega teléfono, dirección, cargo y notas en usuarios.
-- `migrations/007_add_descuento_pct_to_cotizacion_detalle.sql`: agrega descuento en detalle de cotización.
-- `migrations/008_update_pedidos_estado_bodega.sql`: normaliza estados de pedido para bodega.
-- `migrations/009_rbac_pwa_form_optimizations.sql`: mejoras RBAC/PWA y formularios.
-- `migrations/010_rbac_roles_usuarios_fk_y_permisos.sql`: deja RBAC funcional con roles dinámicos, FK `usuarios.rol -> roles_usuario.codigo` y permisos base.
+- `migrations/010_create_proveedores_module.sql`: crea módulo de proveedores con permisos por rol.
 
 ## Notas de estructura
 
@@ -27,7 +24,11 @@ mysql -u root -p < database/schema.sql
 ## Actualización incremental (recomendada)
 
 ```bash
-./database/update_erp.sh tulista
+mysql -u root -p tulista < database/migrations/003_create_usuarios_clientes_cotizaciones.sql
+mysql -u root -p tulista < database/migrations/004_seed_super_admin_usuario.sql
+mysql -u root -p tulista < database/migrations/005_expand_erp_core.sql
+mysql -u root -p tulista < database/migrations/006_add_usuario_profile_fields.sql
+mysql -u root -p tulista < database/migrations/010_create_proveedores_module.sql
 ```
 
 Variables opcionales:
