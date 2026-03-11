@@ -102,7 +102,7 @@ class ClienteController
 
     private function payload(bool $passwordRequired): ?array
     {
-        $rut = trim($_POST['rut'] ?? '');
+        $rut = $this->normalizeRut((string) ($_POST['rut'] ?? ''));
         $nombre = trim($_POST['nombre'] ?? '');
         $empresa = trim($_POST['empresa'] ?? '');
         $email = trim($_POST['email'] ?? '');
@@ -125,6 +125,10 @@ class ClienteController
             return null;
         }
 
+        if (strlen($token) < 6) {
+            $token = bin2hex(random_bytes(5));
+        }
+
         return [
             'rut' => $rut,
             'nombre' => $nombre,
@@ -139,6 +143,13 @@ class ClienteController
             'token' => $token,
             'estado' => $estado,
         ];
+    }
+
+    private function normalizeRut(string $rut): string
+    {
+        $rut = strtoupper(trim($rut));
+        $rut = preg_replace('/\s+/', '', $rut) ?? '';
+        return preg_replace('/[^0-9K\-.]/', '', $rut) ?? '';
     }
 
     private function flash(string $type, string $message): void
