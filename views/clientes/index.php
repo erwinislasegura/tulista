@@ -31,12 +31,12 @@
     </form>
 </div>
 
-<div class="card mb-4">
+<div class="card mb-4 tl-clientes-list-card">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h5 class="tl-section-title mb-0">Clientes</h5>
         <span class="text-muted small">Selecciona un cliente para ver su historial</span>
     </div>
-    <div class="table-responsive">
+    <div class="table-responsive tl-clientes-table-wrap">
         <table class="table align-middle">
             <thead><tr><th>Cliente</th><th>Contacto</th><th>Portal cliente</th><th>Cotizaciones</th><th>Pedidos</th><th>Estado</th><th>Acciones</th></tr></thead>
             <tbody>
