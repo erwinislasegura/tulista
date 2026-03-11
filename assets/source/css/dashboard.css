@@ -544,6 +544,27 @@ textarea.form-control {
     }
 }
 
+/* Fix menú lateral en móvil: cuando JS agrega .sidebar-enable debe mostrarse */
+@media (max-width: 1140px) {
+    html[data-menu-size="hidden"].sidebar-enable .main-nav,
+    html.sidebar-enable .main-nav {
+        transform: translateX(0) !important;
+        margin-left: 0 !important;
+        box-shadow: 6px 0 24px rgba(15, 23, 42, 0.2);
+    }
+
+    .topbar .button-toggle-menu.tl-menu-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+    }
+
+    .topbar .button-toggle-menu.tl-menu-toggle iconify-icon {
+        font-size: 1.25rem;
+    }
+}
+
 .tl-minimal-form {
     border: 1px solid #ece6fa;
     border-radius: 12px;
