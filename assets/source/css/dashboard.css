@@ -348,6 +348,150 @@ textarea.form-control {
     color: #2b2059;
 }
 
+.tl-brand-subtitle {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: #7a6da7;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.tl-topbar-clean {
+    border-bottom: 1px solid #ebe7f6;
+    background: #ffffff;
+}
+
+.tl-topbar-layout {
+    gap: 0.75rem;
+}
+
+.tl-menu-toggle {
+    margin-right: 0 !important;
+}
+
+.tl-topbar-title-wrap {
+    display: flex;
+    flex-direction: column;
+}
+
+.tl-topbar-title {
+    font-size: 1rem;
+    line-height: 1.1;
+    font-weight: 700;
+    color: #241b4b;
+}
+
+.tl-topbar-context {
+    font-size: 0.7rem;
+    color: #7a7197;
+    line-height: 1.1;
+}
+
+.tl-topbar-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    border: 1px solid #ece7f8;
+    color: #5c3d93;
+    background: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.tl-topbar-icon:hover {
+    background: #f7f3ff;
+    color: #4b1d8a;
+}
+
+.tl-user-trigger {
+    width: auto;
+    min-width: 44px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid #ece7f8;
+    background: #fff;
+    padding: 0.2rem 0.45rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.tl-user-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: #4b1d8a;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.75rem;
+}
+
+.tl-user-name {
+    max-width: 150px;
+    font-size: 0.78rem;
+    line-height: 1.1;
+    color: #2b2059;
+}
+
+.tl-user-role {
+    max-width: 150px;
+    font-size: 0.66rem;
+    line-height: 1.1;
+    color: #7a7197;
+}
+
+.tl-user-dropdown {
+    min-width: 230px;
+    border: 1px solid #ece7f8;
+    border-radius: 10px;
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
+}
+
+@media (max-width: 767.98px) {
+    .topbar .container-fluid {
+        padding-left: 0.65rem;
+        padding-right: 0.65rem;
+    }
+
+    .tl-topbar-title {
+        font-size: 0.92rem;
+    }
+
+    .tl-topbar-context {
+        max-width: 34vw;
+        display: block;
+    }
+
+    .tl-topbar-icon {
+        width: 34px;
+        height: 34px;
+    }
+
+    .tl-user-trigger {
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        justify-content: center;
+    }
+
+    .tl-user-avatar {
+        width: 24px;
+        height: 24px;
+        border-radius: 7px;
+        font-size: 0.7rem;
+    }
+
+    .tl-user-dropdown {
+        min-width: 210px;
+    }
+}
+
 .tl-minimal-form {
     border: 1px solid #ece6fa;
     border-radius: 12px;
