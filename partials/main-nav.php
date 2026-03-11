@@ -19,7 +19,17 @@ $menu = [
         ['page' => 'apps-clientes.php', 'text' => '3. Clientes', 'icon' => 'solar:users-group-rounded-broken', 'perm' => 'clientes.manage'],
     ],
     'Operación' => [
-        ['page' => 'apps-productos.php', 'text' => 'Productos', 'icon' => 'solar:box-broken', 'perm' => 'productos.view', 'pages' => ['apps-productos.php','apps-productos-categorias.php','apps-productos-marcas.php','apps-productos-unidades.php','apps-productos-importacion.php']],
+        [
+            'page' => 'apps-productos.php',
+            'text' => 'Productos',
+            'icon' => 'solar:box-broken',
+            'perm' => 'productos.view',
+            'pages' => ['apps-productos.php','apps-productos-categorias.php','apps-productos-marcas.php','apps-productos-unidades.php','apps-productos-importacion.php'],
+            'children' => [
+                ['page' => 'apps-productos.php', 'text' => 'Listado general', 'icon' => 'solar:list-broken', 'perm' => 'productos.view'],
+                ['page' => 'apps-productos-importacion.php', 'text' => 'Importar desde Excel', 'icon' => 'solar:import-broken', 'perm' => 'productos.view'],
+            ],
+        ],
         ['page' => 'apps-proveedores.php', 'text' => 'Proveedores', 'icon' => 'solar:buildings-2-broken', 'perm' => 'proveedores.view'],
         ['page' => 'apps-inventario.php', 'text' => 'Inventario', 'icon' => 'solar:archive-broken', 'perm' => 'inventario.view'],
         ['page' => 'apps-bodega.php', 'text' => 'Bodega', 'icon' => 'solar:box-minimalistic-broken', 'perm' => 'bodega.view'],
@@ -30,7 +40,20 @@ $menu = [
     ],
     'Sistema' => [
         ['page' => 'apps-usuarios.php', 'text' => 'Usuarios', 'icon' => 'solar:user-id-broken', 'perm' => 'usuarios.manage'],
-        ['page' => 'apps-mantenedores.php', 'text' => 'Mantenedores', 'icon' => 'solar:slider-horizontal-broken', 'perm' => 'usuarios.manage'],
+        [
+            'page' => 'apps-mantenedores.php',
+            'text' => 'Mantenedores',
+            'icon' => 'solar:slider-horizontal-broken',
+            'perm' => 'usuarios.manage',
+            'pages' => ['apps-mantenedores.php', 'apps-productos-categorias.php', 'apps-productos-marcas.php', 'apps-productos-unidades.php', 'apps-roles.php', 'apps-permisos.php'],
+            'children' => [
+                ['page' => 'apps-productos-categorias.php', 'text' => 'Categorías', 'icon' => 'solar:tag-broken', 'perm' => 'productos.view'],
+                ['page' => 'apps-productos-marcas.php', 'text' => 'Marcas', 'icon' => 'solar:star-broken', 'perm' => 'productos.view'],
+                ['page' => 'apps-productos-unidades.php', 'text' => 'Unidades', 'icon' => 'solar:ruler-broken', 'perm' => 'productos.view'],
+                ['page' => 'apps-roles.php', 'text' => 'Roles', 'icon' => 'solar:shield-user-broken', 'perm' => 'usuarios.manage'],
+                ['page' => 'apps-permisos.php', 'text' => 'Permisos', 'icon' => 'solar:key-broken', 'perm' => 'usuarios.manage'],
+            ],
+        ],
         ['page' => 'apps-configuracion-empresa.php', 'text' => 'Configuración', 'icon' => 'solar:settings-broken', 'perm' => 'configuracion.view'],
     ],
 ];
@@ -65,9 +88,36 @@ $menu = [
                          }
                          ?>
                          <li class="menu-title"><?= htmlspecialchars($section) ?></li>
-                         <?php foreach ($visible as $item): ?>
-                              <?php $activePages = $item['pages'] ?? [$item['page']]; ?>
-                              <li class="nav-item"><a class="nav-link <?= in_array($currentPage, $activePages, true) ? 'active' : '' ?>" href="<?= htmlspecialchars($item['page']) ?>"><span class="nav-icon"><iconify-icon icon="<?= htmlspecialchars($item['icon']) ?>"></iconify-icon></span><span class="nav-text"><?= htmlspecialchars($item['text']) ?></span></a></li>
+                         <?php foreach ($visible as $index => $item): ?>
+                              <?php
+                              $activePages = $item['pages'] ?? [$item['page']];
+                              $children = array_values(array_filter($item['children'] ?? [], static fn ($child) => AuthorizationService::can($child['perm'] ?? '')));
+                              $hasChildren = !empty($children);
+                              $isActive = in_array($currentPage, $activePages, true);
+                              $collapseId = 'menu-' . preg_replace('/[^a-z0-9]+/i', '-', strtolower($section . '-' . $index));
+                              ?>
+                              <li class="nav-item">
+                                   <?php if ($hasChildren): ?>
+                                        <a class="nav-link d-flex align-items-center justify-content-between <?= $isActive ? 'active' : '' ?>" data-bs-toggle="collapse" href="#<?= htmlspecialchars($collapseId) ?>" role="button" aria-expanded="<?= $isActive ? 'true' : 'false' ?>" aria-controls="<?= htmlspecialchars($collapseId) ?>">
+                                             <span class="d-flex align-items-center gap-2"><span class="nav-icon"><iconify-icon icon="<?= htmlspecialchars($item['icon']) ?>"></iconify-icon></span><span class="nav-text"><?= htmlspecialchars($item['text']) ?></span></span>
+                                             <iconify-icon icon="solar:alt-arrow-down-broken" class="tl-submenu-caret"></iconify-icon>
+                                        </a>
+                                        <div class="collapse <?= $isActive ? 'show' : '' ?>" id="<?= htmlspecialchars($collapseId) ?>">
+                                             <ul class="nav flex-column tl-submenu-list">
+                                                  <?php foreach ($children as $child): ?>
+                                                       <li class="nav-item">
+                                                            <a class="sub-nav-link <?= $currentPage === $child['page'] ? 'active' : '' ?>" href="<?= htmlspecialchars($child['page']) ?>">
+                                                                 <span class="nav-icon"><iconify-icon icon="<?= htmlspecialchars($child['icon']) ?>"></iconify-icon></span>
+                                                                 <span class="nav-text"><?= htmlspecialchars($child['text']) ?></span>
+                                                            </a>
+                                                       </li>
+                                                  <?php endforeach; ?>
+                                             </ul>
+                                        </div>
+                                   <?php else: ?>
+                                        <a class="nav-link <?= $isActive ? 'active' : '' ?>" href="<?= htmlspecialchars($item['page']) ?>"><span class="nav-icon"><iconify-icon icon="<?= htmlspecialchars($item['icon']) ?>"></iconify-icon></span><span class="nav-text"><?= htmlspecialchars($item['text']) ?></span></a>
+                                   <?php endif; ?>
+                              </li>
                          <?php endforeach; ?>
                     <?php endforeach; ?>
                     <li class="nav-item mt-2"><a class="nav-link" href="logout-usuarios.php"><span class="nav-icon"><iconify-icon icon="solar:logout-2-broken"></iconify-icon></span><span class="nav-text">Cerrar sesión</span></a></li>
