@@ -77,6 +77,14 @@ body,
     opacity: 0.8;
 }
 
+.main-nav .nav-link[aria-expanded="true"] .tl-submenu-caret {
+    transform: rotate(180deg);
+}
+
+.main-nav .tl-submenu-caret {
+    transition: transform 0.2s ease;
+}
+
 .card,
 .auth-card,
 .tl-card {
