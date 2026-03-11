@@ -15,10 +15,10 @@
     --erp-bg-muted: #eef2f6;
 
     /* Sidebar */
-    --erp-sidebar-bg: #1e293b;
-    --erp-sidebar-bg-soft: #263449;
-    --erp-sidebar-text: #d6e0ee;
-    --erp-sidebar-text-muted: #94a3b8;
+    --erp-sidebar-bg: #334155;
+    --erp-sidebar-bg-soft: #3f5168;
+    --erp-sidebar-text: #f1f5f9;
+    --erp-sidebar-text-muted: #c7d2e1;
     --erp-sidebar-active: #e6f0fb;
     --erp-sidebar-active-text: #0a6ed1;
 
@@ -82,13 +82,14 @@ small {
 
 /* ===== Sidebar ===== */
 .main-nav {
-    background: var(--erp-sidebar-bg) !important;
-    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    background: linear-gradient(180deg, var(--erp-sidebar-bg) 0%, #3b4d63 100%) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 2px 0 20px rgba(15, 23, 42, 0.08);
 }
 
 .main-nav .logo-box {
-    background: var(--erp-sidebar-bg-soft);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+    background: rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .tl-brand-block {
@@ -224,22 +225,30 @@ small {
 
 /* ===== Forms ===== */
 .form-label {
-    font-size: 0.76rem;
-    font-weight: 620;
-    color: #334155;
-    margin-bottom: 0.28rem;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
+    color: var(--erp-text-primary);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    margin-bottom: 0.3rem;
+    text-transform: none;
+}
+
+.form-control,
+.form-select,
+.form-control:focus,
+.form-select:focus {
+    min-height: 36px;
+    height: 36px;
+    border-radius: var(--erp-radius-sm);
 }
 
 .form-control,
 .form-select {
-    min-height: 38px;
-    background: #fff;
-    color: #0f172a;
     border: 1px solid var(--erp-border);
-    border-radius: var(--erp-radius-sm);
-    font-size: 0.86rem;
+    color: var(--erp-text-primary);
+    background-color: #fff;
+    font-size: 0.84rem;
+    padding: 0.32rem 0.65rem;
 }
 
 textarea.form-control {
@@ -247,18 +256,47 @@ textarea.form-control {
 }
 
 .form-control::placeholder {
-    color: #94a3b8;
+    color: #9ca3af;
 }
 
 .form-control:focus,
 .form-select:focus {
-    border-color: #7cb7f0;
-    box-shadow: 0 0 0 3px rgba(10, 110, 209, 0.12);
+    border-color: var(--erp-primary);
+    box-shadow: 0 0 0 0.2rem rgba(10, 110, 209, 0.14);
 }
 
 .form-check-input:checked {
     background-color: var(--erp-primary);
     border-color: var(--erp-primary);
+}
+
+.tl-form-card {
+    border: 1px solid #e1e8f0;
+    border-radius: 12px;
+    padding: 14px;
+    background: #ffffff;
+}
+
+.tl-form-card-title {
+    font-size: 0.82rem;
+    color: #2a4568;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+}
+
+.tl-form-actions {
+    border-top: 1px solid #eef0f6;
+    margin-top: 0.25rem;
+    padding-top: 0.85rem;
+}
+
+.tl-input-group .input-group-text {
+    background: #eef3f8;
+    border-color: var(--erp-border);
+    color: #7a8091;
+    font-size: 0.78rem;
 }
 
 /* ===== Buttons ===== */
