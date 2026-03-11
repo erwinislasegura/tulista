@@ -12,13 +12,6 @@ $data = $controller->handleRequest();
     <?php include 'partials/menu.php'; ?>
     <div class="page-content">
         <div class="container-fluid">
-            <div class="d-flex align-items-center justify-content-between mb-3">
-                <div>
-                    <h4 class="mb-1">Usuarios internos</h4>
-                    <p class="text-muted mb-0">Control de acceso, cargos y comisiones del equipo.</p>
-                </div>
-                <span class="badge bg-primary-subtle text-primary fs-6 px-3 py-2 rounded-pill">Módulo ERP</span>
-            </div>
             <?php include __DIR__ . '/views/usuarios/index.php'; ?>
         </div>
         <?php include 'partials/footer.php'; ?>

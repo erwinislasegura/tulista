@@ -1,12 +1,5 @@
 <div class="page-content">
     <div class="container-fluid">
-        <div class="d-flex align-items-center justify-content-between mb-4">
-            <div>
-                <h4 class="mb-1"><?= htmlspecialchars($pageTitle) ?></h4>
-                <p class="text-muted mb-0">Gestión ERP de catálogo, stock y precios de productos.</p>
-            </div>
-            <span class="badge bg-primary-subtle text-primary fs-6 px-3 py-2 rounded-pill">Módulo ERP</span>
-        </div>
 
         <?php foreach ($data['flash'] as $alert): ?>
             <div class="alert alert-<?= htmlspecialchars($alert['type']) ?> alert-dismissible fade show" role="alert">
