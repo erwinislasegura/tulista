@@ -2,6 +2,38 @@
 <div class="alert alert-<?= htmlspecialchars($alert['type']) ?> py-2"><?= htmlspecialchars($alert['message']) ?></div>
 <?php endforeach; ?>
 
+<style>
+  .tl-clientes-table-wrap {
+    overflow-y: visible;
+    padding-bottom: .25rem;
+  }
+
+  .tl-action-btn {
+    border-radius: 999px;
+    font-size: .75rem;
+    line-height: 1.2;
+    font-weight: 600;
+    padding: .3rem .65rem;
+    border-color: #d9dee5;
+    color: #2f3a4c;
+    background: #fff;
+  }
+
+  .tl-action-menu {
+    min-width: 11rem;
+    border-radius: .6rem;
+    border: 1px solid #e7eaef;
+    box-shadow: 0 10px 24px rgba(23, 38, 61, .12);
+    padding: .35rem;
+  }
+
+  .tl-action-menu .dropdown-item {
+    border-radius: .4rem;
+    font-size: .8125rem;
+    padding: .45rem .6rem;
+  }
+</style>
+
 <div class="card mb-4">
     <h5 class="tl-section-title">Nuevo cliente</h5>
     <form method="post" class="row g-3 tl-minimal-form">
@@ -34,7 +66,7 @@
         <h5 class="tl-section-title mb-0">Clientes</h5>
         <span class="text-muted small">Selecciona un cliente para ver su historial</span>
     </div>
-    <div class="table-responsive">
+    <div class="table-responsive tl-clientes-table-wrap">
         <table class="table align-middle">
             <thead><tr><th>Cliente</th><th>Contacto</th><th>Portal cliente</th><th>Cotizaciones</th><th>Pedidos</th><th>Estado</th><th>Acciones</th></tr></thead>
             <tbody>
@@ -49,8 +81,8 @@
                     <td><?= (int) $cliente['estado'] ? 'Activo' : 'Inactivo' ?></td>
                     <td>
                         <div class="dropdown">
-                            <button class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" type="button">Acciones</button>
-                            <ul class="dropdown-menu dropdown-menu-end">
+                            <button class="btn btn-sm tl-action-btn dropdown-toggle" data-bs-toggle="dropdown" data-bs-boundary="viewport" type="button">Acciones</button>
+                            <ul class="dropdown-menu dropdown-menu-end tl-action-menu">
                                 <li><a class="dropdown-item" href="apps-clientes.php?cliente_id=<?= (int) $cliente['id'] ?>">Ver</a></li>
                                 <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editCliente<?= (int) $cliente['id'] ?>">Editar</button></li>
                                 <li><a class="dropdown-item" target="_blank" href="<?= htmlspecialchars($portalUrl) ?>">Abrir portal</a></li>
