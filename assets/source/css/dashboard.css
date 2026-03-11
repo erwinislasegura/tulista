@@ -54,7 +54,7 @@ body,
 
 .page-content {
     background: transparent;
-    padding: 1rem 0.6rem 1.2rem;
+    padding: calc(70px + 1rem) 0.6rem 1.2rem;
 }
 
 .page-content .container-fluid {
@@ -153,58 +153,8 @@ small {
 
 /* ===== Topbar ===== */
 .topbar {
+    border-bottom: 1px solid #e5eaf0;
     background: #ffffff;
-    border-bottom: 1px solid var(--erp-border-soft);
-    box-shadow: var(--erp-shadow-sm);
-}
-
-.tl-topbar-title {
-    font-size: 1rem;
-    color: #0f172a;
-    font-weight: 650;
-}
-
-.tl-topbar-context {
-    font-size: 0.74rem;
-    color: var(--erp-text-secondary);
-}
-
-.topbar-button.tl-topbar-action,
-.tl-menu-toggle {
-    border: 1px solid transparent;
-    border-radius: 9px;
-    color: #4b5563;
-}
-
-.topbar-button.tl-topbar-action:hover,
-.tl-menu-toggle:hover {
-    background: var(--erp-bg-soft);
-    border-color: var(--erp-border-soft);
-    color: #111827;
-}
-
-.tl-user-trigger {
-    border: 1px solid var(--erp-border-soft);
-    border-radius: 999px;
-    background: #fff;
-    box-shadow: var(--erp-shadow-sm);
-}
-
-.tl-user-avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: #e0ecfb;
-    color: #0a6ed1;
-    display: grid;
-    place-items: center;
-    font-weight: 700;
-}
-
-.tl-user-dropdown {
-    border: 1px solid var(--erp-border-soft);
-    border-radius: var(--erp-radius-md);
-    box-shadow: var(--erp-shadow-md);
 }
 
 /* ===== Cards / sections ===== */
