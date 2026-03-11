@@ -2,17 +2,20 @@
 
 require_once __DIR__ . '/../models/Usuario.php';
 require_once __DIR__ . '/../services/AuthService.php';
+require_once __DIR__ . '/../models/RoleModel.php';
 require_once __DIR__ . '/../services/AuthorizationService.php';
 require_once __DIR__ . '/../services/AuditService.php';
 
 class UsuarioController
 {
     private Usuario $usuarios;
+    private RoleModel $roles;
 
     public function __construct()
     {
         AuthService::startSession();
         $this->usuarios = new Usuario();
+        $this->roles = new RoleModel();
         $_SESSION['usuarios_flash'] = $_SESSION['usuarios_flash'] ?? [];
     }
 
@@ -33,7 +36,7 @@ class UsuarioController
         $flash = $_SESSION['usuarios_flash'];
         $_SESSION['usuarios_flash'] = [];
 
-        return ['usuarios' => $this->usuarios->all(), 'flash' => $flash, 'auth' => AuthService::user()];
+        return ['usuarios' => $this->usuarios->all(), 'roles' => $this->roles->all(true), 'flash' => $flash, 'auth' => AuthService::user()];
     }
 
     public function login(): ?string
@@ -124,7 +127,7 @@ class UsuarioController
         $rol = $_POST['rol'] ?? 'vendedor';
         $estado = !empty($_POST['estado']) ? 1 : 0;
         $porcentajeComision = (float) ($_POST['porcentaje_comision'] ?? 0);
-        $rolesValidos = ['admin', 'supervisor', 'vendedor', 'bodega'];
+        $rolesValidos = array_column($this->roles->all(true), 'codigo');
 
         if ($nombre === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || !in_array($rol, $rolesValidos, true)) {
             $this->flash('warning', 'Completa nombre, email válido y rol.');

@@ -7,15 +7,16 @@
 - `migrations/004_seed_super_admin_usuario.sql`: super administrador por defecto.
 - `migrations/005_expand_erp_core.sql`: expansión ERP (pedidos, comisiones, inventario, auditoría, mantenedores y configuración).
 - `migrations/006_add_usuario_profile_fields.sql`: agrega teléfono, dirección, cargo y notas en usuarios.
+- `migrations/007_add_descuento_pct_to_cotizacion_detalle.sql`: agrega descuento en detalle de cotización.
+- `migrations/008_update_pedidos_estado_bodega.sql`: normaliza estados de pedido para bodega.
+- `migrations/009_rbac_pwa_form_optimizations.sql`: mejoras RBAC/PWA y formularios.
+- `migrations/010_rbac_roles_usuarios_fk_y_permisos.sql`: deja RBAC funcional con roles dinámicos, FK `usuarios.rol -> roles_usuario.codigo` y permisos base.
 
 ## Notas de estructura
 
-- `usuarios` soporta roles (`admin`, `supervisor`, `vendedor`, `bodega`) y comisión por vendedor.
-- `clientes` permite login con `rut + password` y acceso por `token_acceso`.
-- `cotizaciones` registra responsable (`usuario_id`) y estados de ciclo comercial.
-- `pedidos` concentra operación logística y venta.
-- `ventas_resumen` y `comisiones` habilitan dashboard financiero.
-- `movimientos_stock` y `log_sistema` entregan trazabilidad operativa.
+- `usuarios.rol` ahora es `VARCHAR(30)` y queda relacionado por FK con `roles_usuario(codigo)`.
+- Los roles son mantenibles desde la UI y persisten en `roles_usuario`.
+- Los permisos se guardan en `role_permissions` por rol.
 
 ## Instalación completa
 
@@ -23,11 +24,16 @@
 mysql -u root -p < database/schema.sql
 ```
 
-## Actualización incremental
+## Actualización incremental (recomendada)
 
 ```bash
-mysql -u root -p tulista < database/migrations/003_create_usuarios_clientes_cotizaciones.sql
-mysql -u root -p tulista < database/migrations/004_seed_super_admin_usuario.sql
-mysql -u root -p tulista < database/migrations/005_expand_erp_core.sql
-mysql -u root -p tulista < database/migrations/006_add_usuario_profile_fields.sql
+./database/update_erp.sh tulista
 ```
+
+Variables opcionales:
+
+```bash
+DB_HOST=127.0.0.1 DB_PORT=3306 DB_USER=root DB_PASS=secret ./database/update_erp.sh tulista
+```
+
+El script `update_erp.sh` ahora registra migraciones aplicadas en `schema_migrations`, por lo que no vuelve a ejecutar una migración ya aplicada.
