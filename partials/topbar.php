@@ -9,35 +9,42 @@ $companyConfig = CompanyConfigService::get();
 $profileName = $isClientePortal ? ($cliente['nombre'] ?? 'Cliente') : ($user['nombre'] ?? 'Usuario');
 $profileSubtitle = $isClientePortal ? ('RUT: ' . ($cliente['rut'] ?? '-')) : ('Rol: ' . ($user['rol'] ?? 'usuario'));
 $logoutUrl = $isClientePortal ? 'logout-clientes.php' : 'logout-usuarios.php';
+$homeUrl = $isClientePortal ? 'cotizar.php' : 'index.php';
 $profileInitial = strtoupper(substr(trim((string) $profileName), 0, 1));
-$currentTitle = isset($title) && trim((string) $title) !== '' ? (string) $title : ($companyConfig['nombre'] ?? 'Tulista');
+$currentTitle = isset($title) && trim((string) $title) !== '' ? (string) $title : 'Dashboard';
 ?>
 <header class="topbar tl-topbar-clean">
      <div class="container-fluid">
           <div class="navbar-header tl-topbar-layout">
-               <div class="d-flex align-items-center gap-2 min-w-0">
+               <div class="tl-topbar-left min-w-0">
                     <div class="topbar-item">
                          <button type="button" class="button-toggle-menu tl-menu-toggle" aria-label="Mostrar u ocultar menú lateral">
-                              <iconify-icon icon="solar:hamburger-menu-broken" class="fs-24 align-middle"></iconify-icon>
+                              <iconify-icon icon="solar:hamburger-menu-broken" class="fs-22 align-middle"></iconify-icon>
                          </button>
                     </div>
                     <div class="tl-topbar-title-wrap min-w-0">
-                         <h1 class="tl-topbar-title text-truncate mb-0"><?= htmlspecialchars($currentTitle) ?></h1>
-                         <small class="tl-topbar-context text-truncate"><?= htmlspecialchars($companyConfig['nombre'] ?? 'Tulista') ?></small>
+                         <span class="tl-topbar-title text-truncate"><?= htmlspecialchars($currentTitle) ?></span>
+                         <span class="tl-topbar-context text-truncate"><?= htmlspecialchars($companyConfig['nombre'] ?? 'Tulista') ?></span>
                     </div>
                </div>
 
-               <div class="d-flex align-items-center gap-2">
-                    <a href="<?= htmlspecialchars($isClientePortal ? 'cotizar.php' : 'index.php') ?>" class="topbar-button tl-topbar-icon" title="Ir al inicio" aria-label="Ir al inicio">
+               <div class="tl-topbar-right">
+                    <a href="<?= htmlspecialchars($homeUrl) ?>" class="topbar-button tl-topbar-action" title="Inicio" aria-label="Ir al inicio">
                          <iconify-icon icon="solar:home-angle-broken" class="fs-20"></iconify-icon>
                     </a>
-                    <button type="button" class="topbar-button tl-topbar-icon" data-toggle="fullscreen" title="Pantalla completa" aria-label="Pantalla completa">
-                         <iconify-icon icon="solar:full-screen-broken" class="fs-20"></iconify-icon>
+                    <?php if (!$isClientePortal): ?>
+                    <a href="apps-configuracion-empresa.php" class="topbar-button tl-topbar-action" title="Configuración" aria-label="Configuración empresa">
+                         <iconify-icon icon="solar:settings-broken" class="fs-20"></iconify-icon>
+                    </a>
+                    <?php endif; ?>
+                    <button type="button" class="topbar-button tl-topbar-action" data-toggle="fullscreen" title="Pantalla completa" aria-label="Pantalla completa">
+                         <iconify-icon icon="solar:maximize-square-broken" class="fs-20"></iconify-icon>
                     </button>
+
                     <div class="dropdown topbar-item">
                          <a type="button" class="topbar-button tl-user-trigger" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               <span class="tl-user-avatar"><?= htmlspecialchars($profileInitial) ?></span>
-                              <span class="d-none d-md-flex flex-column text-start min-w-0">
+                              <span class="tl-user-meta d-none d-lg-flex">
                                    <strong class="tl-user-name text-truncate"><?= htmlspecialchars($profileName) ?></strong>
                                    <small class="tl-user-role text-truncate"><?= htmlspecialchars($profileSubtitle) ?></small>
                               </span>
@@ -53,7 +60,7 @@ $currentTitle = isset($title) && trim((string) $title) !== '' ? (string) $title 
                                         <i class="bx bx-cog text-muted fs-18 align-middle me-1"></i><span class="align-middle">Configuración empresa</span>
                                    </a>
                               <?php endif; ?>
-                              <a class="dropdown-item" href="<?= htmlspecialchars($isClientePortal ? 'cotizar.php' : 'index.php') ?>">
+                              <a class="dropdown-item" href="<?= htmlspecialchars($homeUrl) ?>">
                                    <i class="bx bx-home-alt text-muted fs-18 align-middle me-1"></i><span class="align-middle">Inicio</span>
                               </a>
                               <div class="dropdown-divider my-1"></div>
