@@ -575,7 +575,38 @@ textarea.form-control {
 .table-responsive {
     border: 1px solid #ede7fb;
     border-radius: 12px;
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: visible;
+}
+
+.card .table-responsive {
+    min-height: 24rem;
+}
+
+.card .table-responsive .btn.dropdown-toggle {
+    border-radius: 999px;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    font-weight: 600;
+    padding: 0.3rem 0.65rem;
+    border-color: #d9dee5;
+    color: #2f3a4c;
+    background: #fff;
+}
+
+.card .table-responsive .dropdown-menu {
+    min-width: 11rem;
+    border-radius: 0.6rem;
+    border: 1px solid #e7eaef;
+    box-shadow: 0 10px 24px rgba(23, 38, 61, 0.12);
+    padding: 0.35rem;
+    z-index: 1085;
+}
+
+.card .table-responsive .dropdown-menu .dropdown-item {
+    border-radius: 0.4rem;
+    font-size: 0.8125rem;
+    padding: 0.45rem 0.6rem;
 }
 
 

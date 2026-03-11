@@ -98,7 +98,7 @@
                         <td><?= htmlspecialchars($cotizacion['fecha']) ?></td>
                         <td>
                             <div class="dropdown">
-                                <button class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" type="button">Acciones</button>
+                                <button class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" data-bs-boundary="viewport" data-bs-display="static" type="button">Acciones</button>
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li><a class="dropdown-item" href="apps-cotizaciones.php?download_pdf=<?= (int) $cotizacion['id'] ?>">Descargar PDF</a></li>
                                     <li><hr class="dropdown-divider"></li>
