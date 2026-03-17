@@ -10,11 +10,11 @@ class Database
             return self::$instance;
         }
 
-        $host = getenv('DB_HOST') ?: '127.0.0.1';
+        $host = getenv('DB_HOST') ?: 'localhost';
         $port = getenv('DB_PORT') ?: '3306';
-        $dbName = getenv('DB_NAME') ?: 'tulista';
-        $username = getenv('DB_USER') ?: 'root';
-        $password = getenv('DB_PASS') ?: '';
+        $dbName = getenv('DB_NAME') ?: 'tulista_app';
+        $username = getenv('DB_USER') ?: 'tulista_app';
+        $password = getenv('DB_PASS') ?: 'Eisla1245...';
 
         $dsn = sprintf('mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4', $host, $port, $dbName);
 
