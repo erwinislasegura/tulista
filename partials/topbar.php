@@ -30,10 +30,6 @@ $topbarContext = $isClientePortal ? 'Portal cliente' : ($companyConfig['nombre']
                </div>
 
                <div class="tl-topbar-right">
-                    <label class="tl-topbar-search d-none d-md-flex" aria-label="Búsqueda rápida">
-                         <iconify-icon icon="solar:magnifer-broken"></iconify-icon>
-                         <input type="search" value="" placeholder="Buscar módulos, documentos o clientes" />
-                    </label>
                     <a href="<?= htmlspecialchars($homeUrl) ?>" class="topbar-button tl-topbar-action" title="Inicio" aria-label="Ir al inicio">
                          <iconify-icon icon="solar:home-angle-broken" class="fs-20"></iconify-icon>
                     </a>
