@@ -61,14 +61,14 @@ class AuthorizationService
             return true;
         }
 
-        if (str_ends_with($permission, '.manage')) {
+        if (substr($permission, -7) === '.manage') {
             $edit = substr($permission, 0, -7) . '.edit';
             if (in_array($edit, $rolePermissions, true)) {
                 return true;
             }
         }
 
-        if (str_ends_with($permission, '.view')) {
+        if (substr($permission, -5) === '.view') {
             $manage = substr($permission, 0, -5) . '.manage';
             $edit = substr($permission, 0, -5) . '.edit';
             return in_array($manage, $rolePermissions, true) || in_array($edit, $rolePermissions, true);
@@ -88,11 +88,15 @@ class AuthorizationService
             return '';
         }
 
-        return match ($action) {
-            'edit' => $menuKey . '.manage',
-            'delete' => $menuKey . '.delete',
-            default => $menuKey . '.view',
-        };
+        if ($action === 'edit') {
+            return $menuKey . '.manage';
+        }
+
+        if ($action === 'delete') {
+            return $menuKey . '.delete';
+        }
+
+        return $menuKey . '.view';
     }
 
     public static function requirePermission(string $permission): void
@@ -149,10 +153,11 @@ class AuthorizationService
     {
         $normalized = strtolower(trim($role));
 
-        return match ($normalized) {
-            'administrador' => 'admin',
-            default => $normalized,
-        };
+        if ($normalized === 'administrador') {
+            return 'admin';
+        }
+
+        return $normalized;
     }
 
 }
