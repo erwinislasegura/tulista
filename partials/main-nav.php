@@ -14,70 +14,47 @@ $menu = [
         ['page' => 'index.php', 'text' => 'Dashboard', 'icon' => 'solar:widget-2-broken', 'perm' => 'dashboard.view'],
     ],
     'Flujo comercial' => [
-        [
-            'page' => 'apps-cotizaciones.php',
-            'text' => 'Gestión comercial',
-            'icon' => 'solar:bag-smile-broken',
-            'pages' => ['apps-cotizaciones.php', 'apps-pedidos.php', 'apps-clientes.php'],
-            'children' => [
-                ['page' => 'apps-cotizaciones.php', 'text' => '1. Cotizaciones', 'icon' => 'solar:bill-list-broken', 'perm' => 'cotizaciones.manage'],
-                ['page' => 'apps-pedidos.php', 'text' => '2. Pedidos', 'icon' => 'solar:cart-large-broken', 'perm' => 'pedidos.view'],
-                ['page' => 'apps-clientes.php', 'text' => '3. Clientes', 'icon' => 'solar:users-group-rounded-broken', 'perm' => 'clientes.manage'],
-            ],
-        ],
+        ['page' => 'apps-cotizaciones.php', 'text' => '1. Cotizaciones', 'icon' => 'solar:bill-list-broken', 'perm' => 'cotizaciones.manage'],
+        ['page' => 'apps-pedidos.php', 'text' => '2. Pedidos', 'icon' => 'solar:cart-large-broken', 'perm' => 'pedidos.view'],
+        ['page' => 'apps-clientes.php', 'text' => '3. Clientes', 'icon' => 'solar:users-group-rounded-broken', 'perm' => 'clientes.manage'],
     ],
     'Operación' => [
         [
             'page' => 'apps-productos.php',
-            'text' => 'Productos y catálogo',
+            'text' => 'Productos',
             'icon' => 'solar:box-broken',
-            'pages' => ['apps-productos.php', 'apps-productos-importacion.php', 'apps-productos-categorias.php', 'apps-productos-marcas.php', 'apps-productos-unidades.php'],
+            'perm' => 'productos.view',
+            'pages' => ['apps-productos.php','apps-productos-categorias.php','apps-productos-marcas.php','apps-productos-unidades.php','apps-productos-importacion.php'],
             'children' => [
                 ['page' => 'apps-productos.php', 'text' => 'Listado general', 'icon' => 'solar:list-broken', 'perm' => 'productos.view'],
                 ['page' => 'apps-productos-importacion.php', 'text' => 'Importar desde Excel', 'icon' => 'solar:import-broken', 'perm' => 'productos.view'],
+            ],
+        ],
+        ['page' => 'apps-proveedores.php', 'text' => 'Proveedores', 'icon' => 'solar:buildings-2-broken', 'perm' => 'proveedores.view'],
+        ['page' => 'apps-inventario.php', 'text' => 'Inventario', 'icon' => 'solar:archive-broken', 'perm' => 'inventario.view'],
+        ['page' => 'apps-bodega.php', 'text' => 'Bodega', 'icon' => 'solar:box-minimalistic-broken', 'perm' => 'bodega.view'],
+    ],
+    'Control' => [
+        ['page' => 'apps-reportes.php', 'text' => 'Reportes', 'icon' => 'solar:chart-square-broken', 'perm' => 'reportes.view'],
+        ['page' => 'apps-auditoria.php', 'text' => 'Auditoría', 'icon' => 'solar:document-text-broken', 'perm' => 'auditoria.view'],
+    ],
+    'Sistema' => [
+        ['page' => 'apps-usuarios.php', 'text' => 'Usuarios', 'icon' => 'solar:user-id-broken', 'perm' => 'usuarios.manage'],
+        [
+            'page' => 'apps-mantenedores.php',
+            'text' => 'Mantenedores',
+            'icon' => 'solar:slider-horizontal-broken',
+            'perm' => 'usuarios.manage',
+            'pages' => ['apps-mantenedores.php', 'apps-productos-categorias.php', 'apps-productos-marcas.php', 'apps-productos-unidades.php', 'apps-roles.php', 'apps-permisos.php'],
+            'children' => [
                 ['page' => 'apps-productos-categorias.php', 'text' => 'Categorías', 'icon' => 'solar:tag-broken', 'perm' => 'productos.view'],
                 ['page' => 'apps-productos-marcas.php', 'text' => 'Marcas', 'icon' => 'solar:star-broken', 'perm' => 'productos.view'],
                 ['page' => 'apps-productos-unidades.php', 'text' => 'Unidades', 'icon' => 'solar:ruler-broken', 'perm' => 'productos.view'],
-            ],
-        ],
-        [
-            'page' => 'apps-proveedores.php',
-            'text' => 'Abastecimiento y bodega',
-            'icon' => 'solar:buildings-2-broken',
-            'pages' => ['apps-proveedores.php', 'apps-inventario.php', 'apps-bodega.php'],
-            'children' => [
-                ['page' => 'apps-proveedores.php', 'text' => 'Proveedores', 'icon' => 'solar:buildings-2-broken', 'perm' => 'proveedores.view'],
-                ['page' => 'apps-inventario.php', 'text' => 'Inventario', 'icon' => 'solar:archive-broken', 'perm' => 'inventario.view'],
-                ['page' => 'apps-bodega.php', 'text' => 'Bodega', 'icon' => 'solar:box-minimalistic-broken', 'perm' => 'bodega.view'],
-            ],
-        ],
-    ],
-    'Control' => [
-        [
-            'page' => 'apps-reportes.php',
-            'text' => 'Control y seguimiento',
-            'icon' => 'solar:chart-square-broken',
-            'pages' => ['apps-reportes.php', 'apps-auditoria.php'],
-            'children' => [
-                ['page' => 'apps-reportes.php', 'text' => 'Reportes', 'icon' => 'solar:chart-square-broken', 'perm' => 'reportes.view'],
-                ['page' => 'apps-auditoria.php', 'text' => 'Auditoría', 'icon' => 'solar:document-text-broken', 'perm' => 'auditoria.view'],
-            ],
-        ],
-    ],
-    'Sistema' => [
-        [
-            'page' => 'apps-usuarios.php',
-            'text' => 'Administración',
-            'icon' => 'solar:user-id-broken',
-            'pages' => ['apps-usuarios.php', 'apps-roles.php', 'apps-permisos.php', 'apps-mantenedores.php', 'apps-configuracion-empresa.php'],
-            'children' => [
-                ['page' => 'apps-usuarios.php', 'text' => 'Usuarios', 'icon' => 'solar:user-id-broken', 'perm' => 'usuarios.manage'],
                 ['page' => 'apps-roles.php', 'text' => 'Roles', 'icon' => 'solar:shield-user-broken', 'perm' => 'usuarios.manage'],
                 ['page' => 'apps-permisos.php', 'text' => 'Permisos', 'icon' => 'solar:key-broken', 'perm' => 'usuarios.manage'],
-                ['page' => 'apps-mantenedores.php', 'text' => 'Mantenedores', 'icon' => 'solar:slider-horizontal-broken', 'perm' => 'usuarios.manage'],
-                ['page' => 'apps-configuracion-empresa.php', 'text' => 'Configuración empresa', 'icon' => 'solar:settings-broken', 'perm' => 'configuracion.view'],
             ],
         ],
+        ['page' => 'apps-configuracion-empresa.php', 'text' => 'Configuración', 'icon' => 'solar:settings-broken', 'perm' => 'configuracion.view'],
     ],
 ];
 ?>
@@ -105,23 +82,7 @@ $menu = [
                <?php else: ?>
                     <?php foreach ($menu as $section => $items): ?>
                          <?php
-                         $visible = array_values(array_filter($items, static function ($item): bool {
-                             $itemPerm = (string) ($item['perm'] ?? '');
-                             if ($itemPerm !== '' && AuthorizationService::can($itemPerm)) {
-                                 return true;
-                             }
-
-                             $children = $item['children'] ?? [];
-                             foreach ($children as $child) {
-                                 $childPerm = (string) ($child['perm'] ?? '');
-                                 if ($childPerm !== '' && AuthorizationService::can($childPerm)) {
-                                     return true;
-                                 }
-                             }
-
-                             return false;
-                         }));
-
+                         $visible = array_filter($items, static fn ($item) => AuthorizationService::can($item['perm']));
                          if (empty($visible)) {
                              continue;
                          }
@@ -130,7 +91,7 @@ $menu = [
                          <?php foreach ($visible as $index => $item): ?>
                               <?php
                               $activePages = $item['pages'] ?? [$item['page']];
-                              $children = array_values(array_filter($item['children'] ?? [], static fn ($child) => AuthorizationService::can((string) ($child['perm'] ?? ''))));
+                              $children = array_values(array_filter($item['children'] ?? [], static fn ($child) => AuthorizationService::can($child['perm'] ?? '')));
                               $hasChildren = !empty($children);
                               $isActive = in_array($currentPage, $activePages, true);
                               $collapseId = 'menu-' . preg_replace('/[^a-z0-9]+/i', '-', strtolower($section . '-' . $index));
