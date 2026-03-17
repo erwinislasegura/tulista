@@ -5,9 +5,20 @@ class AuthService
     public static function startSession(): void
     {
         if (session_status() === PHP_SESSION_NONE) {
+            $httpsHeader = strtolower((string) ($_SERVER['HTTPS'] ?? ''));
+            $forwardedProto = strtolower((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? ''));
+            $serverPort = (string) ($_SERVER['SERVER_PORT'] ?? '');
+            $isSecure = ($httpsHeader !== '' && $httpsHeader !== 'off') || str_contains($forwardedProto, 'https') || $serverPort === '443';
+
+            $host = (string) ($_SERVER['HTTP_HOST'] ?? '');
+            $cookieDomain = $host !== '' ? explode(':', $host)[0] : '';
+
             session_set_cookie_params([
+                'lifetime' => 0,
+                'path' => '/',
+                'domain' => $cookieDomain,
+                'secure' => $isSecure,
                 'httponly' => true,
-                'secure' => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
                 'samesite' => 'Lax',
             ]);
             session_start();

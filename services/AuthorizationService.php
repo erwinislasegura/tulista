@@ -40,7 +40,7 @@ class AuthorizationService
     public static function role(): string
     {
         $user = AuthService::user();
-        return strtolower((string) ($user['rol'] ?? ''));
+        return self::normalizeRole((string) ($user['rol'] ?? ''));
     }
 
     public static function can(string $permission): bool
@@ -48,6 +48,10 @@ class AuthorizationService
         $role = self::role();
         if ($role === '') {
             return false;
+        }
+
+        if (in_array($role, ['admin', 'superadmin'], true)) {
+            return true;
         }
 
         $permissions = self::permissionsByRole();
@@ -93,6 +97,11 @@ class AuthorizationService
 
     public static function requirePermission(string $permission): void
     {
+        if (!AuthService::user()) {
+            header('Location: auth-signin.php');
+            exit;
+        }
+
         if (!self::can($permission)) {
             http_response_code(403);
             exit('Acceso no autorizado para esta acción.');
@@ -113,14 +122,18 @@ class AuthorizationService
             if ($tableExists) {
                 $rows = $db->query('SELECT role_codigo, permiso FROM role_permissions WHERE estado = 1')->fetchAll();
                 if (!empty($rows)) {
-                    $permissions = [];
+                    $dbPermissionsByRole = [];
                     foreach ($rows as $row) {
-                        $role = strtolower((string) ($row['role_codigo'] ?? ''));
-                        $perm = (string) ($row['permiso'] ?? '');
+                        $role = self::normalizeRole((string) ($row['role_codigo'] ?? ''));
+                        $perm = trim((string) ($row['permiso'] ?? ''));
                         if ($role === '' || $perm === '') {
                             continue;
                         }
-                        $permissions[$role][] = $perm;
+                        $dbPermissionsByRole[$role][] = $perm;
+                    }
+
+                    foreach ($dbPermissionsByRole as $role => $rolePermissions) {
+                        $permissions[$role] = array_values(array_unique($rolePermissions));
                     }
                 }
             }
@@ -131,4 +144,15 @@ class AuthorizationService
         self::$dbPermissions = $permissions;
         return $permissions;
     }
+
+    private static function normalizeRole(string $role): string
+    {
+        $normalized = strtolower(trim($role));
+
+        return match ($normalized) {
+            'administrador' => 'admin',
+            default => $normalized,
+        };
+    }
+
 }
