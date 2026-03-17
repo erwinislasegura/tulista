@@ -97,6 +97,11 @@ class AuthorizationService
 
     public static function requirePermission(string $permission): void
     {
+        if (!AuthService::user()) {
+            header('Location: auth-signin.php');
+            exit;
+        }
+
         if (!self::can($permission)) {
             http_response_code(403);
             exit('Acceso no autorizado para esta acción.');
