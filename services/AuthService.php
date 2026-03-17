@@ -8,7 +8,7 @@ class AuthService
             $httpsHeader = strtolower((string) ($_SERVER['HTTPS'] ?? ''));
             $forwardedProto = strtolower((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? ''));
             $serverPort = (string) ($_SERVER['SERVER_PORT'] ?? '');
-            $isSecure = ($httpsHeader !== '' && $httpsHeader !== 'off') || str_contains($forwardedProto, 'https') || $serverPort === '443';
+            $isSecure = ($httpsHeader !== '' && $httpsHeader !== 'off') || strpos($forwardedProto, 'https') !== false || $serverPort === '443';
 
             $host = (string) ($_SERVER['HTTP_HOST'] ?? '');
             $cookieDomain = $host !== '' ? explode(':', $host)[0] : '';
