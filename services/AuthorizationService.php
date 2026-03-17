@@ -40,7 +40,7 @@ class AuthorizationService
     public static function role(): string
     {
         $user = AuthService::user();
-        return strtolower((string) ($user['rol'] ?? ''));
+        return self::normalizeRole((string) ($user['rol'] ?? ''));
     }
 
     public static function can(string $permission): bool
@@ -50,6 +50,10 @@ class AuthorizationService
             return false;
         }
 
+        if (in_array($role, ['admin', 'superadmin'], true)) {
+            return true;
+        }
+
         $permissions = self::permissionsByRole();
         $rolePermissions = $permissions[$role] ?? [];
 
@@ -57,14 +61,14 @@ class AuthorizationService
             return true;
         }
 
-        if (str_ends_with($permission, '.manage')) {
+        if (substr($permission, -7) === '.manage') {
             $edit = substr($permission, 0, -7) . '.edit';
             if (in_array($edit, $rolePermissions, true)) {
                 return true;
             }
         }
 
-        if (str_ends_with($permission, '.view')) {
+        if (substr($permission, -5) === '.view') {
             $manage = substr($permission, 0, -5) . '.manage';
             $edit = substr($permission, 0, -5) . '.edit';
             return in_array($manage, $rolePermissions, true) || in_array($edit, $rolePermissions, true);
@@ -84,15 +88,24 @@ class AuthorizationService
             return '';
         }
 
-        return match ($action) {
-            'edit' => $menuKey . '.manage',
-            'delete' => $menuKey . '.delete',
-            default => $menuKey . '.view',
-        };
+        if ($action === 'edit') {
+            return $menuKey . '.manage';
+        }
+
+        if ($action === 'delete') {
+            return $menuKey . '.delete';
+        }
+
+        return $menuKey . '.view';
     }
 
     public static function requirePermission(string $permission): void
     {
+        if (!AuthService::user()) {
+            header('Location: auth-signin.php');
+            exit;
+        }
+
         if (!self::can($permission)) {
             http_response_code(403);
             exit('Acceso no autorizado para esta acción.');
@@ -113,14 +126,18 @@ class AuthorizationService
             if ($tableExists) {
                 $rows = $db->query('SELECT role_codigo, permiso FROM role_permissions WHERE estado = 1')->fetchAll();
                 if (!empty($rows)) {
-                    $permissions = [];
+                    $dbPermissionsByRole = [];
                     foreach ($rows as $row) {
-                        $role = strtolower((string) ($row['role_codigo'] ?? ''));
-                        $perm = (string) ($row['permiso'] ?? '');
+                        $role = self::normalizeRole((string) ($row['role_codigo'] ?? ''));
+                        $perm = trim((string) ($row['permiso'] ?? ''));
                         if ($role === '' || $perm === '') {
                             continue;
                         }
-                        $permissions[$role][] = $perm;
+                        $dbPermissionsByRole[$role][] = $perm;
+                    }
+
+                    foreach ($dbPermissionsByRole as $role => $rolePermissions) {
+                        $permissions[$role] = array_values(array_unique($rolePermissions));
                     }
                 }
             }
@@ -131,4 +148,16 @@ class AuthorizationService
         self::$dbPermissions = $permissions;
         return $permissions;
     }
+
+    private static function normalizeRole(string $role): string
+    {
+        $normalized = strtolower(trim($role));
+
+        if ($normalized === 'administrador') {
+            return 'admin';
+        }
+
+        return $normalized;
+    }
+
 }
