@@ -1,11 +1,44 @@
 ALTER TABLE pedidos
-    MODIFY COLUMN estado ENUM('pendiente','en_proceso','empaquetado','despachado','transito','entregado','cancelado') NOT NULL DEFAULT 'pendiente';
+    MODIFY COLUMN estado ENUM('pendiente','procesado','en_proceso','empaquetado','despachado','transito','entregado','cancelado') NOT NULL DEFAULT 'pendiente';
 
-UPDATE pedidos SET estado = 'en_proceso' WHERE estado = 'procesado';
+UPDATE pedidos
+SET estado = 'en_proceso'
+WHERE estado = 'procesado';
 
 ALTER TABLE pedidos
-    ADD COLUMN IF NOT EXISTS estado_pago ENUM('pendiente','pagado') NOT NULL DEFAULT 'pendiente' AFTER estado,
-    ADD COLUMN IF NOT EXISTS pagado_at DATETIME DEFAULT NULL AFTER estado_pago;
+    MODIFY COLUMN estado ENUM('pendiente','en_proceso','empaquetado','despachado','transito','entregado','cancelado') NOT NULL DEFAULT 'pendiente';
+
+SET @has_estado_pago := (
+    SELECT COUNT(*)
+    FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE TABLE_SCHEMA = DATABASE()
+      AND TABLE_NAME = 'pedidos'
+      AND COLUMN_NAME = 'estado_pago'
+);
+SET @sql_estado_pago := IF(
+    @has_estado_pago = 0,
+    "ALTER TABLE pedidos ADD COLUMN estado_pago ENUM('pendiente','pagado') NOT NULL DEFAULT 'pendiente' AFTER estado",
+    'SELECT 1'
+);
+PREPARE stmt_estado_pago FROM @sql_estado_pago;
+EXECUTE stmt_estado_pago;
+DEALLOCATE PREPARE stmt_estado_pago;
+
+SET @has_pagado_at := (
+    SELECT COUNT(*)
+    FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE TABLE_SCHEMA = DATABASE()
+      AND TABLE_NAME = 'pedidos'
+      AND COLUMN_NAME = 'pagado_at'
+);
+SET @sql_pagado_at := IF(
+    @has_pagado_at = 0,
+    "ALTER TABLE pedidos ADD COLUMN pagado_at DATETIME DEFAULT NULL AFTER estado_pago",
+    'SELECT 1'
+);
+PREPARE stmt_pagado_at FROM @sql_pagado_at;
+EXECUTE stmt_pagado_at;
+DEALLOCATE PREPARE stmt_pagado_at;
 
 UPDATE pedidos
 SET pagado_at = COALESCE(pagado_at, updated_at)
