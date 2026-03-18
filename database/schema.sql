@@ -307,6 +307,10 @@ ALTER TABLE pedidos
     ADD COLUMN IF NOT EXISTS direccion_entrega VARCHAR(255) DEFAULT NULL AFTER contacto_telefono,
     ADD COLUMN IF NOT EXISTS observaciones VARCHAR(255) DEFAULT NULL AFTER direccion_entrega;
 
+ALTER TABLE pedidos
+    ADD COLUMN IF NOT EXISTS estado_pago ENUM('pendiente','pagado') NOT NULL DEFAULT 'pendiente' AFTER estado,
+    ADD COLUMN IF NOT EXISTS pagado_at DATETIME DEFAULT NULL AFTER estado_pago;
+
 CREATE TABLE IF NOT EXISTS role_permissions (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     role_codigo VARCHAR(30) NOT NULL,
