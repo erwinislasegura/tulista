@@ -1,4 +1,3 @@
-<?php include 'partials/main.php'; ?>
 <?php
 require_once __DIR__ . '/models/Usuario.php';
 require_once __DIR__ . '/services/AuthService.php';
@@ -37,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
+<?php include 'partials/main.php'; ?>
 <head>
     <?php $title = 'Sign In'; include 'partials/title-meta.php'; ?>
     <?php include 'partials/head-css.php' ?>
