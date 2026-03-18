@@ -156,14 +156,25 @@ class ProductosController
 
         $missingCategories = [];
         $missingBrands = [];
+        $missingUnits = [];
+        $rowsWithMissingData = [];
         $imported = 0;
 
-        foreach ($rows as $row) {
+        foreach ($rows as $index => $row) {
+            $rowNumber = $index + 2;
             $categoryName = trim((string) ($row['Categoria'] ?? ''));
             $brandName = trim((string) ($row['Marca'] ?? ''));
             $name = trim((string) ($row['Nombre'] ?? ''));
 
-            if ($categoryName === '' || $name === '') {
+            $missingFields = [];
+            if ($categoryName === '') {
+                $missingFields[] = 'Categoria';
+            }
+            if ($name === '') {
+                $missingFields[] = 'Nombre';
+            }
+            if (!empty($missingFields)) {
+                $rowsWithMissingData[] = "fila {$rowNumber}: " . implode(', ', $missingFields);
                 continue;
             }
 
@@ -189,6 +200,8 @@ class ProductosController
                 $unit = $this->units->findByAbbreviation($abbreviation);
                 if ($unit) {
                     $unitId = (int) $unit['id'];
+                } else {
+                    $missingUnits[$abbreviation] = true;
                 }
             }
 
@@ -220,8 +233,15 @@ class ProductosController
         if (!empty($missingBrands)) {
             $messages[] = 'Marcas faltantes: ' . implode(', ', array_keys($missingBrands)) . '.';
         }
+        if (!empty($missingUnits)) {
+            $messages[] = 'Unidades no encontradas (se importaron sin unidad): ' . implode(', ', array_keys($missingUnits)) . '.';
+        }
+        if (!empty($rowsWithMissingData)) {
+            $messages[] = 'Filas con datos obligatorios faltantes: ' . implode('; ', $rowsWithMissingData) . '.';
+        }
 
-        $this->flash(empty($missingCategories) && empty($missingBrands) ? 'success' : 'warning', implode(' ', $messages));
+        $hasWarnings = !empty($missingCategories) || !empty($missingBrands) || !empty($missingUnits) || !empty($rowsWithMissingData);
+        $this->flash($hasWarnings ? 'warning' : 'success', implode(' ', $messages));
     }
 
     private function mapProductData(array $source): array
