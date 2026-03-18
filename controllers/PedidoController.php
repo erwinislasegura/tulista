@@ -43,6 +43,7 @@ class PedidoController
             'cotizaciones' => $this->pedidos->cotizacionesSource(),
             'cotizaciones_aprobadas' => $this->pedidos->cotizacionesAceptadasPendientesBodega(),
             'estados_operacion' => Pedido::ESTADOS_OPERACION,
+            'estados_pago' => Pedido::ESTADOS_PAGO,
             'flash' => $flash,
         ];
     }
@@ -121,6 +122,7 @@ class PedidoController
         $cotizacionId = (int) ($_POST['cotizacion_id'] ?? 0);
         $usuarioId = (int) ($_POST['usuario_id'] ?? 0);
         $estado = $_POST['estado'] ?? 'pendiente';
+        $estadoPago = $_POST['estado_pago'] ?? 'pendiente';
         $total = (float) ($_POST['total'] ?? 0);
         $fecha = trim($_POST['fecha'] ?? '');
         $contactoNombre = trim($_POST['contacto_nombre'] ?? '');
@@ -130,7 +132,8 @@ class PedidoController
         $observaciones = trim($_POST['observaciones'] ?? '');
 
         $allowed = Pedido::ESTADOS_OPERACION;
-        if ($clienteId <= 0 || $total < 0 || !in_array($estado, $allowed, true)) {
+        $allowedPago = Pedido::ESTADOS_PAGO;
+        if ($clienteId <= 0 || $total < 0 || !in_array($estado, $allowed, true) || !in_array($estadoPago, $allowedPago, true)) {
             $this->flash('warning', 'Completa cliente, estado y total válido.');
             return null;
         }
@@ -146,6 +149,8 @@ class PedidoController
             'cotizacion_id' => $cotizacionId > 0 ? $cotizacionId : null,
             'usuario_id' => $usuarioId > 0 ? $usuarioId : null,
             'estado' => $estado,
+            'estado_pago' => $estadoPago,
+            'pagado_at' => $estadoPago === 'pagado' ? date('Y-m-d H:i:s') : null,
             'total' => $total,
             'fecha' => $fecha,
             'contacto_nombre' => $contactoNombre,

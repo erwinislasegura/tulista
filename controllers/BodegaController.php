@@ -6,6 +6,7 @@ require_once __DIR__ . '/../models/BodegaEmpaque.php';
 require_once __DIR__ . '/../models/CotizacionDetalle.php';
 require_once __DIR__ . '/../services/AuthService.php';
 require_once __DIR__ . '/../services/AuthorizationService.php';
+require_once __DIR__ . '/../services/AuditService.php';
 
 class BodegaController
 {
@@ -35,6 +36,8 @@ class BodegaController
                 $this->resolverItem();
             } elseif ($action === 'cambiar_estado') {
                 $this->cambiarEstadoPedido();
+            } elseif ($action === 'cambiar_estado_pago') {
+                $this->cambiarEstadoPagoPedido();
             } elseif ($action === 'marcar_procesado') {
                 $this->marcarPedidoProcesado();
             }
@@ -57,6 +60,13 @@ class BodegaController
                 $detallesCotizacion[$cotizacionId] = $this->detalles->findByCotizacion($cotizacionId);
             }
         }
+        $empaquePorPedido = [];
+        foreach ($this->pedidos->all() as $pedido) {
+            $pedidoId = (int) ($pedido['id'] ?? 0);
+            if ($pedidoId > 0) {
+                $empaquePorPedido[$pedidoId] = $this->empaque->itemsPorPedido($pedidoId);
+            }
+        }
 
         return [
             'menu' => $_GET['menu'] ?? 'resumen',
@@ -68,10 +78,12 @@ class BodegaController
             'detalles_cotizacion' => $detallesCotizacion,
             'pedidos' => $this->pedidos->all(),
             'estados_operacion' => Pedido::ESTADOS_OPERACION,
+            'estados_pago' => Pedido::ESTADOS_PAGO,
             'productos' => $this->productos->catalog(),
             'stock_query' => $stockQuery,
             'stock_resultados' => $this->productos->stockLookup($stockQuery),
             'historial' => $this->empaque->historialReciente(),
+            'empaque_por_pedido' => $empaquePorPedido,
         ];
     }
 
@@ -188,18 +200,37 @@ class BodegaController
     {
         $pedidoId = (int) ($_POST['pedido_id'] ?? 0);
         if ($pedidoId <= 0) {
-            $this->flash('warning', 'No se encontró pedido asociado para marcar como procesado.');
+            $this->flash('warning', 'No se encontró pedido asociado para marcar como en proceso.');
             return;
         }
 
-        $ok = $this->pedidos->updateEstado($pedidoId, 'procesado');
+        $ok = $this->pedidos->updateEstado($pedidoId, 'en_proceso');
         if ($ok) {
-            AuditService::log('pedido_procesado', 'pedidos', $pedidoId, 'Pedido marcado como procesado desde bodega');
-            $this->flash('success', "Pedido #{$pedidoId} marcado como procesado.");
+            AuditService::log('pedido_en_proceso', 'pedidos', $pedidoId, 'Pedido marcado como en proceso desde bodega');
+            $this->flash('success', "Pedido #{$pedidoId} marcado como en proceso.");
             return;
         }
 
-        $this->flash('danger', 'No fue posible marcar el pedido como procesado.');
+        $this->flash('danger', 'No fue posible marcar el pedido como en proceso.');
+    }
+
+    private function cambiarEstadoPagoPedido(): void
+    {
+        $pedidoId = (int) ($_POST['pedido_id'] ?? 0);
+        $estadoPago = $_POST['estado_pago'] ?? 'pendiente';
+        if ($pedidoId <= 0 || !in_array($estadoPago, Pedido::ESTADOS_PAGO, true)) {
+            $this->flash('warning', 'No fue posible actualizar el estado de pago.');
+            return;
+        }
+
+        $ok = $this->pedidos->updateEstadoPago($pedidoId, $estadoPago);
+        if ($ok) {
+            AuditService::log('cambiar_estado_pago_bodega', 'pedidos', $pedidoId, "Estado de pago actualizado a {$estadoPago}");
+            $this->flash('success', "Pedido #{$pedidoId} actualizado a pago {$estadoPago}.");
+            return;
+        }
+
+        $this->flash('danger', 'Error al actualizar el estado de pago del pedido.');
     }
 
     private function buildRedirectUrl(): string

@@ -108,7 +108,9 @@ CREATE TABLE IF NOT EXISTS pedidos (
     cliente_id INT UNSIGNED NOT NULL,
     cotizacion_id INT UNSIGNED DEFAULT NULL,
     usuario_id INT UNSIGNED DEFAULT NULL,
-    estado ENUM('pendiente','empaquetado','despachado','transito','entregado','cancelado') NOT NULL DEFAULT 'pendiente',
+    estado ENUM('pendiente','en_proceso','empaquetado','despachado','transito','entregado','cancelado') NOT NULL DEFAULT 'pendiente',
+    estado_pago ENUM('pendiente','pagado') NOT NULL DEFAULT 'pendiente',
+    pagado_at DATETIME DEFAULT NULL,
     total DECIMAL(12,2) NOT NULL DEFAULT 0,
     fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -274,11 +276,12 @@ ALTER TABLE usuarios
     ADD CONSTRAINT fk_usuarios_rol FOREIGN KEY (rol) REFERENCES roles_usuario(codigo);
 INSERT IGNORE INTO estados_pedido (codigo, nombre, orden_visual) VALUES
 ('pendiente', 'Pendiente', 1),
-('empaquetado', 'Empaquetado', 2),
-('despachado', 'Despachado', 3),
-('transito', 'En tránsito', 4),
-('entregado', 'Entregado', 5),
-('cancelado', 'Cancelado', 5);
+('en_proceso', 'En proceso', 2),
+('empaquetado', 'Empaquetado', 3),
+('despachado', 'Despachado', 4),
+('transito', 'En tránsito', 5),
+('entregado', 'Entregado', 6),
+('cancelado', 'Cancelado', 7);
 
 INSERT INTO usuarios (nombre, email, password, rol, porcentaje_comision, estado)
 SELECT 'Super Administrador', 'superadmin@tulista.local', '$2y$12$RfmGss4UGywSyo0mofOzHeuEPkHH7NZVYk5Xn.7NXpKYePN0/zmdS', 'admin', 0, 1

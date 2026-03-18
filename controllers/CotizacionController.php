@@ -64,6 +64,7 @@ class CotizacionController
             'productos' => $this->productos->catalog(),
             'cotizaciones' => $this->cotizaciones->all($clienteId),
             'pedidos' => $this->pedidos->byCliente($clienteId),
+            'pedidos_historial' => $this->pedidosHistorialCliente($clienteId),
             'cliente' => $this->clientes->find($clienteId),
             'flash' => $flash,
         ];
@@ -89,8 +90,26 @@ class CotizacionController
         }
 
         $this->cotizaciones->updateEstado($cotizacionId, 'aprobada');
+        $pedido = $this->pedidos->findByCotizacion($cotizacionId);
+        if (!$pedido) {
+            $this->pedidos->create([
+                'cliente_id' => $clienteId,
+                'cotizacion_id' => $cotizacionId,
+                'usuario_id' => null,
+                'estado' => 'pendiente',
+                'estado_pago' => 'pendiente',
+                'pagado_at' => null,
+                'total' => (float) ($cotizacion['total'] ?? 0),
+                'fecha' => date('Y-m-d H:i:s'),
+                'contacto_nombre' => null,
+                'contacto_email' => null,
+                'contacto_telefono' => null,
+                'direccion_entrega' => null,
+                'observaciones' => 'Pedido generado automáticamente al aprobar cotización desde portal cliente.',
+            ]);
+        }
         AuditService::log('aprobar', 'cotizaciones', $cotizacionId, 'Cotización aprobada por cliente');
-        $this->flash('success', 'Cotización #' . $cotizacionId . ' aprobada correctamente.');
+        $this->flash('success', 'Cotización #' . $cotizacionId . ' aprobada correctamente. El pedido ya quedó visible para bodega.');
     }
 
     public function handleAdminRequest(): array
@@ -399,14 +418,26 @@ class CotizacionController
             return;
         }
 
+        if ($this->pedidos->findByCotizacion($cotizacionId)) {
+            $this->flash('warning', 'La cotización ya tiene un pedido asociado.');
+            return;
+        }
+
         $usuario = AuthService::user();
         $this->pedidos->create([
             'cliente_id' => $clienteId,
             'cotizacion_id' => $cotizacionId,
             'usuario_id' => (int) ($usuario['id'] ?? 0) ?: null,
-            'estado' => 'empaquetado',
+            'estado' => 'pendiente',
+            'estado_pago' => 'pendiente',
+            'pagado_at' => null,
             'total' => (float) $cotizacion['total'],
             'fecha' => date('Y-m-d H:i:s'),
+            'contacto_nombre' => null,
+            'contacto_email' => null,
+            'contacto_telefono' => null,
+            'direccion_entrega' => null,
+            'observaciones' => 'Pedido generado desde cotización aprobada.',
         ]);
 
         $this->flash('success', 'Pedido creado desde la cotización #' . $cotizacionId . '.');
@@ -421,5 +452,13 @@ class CotizacionController
     private function flash(string $type, string $message): void
     {
         $_SESSION['cotizaciones_flash'][] = ['type' => $type, 'message' => $message];
+    }
+
+    private function pedidosHistorialCliente(int $clienteId): array
+    {
+        return array_values(array_filter(
+            $this->pedidos->byCliente($clienteId),
+            static fn (array $pedido): bool => in_array(($pedido['estado'] ?? ''), ['entregado', 'cancelado'], true) || ($pedido['estado_pago'] ?? '') === 'pagado'
+        ));
     }
 }
