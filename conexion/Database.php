@@ -18,11 +18,17 @@ class Database
 
         $dsn = sprintf('mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4', $host, $port, $dbName);
 
-        self::$instance = new PDO($dsn, $username, $password, [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES => false,
-        ]);
+        try {
+            self::$instance = new PDO($dsn, $username, $password, [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES => false,
+            ]);
+        } catch (Throwable $e) {
+            $message = sprintf('No se pudo conectar a MySQL (%s:%s/%s).', $host, $port, $dbName);
+            error_log('[Database] ' . $message . ' ' . $e->getMessage());
+            throw new RuntimeException($message, 0, $e);
+        }
 
         return self::$instance;
     }
