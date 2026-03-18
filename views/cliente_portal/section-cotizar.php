@@ -10,7 +10,7 @@
 
         <form method="post" id="cotizacion-form">
             <input type="hidden" name="action" value="crear_cotizacion">
-            <input type="hidden" name="return_url" value="cotizar.php?view=cotizar">
+            <input type="hidden" name="return_url" value="cliente-portal.php?view=cotizar">
 
             <div class="d-flex justify-content-end mb-3">
                 <button class="btn btn-primary tl-cotizar-submit-btn" type="submit">Crear cotización</button>
