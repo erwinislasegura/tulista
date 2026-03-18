@@ -8,6 +8,7 @@
 - `migrations/005_expand_erp_core.sql`: expansión ERP (pedidos, comisiones, inventario, auditoría, mantenedores y configuración).
 - `migrations/006_add_usuario_profile_fields.sql`: agrega teléfono, dirección, cargo y notas en usuarios.
 - `migrations/010_create_proveedores_module.sql`: crea módulo de proveedores con permisos por rol.
+- `migrations/012_portal_cliente_performance.sql`: índices para acelerar dashboard, cotizaciones y seguimiento en portal cliente.
 
 ## Notas de estructura
 
@@ -29,6 +30,7 @@ mysql -u root -p tulista < database/migrations/004_seed_super_admin_usuario.sql
 mysql -u root -p tulista < database/migrations/005_expand_erp_core.sql
 mysql -u root -p tulista < database/migrations/006_add_usuario_profile_fields.sql
 mysql -u root -p tulista < database/migrations/010_create_proveedores_module.sql
+mysql -u root -p tulista < database/migrations/012_portal_cliente_performance.sql
 ```
 
 Variables opcionales:
