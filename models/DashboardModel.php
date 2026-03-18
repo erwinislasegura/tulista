@@ -57,4 +57,27 @@ class DashboardModel extends BaseModel
                 LIMIT 6";
         return array_reverse($this->db->query($sql)->fetchAll());
     }
+
+    public function cotizacionesSinRevision(int $limit = 10): array
+    {
+        $limit = max(1, min(50, $limit));
+
+        $sql = "SELECT
+                    c.id,
+                    c.fecha,
+                    c.estado,
+                    c.total,
+                    cl.nombre AS cliente_nombre,
+                    COALESCE(SUM(CASE WHEN p.existencia < cd.cantidad THEN 1 ELSE 0 END), 0) AS items_sin_stock
+                FROM cotizaciones c
+                INNER JOIN clientes cl ON cl.id = c.cliente_id
+                LEFT JOIN cotizacion_detalle cd ON cd.cotizacion_id = c.id
+                LEFT JOIN productos p ON p.id = cd.producto_id
+                WHERE c.estado = 'enviada'
+                GROUP BY c.id, c.fecha, c.estado, c.total, cl.nombre
+                ORDER BY c.fecha DESC, c.id DESC
+                LIMIT {$limit}";
+
+        return $this->db->query($sql)->fetchAll();
+    }
 }

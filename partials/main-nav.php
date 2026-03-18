@@ -14,7 +14,17 @@ $menu = [
         ['page' => 'index.php', 'text' => 'Dashboard', 'icon' => 'solar:widget-2-broken', 'perm' => 'dashboard.view'],
     ],
     'Flujo comercial' => [
-        ['page' => 'apps-cotizaciones.php', 'text' => '1. Cotizaciones', 'icon' => 'solar:bill-list-broken', 'perm' => 'cotizaciones.manage'],
+        [
+            'page' => 'apps-cotizaciones.php',
+            'text' => '1. Cotizaciones clientes',
+            'icon' => 'solar:bill-list-broken',
+            'perm' => 'cotizaciones.manage',
+            'pages' => ['apps-cotizaciones.php', 'apps-bodega.php'],
+            'children' => [
+                ['page' => 'apps-cotizaciones.php', 'text' => 'Bandeja y detalle', 'icon' => 'solar:bill-list-broken', 'perm' => 'cotizaciones.manage'],
+                ['page' => 'apps-bodega.php', 'url' => 'apps-bodega.php?menu=revision', 'text' => 'Faltantes y reemplazos', 'icon' => 'solar:box-minimalistic-broken', 'perm' => 'bodega.view'],
+            ],
+        ],
         ['page' => 'apps-pedidos.php', 'text' => '2. Pedidos', 'icon' => 'solar:cart-large-broken', 'perm' => 'pedidos.view'],
         ['page' => 'apps-clientes.php', 'text' => '3. Clientes', 'icon' => 'solar:users-group-rounded-broken', 'perm' => 'clientes.manage'],
     ],
@@ -106,7 +116,8 @@ $menu = [
                                              <ul class="nav flex-column tl-submenu-list">
                                                   <?php foreach ($children as $child): ?>
                                                        <li class="nav-item">
-                                                            <a class="sub-nav-link <?= $currentPage === $child['page'] ? 'active' : '' ?>" href="<?= htmlspecialchars($child['page']) ?>">
+                                                            <?php $childUrl = $child['url'] ?? $child['page']; ?>
+                                                            <a class="sub-nav-link <?= $currentPage === basename((string) $child['page']) ? 'active' : '' ?>" href="<?= htmlspecialchars($childUrl) ?>">
                                                                  <span class="nav-icon"><iconify-icon icon="<?= htmlspecialchars($child['icon']) ?>"></iconify-icon></span>
                                                                  <span class="nav-text"><?= htmlspecialchars($child['text']) ?></span>
                                                             </a>

@@ -187,7 +187,7 @@ class CotizacionController
 
         $this->cotizaciones->updateTotal($cotizacionId, $total);
         AuditService::log('crear', 'cotizaciones', $cotizacionId, 'Cotización creada', null, ['cliente_id' => $clienteId, 'total' => $total]);
-        $this->flash('success', 'Cotización creada exitosamente.');
+        $this->flash('success', 'Cotización #' . $cotizacionId . ' creada exitosamente.');
     }
 
     private function descargarCotizacionPdf(int $cotizacionId): void

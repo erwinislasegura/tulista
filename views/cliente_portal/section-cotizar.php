@@ -55,7 +55,7 @@
 
             <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-3">
                 <small class="text-muted">Tip: usa los botones +/- para completar más rápido tu pedido.</small>
-                <button class="btn btn-primary" type="submit">Enviar cotización</button>
+                <button class="btn btn-primary" type="submit">Crear cotización</button>
             </div>
         </form>
     </div>
