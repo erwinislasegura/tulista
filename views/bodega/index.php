@@ -34,7 +34,7 @@
         <h5 class="tl-section-title">Cotizaciones aceptadas por clientes</h5>
         <div class="table-responsive">
             <table class="table align-middle">
-                <thead><tr><th>Cotización</th><th>Cliente</th><th>Total</th><th>Pedido</th><th>Estado pedido</th><th>Fecha</th></tr></thead>
+                <thead><tr><th>Cotización</th><th>Cliente</th><th>Total</th><th>Pedido</th><th>Estado pedido</th><th>Fecha</th><th>Acciones</th></tr></thead>
                 <tbody>
                 <?php foreach ($data['cotizaciones_aprobadas'] as $cot): ?>
                     <tr>
@@ -42,17 +42,77 @@
                         <td><?= htmlspecialchars($cot['cliente_nombre']) ?></td>
                         <td>$<?= number_format((float) $cot['total'], 0, ',', '.') ?></td>
                         <td><?= !empty($cot['pedido_id']) ? ('#' . (int) $cot['pedido_id']) : 'Sin pedido' ?></td>
-                        <td><?= htmlspecialchars($cot['pedido_estado'] ?? '-') ?></td>
+                        <td class="text-capitalize"><?= htmlspecialchars($cot['pedido_estado'] ?? '-') ?></td>
                         <td><?= htmlspecialchars($cot['pedido_fecha'] ?: $cot['fecha']) ?></td>
+                        <td>
+                            <div class="d-flex flex-wrap gap-2">
+                                <button class="btn btn-sm btn-light" type="button" data-bs-toggle="modal" data-bs-target="#modal-cot-<?= (int) $cot['id'] ?>">Detalle</button>
+                                <a class="btn btn-sm btn-outline-primary" href="apps-cotizaciones.php?download_pdf=<?= (int) $cot['id'] ?>">PDF</a>
+                                <?php if (!empty($cot['pedido_id'])): ?>
+                                    <form method="post" class="m-0">
+                                        <input type="hidden" name="action" value="marcar_procesado">
+                                        <input type="hidden" name="menu" value="resumen">
+                                        <input type="hidden" name="pedido_id" value="<?= (int) $cot['pedido_id'] ?>">
+                                        <button class="btn btn-sm btn-success" type="submit">Marcar procesado</button>
+                                    </form>
+                                <?php else: ?>
+                                    <span class="badge bg-light text-dark">Sin pedido asociado</span>
+                                <?php endif; ?>
+                            </div>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
                 <?php if (empty($data['cotizaciones_aprobadas'])): ?>
-                    <tr><td colspan="6" class="text-center text-muted py-3">Sin cotizaciones aprobadas.</td></tr>
+                    <tr><td colspan="7" class="text-center text-muted py-3">Sin cotizaciones aprobadas.</td></tr>
                 <?php endif; ?>
                 </tbody>
             </table>
         </div>
     </div>
+
+    <?php foreach ($data['cotizaciones_aprobadas'] as $cot): ?>
+        <?php $cotId = (int) $cot['id']; ?>
+        <div class="modal fade" id="modal-cot-<?= $cotId ?>" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Detalle cotización #<?= $cotId ?></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <div><strong>Cliente:</strong> <?= htmlspecialchars($cot['cliente_nombre']) ?></div>
+                            <div><strong>Total:</strong> $<?= number_format((float) $cot['total'], 0, ',', '.') ?></div>
+                            <div><strong>Fecha:</strong> <?= htmlspecialchars($cot['fecha']) ?></div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-sm align-middle">
+                                <thead><tr><th>SKU</th><th>Producto</th><th>Cantidad</th><th>Precio</th><th>Subtotal</th></tr></thead>
+                                <tbody>
+                                <?php foreach (($data['detalles_cotizacion'][$cotId] ?? []) as $detalle): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($detalle['sku'] ?? '-') ?></td>
+                                        <td><?= htmlspecialchars($detalle['producto_nombre'] ?? '-') ?></td>
+                                        <td><?= (int) ($detalle['cantidad'] ?? 0) ?></td>
+                                        <td>$<?= number_format((float) ($detalle['precio'] ?? 0), 0, ',', '.') ?></td>
+                                        <td>$<?= number_format((float) ($detalle['subtotal'] ?? 0), 0, ',', '.') ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                                <?php if (empty($data['detalles_cotizacion'][$cotId])): ?>
+                                    <tr><td colspan="5" class="text-center text-muted py-3">No hay detalle para esta cotización.</td></tr>
+                                <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-primary" href="apps-cotizaciones.php?download_pdf=<?= $cotId ?>">Descargar PDF</a>
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
 <?php endif; ?>
 
 <?php if ($menu === 'revision'): ?>
