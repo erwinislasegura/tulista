@@ -2,6 +2,7 @@
 require_once __DIR__ . '/controllers/ClienteAuthController.php';
 require_once __DIR__ . '/controllers/CotizacionController.php';
 require_once __DIR__ . '/services/AuthService.php';
+require_once __DIR__ . '/models/Cliente.php';
 
 $auth = new ClienteAuthController();
 AuthService::startSession();
@@ -12,6 +13,7 @@ if (($_POST['action'] ?? '') === 'cerrar_sesion') {
 
 $cliente = AuthService::cliente();
 $error = null;
+$passwordFlash = null;
 
 if (!$cliente && $_SERVER['REQUEST_METHOD'] === 'POST' && (($_POST['action'] ?? '') === 'login_cliente')) {
     $error = $auth->attemptLogin('cotizar.php');
@@ -20,6 +22,30 @@ if (!$cliente && $_SERVER['REQUEST_METHOD'] === 'POST' && (($_POST['action'] ?? 
 $cliente = AuthService::cliente();
 $data = null;
 if ($cliente) {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && (($_POST['action'] ?? '') === 'cambiar_password_cliente')) {
+        $clientesModel = new Cliente();
+        $clienteActual = $clientesModel->find((int) ($cliente['id'] ?? 0));
+        $actual = (string) ($_POST['password_actual'] ?? '');
+        $nueva = (string) ($_POST['password_nueva'] ?? '');
+        $confirmacion = (string) ($_POST['password_confirmacion'] ?? '');
+
+        if (!$clienteActual || !password_verify($actual, (string) ($clienteActual['password'] ?? ''))) {
+            $passwordFlash = ['type' => 'danger', 'message' => 'La contraseña actual no es correcta.'];
+        } elseif (strlen($nueva) < 6) {
+            $passwordFlash = ['type' => 'warning', 'message' => 'La nueva contraseña debe tener al menos 6 caracteres.'];
+        } elseif ($nueva !== $confirmacion) {
+            $passwordFlash = ['type' => 'warning', 'message' => 'La confirmación de contraseña no coincide.'];
+        } else {
+            $clientesModel->updatePassword((int) $cliente['id'], password_hash($nueva, PASSWORD_DEFAULT));
+            $refresh = $clientesModel->find((int) $cliente['id']);
+            if ($refresh) {
+                AuthService::loginCliente($refresh);
+                $cliente = AuthService::cliente();
+            }
+            $passwordFlash = ['type' => 'success', 'message' => 'Contraseña actualizada correctamente.'];
+        }
+    }
+
     $controller = new CotizacionController();
     $data = $controller->handlePortalRequest();
 }
@@ -59,6 +85,30 @@ if ($data) {
         }
     }
 }
+
+$notificationItems = [];
+if (($clienteMetrics['cotizaciones_pendientes'] ?? 0) > 0) {
+    $notificationItems[] = [
+        'label' => 'cotizaciones pendientes por revisar',
+        'count' => (int) $clienteMetrics['cotizaciones_pendientes'],
+        'href' => 'cotizar.php?view=cotizaciones&estado=sin_revision',
+    ];
+}
+if (($clienteMetrics['pedidos_activos'] ?? 0) > 0) {
+    $notificationItems[] = [
+        'label' => 'pedidos activos en curso',
+        'count' => (int) $clienteMetrics['pedidos_activos'],
+        'href' => 'cotizar.php?view=seguimiento',
+    ];
+}
+if (($clienteMetrics['pedidos_no_pagados'] ?? 0) > 0) {
+    $notificationItems[] = [
+        'label' => 'pedidos pendientes de pago',
+        'count' => (int) $clienteMetrics['pedidos_no_pagados'],
+        'href' => 'cotizar.php?view=mis-pedidos',
+    ];
+}
+$notificationTotal = array_sum(array_map(static fn ($item) => (int) $item['count'], $notificationItems));
 
 $formatCurrency = static function (float $value): string {
     return '$' . number_format($value, 0, ',', '.');
@@ -163,9 +213,15 @@ if (!isset($sections[$currentView])) {
         .tl-cliente .main-nav .menu-title,
         .tl-cliente .main-nav .nav-text,
         .tl-cliente .main-nav iconify-icon {
-            font-size: 0.8rem;
+            font-size: 0.93rem;
             letter-spacing: 0.01em;
             color: rgba(255, 255, 255, 0.92) !important;
+        }
+
+        .tl-cliente .main-nav .nav-link {
+            min-height: 42px;
+            display: flex;
+            align-items: center;
         }
 
         .tl-cliente .main-nav .nav-link.active,
@@ -238,6 +294,98 @@ if (!isset($sections[$currentView])) {
         .tl-cliente .table .btn {
             font-size: 0.72rem;
             padding: 0.22rem 0.52rem;
+        }
+
+        .tl-cliente .tl-consulta-list .table td,
+        .tl-cliente .tl-consulta-list .table th,
+        .tl-cliente .tl-consulta-list .badge,
+        .tl-cliente .tl-consulta-list .tl-product-name {
+            font-size: 0.7rem !important;
+            font-weight: 400;
+        }
+
+        .tl-cliente .navbar-header .button-toggle-menu {
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.12);
+            transition: all .18s ease;
+        }
+
+        .tl-cliente .navbar-header .button-toggle-menu:hover {
+            background: rgba(255, 255, 255, 0.22);
+            border-color: rgba(255, 255, 255, 0.38);
+        }
+
+        .tl-notif-bell {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            color: #fff;
+            background: rgba(255, 255, 255, 0.12);
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .tl-notif-dot {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #ef4444;
+            border: 2px solid #18253b;
+        }
+
+        .tl-profile-btn {
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            color: #fff;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            padding: 0.35rem 0.65rem;
+            font-size: 0.8rem;
+        }
+
+        .tl-top-dropdown {
+            min-width: 280px;
+            border-radius: 12px;
+            border: 1px solid #dbe5f1;
+            box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16);
+        }
+
+        @media (max-width: 767.98px) {
+            .tl-cliente .navbar-header .button-toggle-menu {
+                width: 44px;
+                height: 44px;
+            }
+
+            .tl-cliente .main-nav .nav-link,
+            .tl-cliente .main-nav .menu-title,
+            .tl-cliente .main-nav .nav-text,
+            .tl-cliente .main-nav iconify-icon {
+                font-size: 1rem;
+            }
+
+            .tl-profile-btn {
+                padding: 0.35rem 0.5rem;
+                min-width: 38px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .tl-profile-btn .tl-profile-name {
+                display: none;
+            }
         }
 
         .tl-login-gradient {
@@ -339,7 +487,43 @@ if (!isset($sections[$currentView])) {
                         <h5 class="mb-0 text-white">Portal de clientes</h5>
                     </div>
                     <div class="d-flex align-items-center gap-2">
-                        <span class="text-white small">Hola, <?= htmlspecialchars($cliente['nombre']) ?></span>
+                        <div class="dropdown">
+                            <button class="tl-notif-bell" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notificaciones">
+                                <iconify-icon icon="solar:bell-bing-broken" class="fs-20"></iconify-icon>
+                                <?php if ($notificationTotal > 0): ?><span class="tl-notif-dot"></span><?php endif; ?>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end p-2 tl-top-dropdown">
+                                <h6 class="dropdown-header">Notificaciones</h6>
+                                <?php if (!empty($notificationItems)): ?>
+                                    <?php foreach ($notificationItems as $item): ?>
+                                        <a class="dropdown-item d-flex justify-content-between align-items-center" href="<?= htmlspecialchars($item['href']) ?>">
+                                            <span><?= (int) $item['count'] ?> <?= htmlspecialchars($item['label']) ?></span>
+                                            <span class="badge text-bg-danger">!</span>
+                                        </a>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <div class="dropdown-item text-muted">Sin alertas pendientes.</div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+
+                        <div class="dropdown">
+                            <button class="tl-profile-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="tl-profile-name">Hola, <?= htmlspecialchars($cliente['nombre']) ?></span>
+                                <iconify-icon icon="solar:user-circle-broken" class="fs-18"></iconify-icon>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end tl-top-dropdown">
+                                <li><h6 class="dropdown-header"><?= htmlspecialchars($cliente['empresa'] ?? 'Mi cuenta') ?></h6></li>
+                                <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#modal-cambiar-password"><iconify-icon icon="solar:key-broken" class="me-1"></iconify-icon> Cambiar contraseña</button></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form method="post" class="m-0">
+                                        <input type="hidden" name="action" value="cerrar_sesion">
+                                        <button class="dropdown-item text-danger" type="submit"><iconify-icon icon="solar:logout-2-broken" class="me-1"></iconify-icon> Cerrar sesión</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -368,21 +552,15 @@ if (!isset($sections[$currentView])) {
                             </a>
                         </li>
                     <?php endforeach; ?>
-                    <li class="nav-item mt-2 px-2">
-                        <form method="post" class="m-0">
-                            <input type="hidden" name="action" value="cerrar_sesion">
-                            <button class="nav-link text-white border-0 bg-transparent w-100 text-start" type="submit">
-                                <span class="nav-icon"><iconify-icon icon="solar:logout-2-broken"></iconify-icon></span>
-                                <span class="nav-text">Cerrar sesión</span>
-                            </button>
-                        </form>
-                    </li>
                 </ul>
             </div>
         </div>
 
         <div class="page-content">
             <div class="container-fluid">
+                <?php if ($passwordFlash): ?>
+                    <div class="alert alert-<?= htmlspecialchars($passwordFlash['type']) ?>"><?= htmlspecialchars($passwordFlash['message']) ?></div>
+                <?php endif; ?>
                 <?php foreach ($data['flash'] as $alert): ?>
                     <div class="alert alert-<?= htmlspecialchars($alert['type']) ?>"><?= htmlspecialchars($alert['message']) ?></div>
                 <?php endforeach; ?>
@@ -442,6 +620,38 @@ if (!isset($sections[$currentView])) {
                 <?php include $sections[$currentView]['file']; ?>
             </div>
             <?php include 'partials/footer.php'; ?>
+        </div>
+
+        <div class="modal fade" id="modal-cambiar-password" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Cambiar contraseña</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <form method="post">
+                        <div class="modal-body">
+                            <input type="hidden" name="action" value="cambiar_password_cliente">
+                            <div class="mb-2">
+                                <label class="form-label">Contraseña actual</label>
+                                <input type="password" name="password_actual" class="form-control" required>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Nueva contraseña</label>
+                                <input type="password" name="password_nueva" class="form-control" minlength="6" required>
+                            </div>
+                            <div class="mb-0">
+                                <label class="form-label">Confirmar nueva contraseña</label>
+                                <input type="password" name="password_confirmacion" class="form-control" minlength="6" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-light" type="button" data-bs-dismiss="modal">Cancelar</button>
+                            <button class="btn btn-primary" type="submit">Guardar contraseña</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     <?php else: ?>
         <div class="page-content tl-login-gradient" style="margin-left:0;">

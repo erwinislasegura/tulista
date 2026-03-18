@@ -46,19 +46,28 @@ class CotizacionController
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $action = $_POST['action'] ?? '';
+            $handled = false;
             if ($action === 'crear_cotizacion') {
                 $this->crearCotizacion($clienteId);
+                $handled = true;
             } elseif ($action === 'crear_pedido') {
                 $this->crearPedidoDesdeCotizacion($clienteId);
+                $handled = true;
             } elseif ($action === 'aprobar_cotizacion_cliente') {
                 $this->aprobarCotizacionCliente($clienteId);
+                $handled = true;
             } elseif ($action === 'eliminar_cotizacion_cliente') {
                 $this->eliminarCotizacionCliente($clienteId);
+                $handled = true;
             } elseif ($action === 'editar_cotizacion_cliente') {
                 $this->editarCotizacionCliente($clienteId);
+                $handled = true;
             }
-            header('Location: ' . $this->portalReturnUrl());
-            exit;
+
+            if ($handled) {
+                header('Location: ' . $this->portalReturnUrl());
+                exit;
+            }
         }
 
         $flash = $_SESSION['cotizaciones_flash'];
