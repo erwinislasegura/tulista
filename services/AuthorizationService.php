@@ -107,9 +107,42 @@ class AuthorizationService
         }
 
         if (!self::can($permission)) {
+            if (strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET')) === 'GET') {
+                $landing = self::firstAccessiblePage();
+                if ($landing !== null) {
+                    header('Location: ' . $landing);
+                    exit;
+                }
+            }
             http_response_code(403);
             exit('Acceso no autorizado para esta acción.');
         }
+    }
+
+    public static function firstAccessiblePage(): ?string
+    {
+        $map = [
+            'dashboard.view' => 'index.php',
+            'cotizaciones.manage' => 'apps-cotizaciones.php',
+            'pedidos.view' => 'apps-pedidos.php',
+            'clientes.manage' => 'apps-clientes.php',
+            'productos.view' => 'apps-productos.php',
+            'proveedores.view' => 'apps-proveedores.php',
+            'inventario.view' => 'apps-inventario.php',
+            'bodega.view' => 'apps-bodega.php',
+            'reportes.view' => 'apps-reportes.php',
+            'auditoria.view' => 'apps-auditoria.php',
+            'usuarios.manage' => 'apps-usuarios.php',
+            'configuracion.view' => 'apps-configuracion-empresa.php',
+        ];
+
+        foreach ($map as $permission => $page) {
+            if (self::can($permission)) {
+                return $page;
+            }
+        }
+
+        return null;
     }
 
     private static function permissionsByRole(): array

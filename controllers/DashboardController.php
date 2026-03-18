@@ -3,30 +3,30 @@
 require_once __DIR__ . '/../models/DashboardModel.php';
 require_once __DIR__ . '/../models/LogSistema.php';
 require_once __DIR__ . '/../services/AuthService.php';
-require_once __DIR__ . '/../services/AuthorizationService.php';
 
 class DashboardController
 {
-    private $dashboard ;
-    private $log ;
-
     public function __construct()
     {
         AuthService::startSession();
-        AuthorizationService::requirePermission('dashboard.view');
-        $this->dashboard = new DashboardModel();
-        $this->log = new LogSistema();
+        if (!AuthService::user()) {
+            header('Location: auth-signin.php');
+            exit;
+        }
     }
 
     public function handleRequest(): array
     {
         try {
+            $dashboard = new DashboardModel();
+            $log = new LogSistema();
+
             return [
-                'kpis' => $this->dashboard->kpis(),
-                'top_productos' => $this->dashboard->topProductos(),
-                'top_clientes' => $this->dashboard->topClientes(),
-                'ventas_mensuales' => $this->dashboard->ventasPorMes(),
-                'actividad' => $this->log->recent(8),
+                'kpis' => $dashboard->kpis(),
+                'top_productos' => $dashboard->topProductos(),
+                'top_clientes' => $dashboard->topClientes(),
+                'ventas_mensuales' => $dashboard->ventasPorMes(),
+                'actividad' => $log->recent(8),
             ];
         } catch (Throwable $e) {
             return [
