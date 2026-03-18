@@ -33,6 +33,12 @@ $cotizaciones = array_values(array_filter($data['cotizaciones'], static function
 
     return $normalizarEstado((string) ($cotizacion['estado'] ?? '')) === $estadoFiltro;
 }));
+
+$resumenCotizaciones = [
+    'total' => count($data['cotizaciones']),
+    'pendientes' => count(array_filter($data['cotizaciones'], static fn ($c) => in_array((string) ($c['estado'] ?? ''), ['borrador', 'enviada'], true))),
+    'aprobadas' => count(array_filter($data['cotizaciones'], static fn ($c) => ((string) ($c['estado'] ?? '')) === 'aprobada')),
+];
 ?>
 
 <div class="card mb-3 shadow-sm border-0">
@@ -51,6 +57,12 @@ $cotizaciones = array_values(array_filter($data['cotizaciones'], static function
                     <?= htmlspecialchars($label) ?>
                 </a>
             <?php endforeach; ?>
+        </div>
+
+        <div class="row g-2 mb-3">
+            <div class="col-sm-4"><div class="alert alert-light border mb-0 py-2"><strong><?= (int) $resumenCotizaciones['total'] ?></strong> cotizaciones</div></div>
+            <div class="col-sm-4"><div class="alert alert-warning-subtle border mb-0 py-2"><strong><?= (int) $resumenCotizaciones['pendientes'] ?></strong> pendientes</div></div>
+            <div class="col-sm-4"><div class="alert alert-success-subtle border mb-0 py-2"><strong><?= (int) $resumenCotizaciones['aprobadas'] ?></strong> aprobadas</div></div>
         </div>
 
         <div class="table-responsive">

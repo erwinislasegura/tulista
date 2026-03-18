@@ -64,6 +64,32 @@ $formatCurrency = static function (float $value): string {
     return '$' . number_format($value, 0, ',', '.');
 };
 
+$pedidoEstadoBadge = static function (string $estado): string {
+    return match (strtolower(trim($estado))) {
+        'pendiente' => 'bg-secondary-subtle text-secondary',
+        'en_proceso', 'empaquetado' => 'bg-info-subtle text-info',
+        'despachado', 'transito', 'en_transito', 'en tránsito' => 'bg-warning-subtle text-warning',
+        'entregado' => 'bg-success-subtle text-success',
+        'cancelado' => 'bg-danger-subtle text-danger',
+        default => 'bg-light text-dark',
+    };
+};
+
+$pedidoEstadoLabel = static function (string $estado): string {
+    $raw = strtolower(trim($estado));
+    return match ($raw) {
+        'en_proceso' => 'en proceso',
+        'en_transito' => 'en tránsito',
+        default => str_replace('_', ' ', $raw),
+    };
+};
+
+$pagoEstadoBadge = static function (string $estado): string {
+    return in_array(strtolower(trim($estado)), ['pagado', 'paid'], true)
+        ? 'bg-success-subtle text-success'
+        : 'bg-danger-subtle text-danger';
+};
+
 $sections = [
     'cotizar' => [
         'label' => 'Cotizar',
@@ -198,6 +224,25 @@ if (!isset($sections[$currentView])) {
             font-size: 0.86rem;
         }
 
+        .tl-cliente .card {
+            border: 1px solid #e6eaf2;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+        }
+
+        .tl-cliente h4,
+        .tl-cliente h5,
+        .tl-cliente .h4,
+        .tl-cliente .h5 {
+            font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+
+        .tl-cliente p,
+        .tl-cliente .form-label,
+        .tl-cliente .text-muted {
+            font-size: 0.86rem;
+        }
+
         .tl-login-gradient {
             background: radial-gradient(circle at top left, #dbe8f7 0%, #f8fafc 48%, #ecf8fb 100%);
         }
@@ -270,6 +315,15 @@ if (!isset($sections[$currentView])) {
             font-size: 0.84rem;
             font-weight: 500;
             color: #334155;
+        }
+
+        .tl-cotizar-submit-btn {
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            padding: 0.5rem 0.9rem;
+            border-radius: 10px;
+            box-shadow: 0 6px 14px rgba(15, 23, 42, 0.12);
         }
     </style>
 </head>

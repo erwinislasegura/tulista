@@ -12,6 +12,10 @@
             <input type="hidden" name="action" value="crear_cotizacion">
             <input type="hidden" name="return_url" value="cotizar.php?view=cotizar">
 
+            <div class="d-flex justify-content-end mb-3">
+                <button class="btn btn-primary tl-cotizar-submit-btn" type="submit">Crear cotización</button>
+            </div>
+
             <div class="row g-3 mb-3">
                 <div class="col-lg-8">
                     <label for="buscar-producto" class="form-label">Buscar producto</label>
@@ -67,7 +71,6 @@
 
             <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-3">
                 <small class="text-muted">Tip: usa los botones +/- para completar más rápido tu pedido.</small>
-                <button class="btn btn-primary" type="submit">Crear cotización</button>
             </div>
         </form>
     </div>
