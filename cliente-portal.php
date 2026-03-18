@@ -47,6 +47,7 @@ $totalPedidos = 0.0;
 $cotizacionesAprobables = 0;
 $pedidosActivos = 0;
 $ventasMensuales = array_fill(1, 12, 0.0);
+$pedidosMensuales = array_fill(1, 12, 0.0);
 $meses = [1 => 'Ene', 2 => 'Feb', 3 => 'Mar', 4 => 'Abr', 5 => 'May', 6 => 'Jun', 7 => 'Jul', 8 => 'Ago', 9 => 'Sep', 10 => 'Oct', 11 => 'Nov', 12 => 'Dic'];
 
 foreach ($cotizaciones as $cotizacion) {
@@ -68,10 +69,15 @@ foreach ($pedidos as $pedido) {
     if (!in_array(($pedido['estado'] ?? ''), ['entregado', 'cancelado'], true)) {
         $pedidosActivos++;
     }
+    $tsPedido = strtotime((string) ($pedido['fecha'] ?? ''));
+    if ($tsPedido) {
+        $pedidosMensuales[(int) date('n', $tsPedido)] += (float) ($pedido['total'] ?? 0);
+    }
 }
 
 $conversion = count($cotizaciones) > 0 ? (count($pedidos) / count($cotizaciones)) * 100 : 0;
 $maxMensual = max($ventasMensuales) > 0 ? max($ventasMensuales) : 1;
+$maxMensualPedido = max($pedidosMensuales) > 0 ? max($pedidosMensuales) : 1;
 $pedidosEntregados = count(array_filter($pedidos, static fn ($pedido) => in_array((string) ($pedido['estado'] ?? ''), ['entregado'], true)));
 $porcentajePagado = count($pedidos) > 0 ? ((count($pedidos) - $clienteMetrics['pedidos_no_pagados']) / count($pedidos)) * 100 : 0;
 
@@ -182,13 +188,31 @@ if (!isset($sections[$currentView])) {
         .md-title { font-size: 1.05rem; font-weight: 700; color: #12233d; margin-bottom: 0.2rem; }
         .md-subtitle { color: #61748f; margin-bottom: 0; }
         .md-kpis { display: grid; gap: 0.75rem; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-        .md-kpi { border: 1px solid #e5eaf3; border-radius: 12px; padding: 0.8rem; background: #f8fafc; }
+        .md-kpi { border: 1px solid #e5eaf3; border-radius: 12px; padding: 0.8rem; background: #f8fafc; color: #fff; }
+        .md-kpi--teal { background: linear-gradient(135deg, #1f97b3 0%, #16758d 100%); border-color: transparent; }
+        .md-kpi--purple { background: linear-gradient(135deg, #6b46c1 0%, #4c1d95 100%); border-color: transparent; }
+        .md-kpi--green { background: linear-gradient(135deg, #1fa968 0%, #15803d 100%); border-color: transparent; }
+        .md-kpi--red { background: linear-gradient(135deg, #de3f54 0%, #be123c 100%); border-color: transparent; }
         .md-kpi-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: .06em; color: #64748b; margin-bottom: .2rem; }
-        .md-kpi-value { font-size: 1.25rem; font-weight: 700; color: #0f172a; margin-bottom: 0; }
+        .md-kpi-value { font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 0; }
+        .md-kpi small { color: rgba(255, 255, 255, 0.85) !important; }
+        .md-kpi--teal .md-kpi-label,
+        .md-kpi--purple .md-kpi-label,
+        .md-kpi--green .md-kpi-label,
+        .md-kpi--red .md-kpi-label { color: rgba(255, 255, 255, 0.82); }
         .md-quick { border-radius: 10px; padding: .55rem .9rem; font-weight: 600; }
         .md-bars { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: .35rem; align-items: end; min-height: 135px; }
         .md-bar { background: #d7e5ff; border-radius: 8px 8px 4px 4px; position: relative; min-height: 8px; }
         .md-bar span { position: absolute; bottom: -1.1rem; left: 50%; transform: translateX(-50%); font-size: .62rem; color: #6b7b93; }
+        .md-double-bars { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: .45rem; align-items: end; min-height: 150px; }
+        .md-double-col { display: grid; grid-template-columns: 1fr 1fr; gap: .12rem; align-items: end; }
+        .md-double-col i { display: block; border-radius: 4px 4px 2px 2px; min-height: 6px; }
+        .md-double-col i:first-child { background: #60a5fa; }
+        .md-double-col i:last-child { background: #34d399; }
+        .md-legend { display: flex; gap: .8rem; font-size: .68rem; color: #64748b; }
+        .md-legend span::before { content: ''; width: 10px; height: 10px; border-radius: 2px; display: inline-block; margin-right: .35rem; }
+        .md-legend .l-cot::before { background: #60a5fa; }
+        .md-legend .l-ped::before { background: #34d399; }
         .md-progress { height: 8px; border-radius: 999px; background: #edf2f7; overflow: hidden; }
         .md-progress > i { display: block; height: 100%; border-radius: inherit; }
         .md-grid-2 { display: grid; gap: .75rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
