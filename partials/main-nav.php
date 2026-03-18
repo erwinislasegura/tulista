@@ -71,7 +71,7 @@ $menu = [
 ?>
 <div class="main-nav">
      <div class="logo-box py-3 px-3">
-          <a href="<?= $isClientePortal ? 'cotizar.php' : 'index.php' ?>" class="logo-dark d-flex align-items-center gap-2 text-decoration-none tl-brand-block">
+          <a href="<?= $isClientePortal ? 'cliente-portal.php' : 'index.php' ?>" class="logo-dark d-flex align-items-center gap-2 text-decoration-none tl-brand-block">
                <img src="<?= htmlspecialchars($logoPath) ?>" class="logo-sm tl-brand-logo" alt="logo" style="height:34px; width:34px;">
                <span class="fw-semibold tl-brand-name text-white"><?= htmlspecialchars($companyConfig['nombre']) ?></span>
           </a>
@@ -85,7 +85,7 @@ $menu = [
           <ul class="navbar-nav" id="navbar-nav">
                <?php if ($isClientePortal): ?>
                     <?php
-                    $clienteBasePage = $currentPage === '' ? 'cotizar.php' : $currentPage;
+                    $clienteBasePage = $currentPage === '' ? 'cliente-portal.php' : $currentPage;
                     $clienteView = (string) ($_GET['view'] ?? 'cotizar');
                     $clienteMenu = [
                         ['view' => 'cotizar', 'text' => '1. Hacer cotización', 'icon' => 'solar:bill-list-broken'],

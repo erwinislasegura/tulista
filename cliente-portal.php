@@ -41,7 +41,7 @@ foreach (($data['pedidos'] ?? []) as $pedido) {
     }
 }
 
-$portalLink = 'cotizar.php?token=' . urlencode($data['cliente']['token'] ?? '');
+$portalLink = 'cliente-portal.php?token=' . urlencode($data['cliente']['token'] ?? '');
 $totalCotizaciones = 0.0;
 $totalPedidos = 0.0;
 $cotizacionesAprobables = 0;
@@ -128,7 +128,137 @@ if (!isset($sections[$currentView])) {
     $currentView = 'cotizar';
 }
 ?>
-<head><?php $title = 'Portal cliente'; $portalApp = 'cliente'; include 'partials/title-meta.php'; include 'partials/head-css.php'; ?></head>
+<head>
+    <?php $title = 'Portal cliente'; $portalApp = 'cliente'; include 'partials/title-meta.php'; include 'partials/head-css.php'; ?>
+    <style>
+        .tl-cliente,
+        .tl-cliente .card,
+        .tl-cliente .table,
+        .tl-cliente .form-control,
+        .tl-cliente .form-select,
+        .tl-cliente .btn,
+        .tl-cliente .badge,
+        .tl-cliente .text-muted,
+        .tl-cliente .form-label {
+            font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+            font-size: 0.78rem;
+        }
+
+        .tl-cliente h4,
+        .tl-cliente h5,
+        .tl-cliente .h4,
+        .tl-cliente .h5 {
+            font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+
+        .tl-cliente .table th {
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .section-chip {
+            background: #e6f4f7;
+            color: #1f5662;
+            border: 1px solid rgba(47, 166, 185, 0.18);
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            gap: .35rem;
+            padding: .35rem .8rem;
+            font-size: .75rem;
+            font-weight: 600;
+        }
+
+        .cp-hero,
+        .cp-indicators {
+            border: 1px solid #d7e1ed;
+            border-radius: 16px;
+            background: #ffffff;
+            padding: 1rem;
+            margin-bottom: 0.85rem;
+        }
+
+        .cp-hero-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #1e2d41;
+            margin-bottom: 0.25rem;
+        }
+
+        .cp-hero-subtitle {
+            color: #66758c;
+            margin-bottom: 0;
+        }
+
+        .cp-link-box {
+            border: 1px solid #d9e3ef;
+            border-radius: 12px;
+            padding: 0.85rem;
+            background: #f8fbff;
+        }
+
+        .cp-kpis {
+            display: grid;
+            gap: 0.85rem;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            margin-bottom: 0.85rem;
+        }
+
+        .cp-kpi {
+            color: #fff;
+            border-radius: 14px;
+            padding: 0.9rem;
+            min-height: 118px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 0;
+        }
+
+        .cp-kpi--teal { background: #1f97b3; }
+        .cp-kpi--purple { background: #6b46c1; }
+        .cp-kpi--green { background: #1fa968; }
+        .cp-kpi--red { background: #de3f54; }
+
+        .cp-kpi-label {
+            font-size: 0.74rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.95;
+            margin-bottom: 0.35rem;
+        }
+
+        .cp-kpi-value {
+            font-size: 1.6rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin: 0;
+        }
+
+        .cp-kpi-note { font-size: 0.78rem; opacity: 0.9; }
+        .cp-progress-track { height: 10px; border-radius: 999px; background: #e9eef5; overflow: hidden; }
+        .cp-progress-value { height: 100%; border-radius: 999px; }
+        .cp-progress-value--primary { background: #2878ff; }
+        .cp-progress-value--success { background: #1fa968; }
+        .cp-mini-chart { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 0.35rem; align-items: end; min-height: 128px; padding-top: 0.6rem; }
+        .cp-mini-bar { background: #8db6ff; border-radius: 6px 6px 4px 4px; min-height: 8px; position: relative; }
+        .cp-mini-bar span { position: absolute; bottom: -1.25rem; left: 50%; transform: translateX(-50%); font-size: 0.62rem; color: #677892; font-weight: 600; }
+
+        @media (max-width: 1199.98px) {
+            .cp-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+
+        @media (max-width: 767.98px) {
+            .cp-kpis { grid-template-columns: 1fr; gap: 0.65rem; }
+            .cp-kpi { min-height: 98px; padding: 0.75rem; }
+            .cp-kpi-value { font-size: 1.35rem; }
+            .cp-mini-chart { min-height: 102px; gap: 0.25rem; }
+        }
+    </style>
+</head>
 <body>
 <div class="wrapper tl-cliente">
     <?php include 'partials/menu.php'; ?>
