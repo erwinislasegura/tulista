@@ -54,7 +54,7 @@ $resumenCotizaciones = [
 
         <div class="d-flex flex-wrap gap-2 mb-3">
             <?php foreach ($estados as $key => $label): ?>
-                <a class="btn btn-sm <?= $estadoFiltro === $key ? 'btn-primary' : 'btn-light' ?>" href="cotizar.php?view=cotizaciones&estado=<?= urlencode($key) ?>">
+                <a class="btn btn-sm <?= $estadoFiltro === $key ? 'btn-primary' : 'btn-light' ?>" href="cliente-portal.php?view=cotizaciones&estado=<?= urlencode($key) ?>">
                     <?= htmlspecialchars($label) ?>
                 </a>
             <?php endforeach; ?>
@@ -109,7 +109,7 @@ $resumenCotizaciones = [
                                             data-detalles="<?= $detallesJson ?>"
                                         >Ver detalle</button>
                                     </li>
-                                    <li><a class="dropdown-item" href="cotizar.php?view=cotizaciones&estado=<?= urlencode($estadoFiltro) ?>&download_pdf=<?= $cotizacionId ?>">Descargar PDF</a></li>
+                                    <li><a class="dropdown-item" href="cliente-portal.php?view=cotizaciones&estado=<?= urlencode($estadoFiltro) ?>&download_pdf=<?= $cotizacionId ?>">Descargar PDF</a></li>
                                     <?php if ($permiteEdicion): ?>
                                         <li>
                                             <button
@@ -124,7 +124,7 @@ $resumenCotizaciones = [
                                         <li>
                                             <form method="post" class="m-0" onsubmit="return confirm('¿Eliminar cotización #<?= $cotizacionId ?>?');">
                                                 <input type="hidden" name="action" value="eliminar_cotizacion_cliente">
-                                                <input type="hidden" name="return_url" value="cotizar.php?view=cotizaciones&estado=<?= urlencode($estadoFiltro) ?>">
+                                                <input type="hidden" name="return_url" value="cliente-portal.php?view=cotizaciones&estado=<?= urlencode($estadoFiltro) ?>">
                                                 <input type="hidden" name="cotizacion_id" value="<?= $cotizacionId ?>">
                                                 <button class="dropdown-item text-danger" type="submit">Eliminar</button>
                                             </form>
@@ -135,7 +135,7 @@ $resumenCotizaciones = [
                                         <li>
                                             <form method="post" class="m-0">
                                                 <input type="hidden" name="action" value="aprobar_cotizacion_cliente">
-                                                <input type="hidden" name="return_url" value="cotizar.php?view=cotizaciones&estado=<?= urlencode($estadoFiltro) ?>">
+                                                <input type="hidden" name="return_url" value="cliente-portal.php?view=cotizaciones&estado=<?= urlencode($estadoFiltro) ?>">
                                                 <input type="hidden" name="cotizacion_id" value="<?= $cotizacionId ?>">
                                                 <button class="dropdown-item text-success" type="submit">Aprobar y generar pedido</button>
                                             </form>
@@ -188,7 +188,7 @@ $resumenCotizaciones = [
             <form method="post" id="editar-cotizacion-form">
                 <div class="modal-body">
                     <input type="hidden" name="action" value="editar_cotizacion_cliente">
-                    <input type="hidden" name="return_url" value="cotizar.php?view=cotizaciones&estado=<?= urlencode($estadoFiltro) ?>">
+                    <input type="hidden" name="return_url" value="cliente-portal.php?view=cotizaciones&estado=<?= urlencode($estadoFiltro) ?>">
                     <input type="hidden" name="cotizacion_id" id="editar-cotizacion-hidden-id" value="0">
                     <p class="text-muted mb-2">Modifica cantidades. Si un ítem queda en 0, se elimina de la cotización.</p>
                     <div id="editar-cotizacion-items" class="d-grid gap-2"></div>
