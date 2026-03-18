@@ -51,4 +51,10 @@ class CotizacionDetalle extends BaseModel
         $stmt->execute(['cotizacion_id' => $cotizacionId]);
         return $stmt->fetchAll();
     }
+
+    public function deleteByCotizacion(int $cotizacionId): bool
+    {
+        $stmt = $this->db->prepare('DELETE FROM cotizacion_detalle WHERE cotizacion_id = :cotizacion_id');
+        return $stmt->execute(['cotizacion_id' => $cotizacionId]);
+    }
 }
