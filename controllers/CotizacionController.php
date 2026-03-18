@@ -438,79 +438,91 @@ class CotizacionController
         $iva = $total * 0.19;
         $totalConIva = $total + $iva;
 
-        $x = 36;
         $y = 805;
-        $lineHeight = 14;
         $commands = [];
-        $commands[] = "0.97 0.98 1 rg 0 772 595 70 re f";
-        $commands[] = "0.14 0.36 0.72 rg 0 772 595 8 re f";
+        $commands[] = "0.98 0.98 0.98 rg 0 0 595 842 re f";
+        $commands[] = "1 1 1 rg 24 24 547 794 re f";
+        $commands[] = "0.80 0.84 0.90 RG 1 w 24 24 547 794 re S";
+        $commands[] = "0.14 0.36 0.72 rg 24 768 547 50 re f";
 
         if ($hasLogo) {
-            $commands[] = "q 56 0 0 56 36 785 cm /Im1 Do Q";
+            $commands[] = "q 48 0 0 48 36 772 cm /Im1 Do Q";
         }
 
-        $textStartX = $hasLogo ? 102 : 40;
-        $commands[] = "BT /F2 18 Tf {$textStartX} {$y} Td (" . $escape(strtoupper($companyName)) . ") Tj ET";
-        $commands[] = "BT /F1 9 Tf {$textStartX} " . ($y - 16) . " Td (" . $escape('RUT: ' . ($empresa['rut'] ?? '-')) . ") Tj ET";
-        $commands[] = "BT /F1 9 Tf {$textStartX} " . ($y - 29) . " Td (" . $escape('Email: ' . ($empresa['email'] ?? '-') . '   Tel: ' . ($empresa['telefono'] ?? '-')) . ") Tj ET";
-        $commands[] = "BT /F1 9 Tf {$textStartX} " . ($y - 42) . " Td (" . $escape('Dirección: ' . ($empresa['direccion'] ?? '-') . '   Web: ' . ($empresa['sitio_web'] ?? '-')) . ") Tj ET";
+        $textStartX = $hasLogo ? 92 : 36;
+        $commands[] = "0.14 0.36 0.72 rg";
+        $commands[] = "BT /F2 16 Tf {$textStartX} {$y} Td (" . $escape(strtoupper($companyName)) . ") Tj ET";
+        $commands[] = "0 0 0 rg";
+        $commands[] = "BT /F1 8 Tf {$textStartX} " . ($y - 15) . " Td (" . $escape('RUT: ' . ($empresa['rut'] ?? '-') . '  |  Email: ' . ($empresa['email'] ?? '-')) . ") Tj ET";
+        $commands[] = "BT /F1 8 Tf {$textStartX} " . ($y - 27) . " Td (" . $escape('Tel: ' . ($empresa['telefono'] ?? '-') . '  |  Web: ' . ($empresa['sitio_web'] ?? '-')) . ") Tj ET";
+        $commands[] = "BT /F1 8 Tf {$textStartX} " . ($y - 39) . " Td (" . $escape('Dirección: ' . ($empresa['direccion'] ?? '-')) . ") Tj ET";
 
-        $commands[] = "0.15 0.22 0.32 RG 1 w 36 760 m 559 760 l S";
+        $commands[] = "0.82 0.86 0.93 rg 24 724 547 34 re f";
 
-        $yInfo = 734;
-        $commands[] = "BT /F2 14 Tf 36 {$yInfo} Td (" . $escape('COTIZACIÓN #' . (int) ($cotizacion['id'] ?? 0)) . ") Tj ET";
-        $commands[] = "BT /F1 10 Tf 360 {$yInfo} Td (" . $escape('Fecha: ' . ((string) ($cotizacion['fecha'] ?? '-'))) . ") Tj ET";
-        $commands[] = "BT /F1 10 Tf 36 " . ($yInfo - 16) . " Td (" . $escape('Estado: ' . strtoupper((string) ($cotizacion['estado'] ?? '-'))) . ") Tj ET";
-        $commands[] = "BT /F1 10 Tf 36 " . ($yInfo - 32) . " Td (" . $escape('Cliente: ' . ($cotizacion['cliente_nombre'] ?? '-') . ' | RUT: ' . ($cotizacion['cliente_rut'] ?? '-')) . ") Tj ET";
-        $commands[] = "BT /F1 10 Tf 36 " . ($yInfo - 48) . " Td (" . $escape('Empresa: ' . ($cotizacion['cliente_empresa'] ?? '-') . ' | Contacto: ' . ($cotizacion['cliente_email'] ?? '-')) . ") Tj ET";
+        $yInfo = 744;
+        $commands[] = "BT /F2 13 Tf 34 {$yInfo} Td (" . $escape('COTIZACIÓN #' . (int) ($cotizacion['id'] ?? 0)) . ") Tj ET";
+        $commands[] = "BT /F1 9 Tf 432 {$yInfo} Td (" . $escape('Fecha: ' . ((string) ($cotizacion['fecha'] ?? '-'))) . ") Tj ET";
+        $commands[] = "BT /F1 9 Tf 34 " . ($yInfo - 13) . " Td (" . $escape('Estado: ' . strtoupper((string) ($cotizacion['estado'] ?? '-')) . '  |  Ejecutivo: ' . ($cotizacion['vendedor'] ?? 'Sin asignar')) . ") Tj ET";
 
-        $tableY = 652;
-        $commands[] = "0.93 0.95 0.99 rg 36 {$tableY} 523 20 re f";
-        $commands[] = "BT /F2 9 Tf 40 " . ($tableY + 6) . " Td (" . $escape('SKU') . ") Tj ET";
-        $commands[] = "BT /F2 9 Tf 96 " . ($tableY + 6) . " Td (" . $escape('Producto') . ") Tj ET";
-        $commands[] = "BT /F2 9 Tf 305 " . ($tableY + 6) . " Td (" . $escape('Cant.') . ") Tj ET";
-        $commands[] = "BT /F2 9 Tf 350 " . ($tableY + 6) . " Td (" . $escape('Precio') . ") Tj ET";
-        $commands[] = "BT /F2 9 Tf 425 " . ($tableY + 6) . " Td (" . $escape('Desc.') . ") Tj ET";
-        $commands[] = "BT /F2 9 Tf 485 " . ($tableY + 6) . " Td (" . $escape('Subtotal') . ") Tj ET";
+        $commands[] = "BT /F1 9 Tf 34 704 Td (" . $escape('Cliente: ' . ($cotizacion['cliente_nombre'] ?? '-') . '  |  RUT: ' . ($cotizacion['cliente_rut'] ?? '-')) . ") Tj ET";
+        $commands[] = "BT /F1 9 Tf 34 691 Td (" . $escape('Empresa: ' . ($cotizacion['cliente_empresa'] ?? '-') . '  |  Contacto: ' . ($cotizacion['cliente_email'] ?? '-')) . ") Tj ET";
+        $commands[] = "BT /F1 9 Tf 34 678 Td (" . $escape('Dirección: ' . ($cotizacion['cliente_direccion'] ?? '-') . '  |  Fono: ' . ($cotizacion['cliente_telefono'] ?? '-')) . ") Tj ET";
 
-        $rowY = $tableY - 16;
-        $maxRows = 22;
+        $tableY = 650;
+        $commands[] = "0.17 0.34 0.62 rg 34 {$tableY} 527 18 re f";
+        $commands[] = "1 1 1 rg";
+        $commands[] = "BT /F2 8 Tf 40 " . ($tableY + 5) . " Td (" . $escape('SKU') . ") Tj ET";
+        $commands[] = "BT /F2 8 Tf 92 " . ($tableY + 5) . " Td (" . $escape('DESCRIPCIÓN') . ") Tj ET";
+        $commands[] = "BT /F2 8 Tf 323 " . ($tableY + 5) . " Td (" . $escape('CANT') . ") Tj ET";
+        $commands[] = "BT /F2 8 Tf 362 " . ($tableY + 5) . " Td (" . $escape('PRECIO') . ") Tj ET";
+        $commands[] = "BT /F2 8 Tf 426 " . ($tableY + 5) . " Td (" . $escape('DESC %') . ") Tj ET";
+        $commands[] = "BT /F2 8 Tf 486 " . ($tableY + 5) . " Td (" . $escape('SUBTOTAL') . ") Tj ET";
+
+        $rowY = $tableY - 14;
+        $maxRows = 24;
         $shownDetails = array_slice($detalles, 0, $maxRows);
         foreach ($shownDetails as $index => $detalle) {
             $isEven = $index % 2 === 0;
             if ($isEven) {
-                $commands[] = "0.99 0.99 1 rg 36 " . ($rowY - 3) . " 523 16 re f";
+                $commands[] = "0.96 0.97 0.99 rg 34 " . ($rowY - 3) . " 527 14 re f";
             }
+            $commands[] = "0 0 0 rg";
 
             $cantidad = (int) ($detalle['cantidad'] ?? 0);
             $precio = (float) ($detalle['precio'] ?? 0);
             $descuento = (float) ($detalle['descuento_pct'] ?? 0);
             $subtotal = (float) ($detalle['subtotal'] ?? 0);
 
-            $commands[] = "BT /F1 8 Tf 40 {$rowY} Td (" . $escape(substr((string) ($detalle['sku'] ?? '-'), 0, 12)) . ") Tj ET";
-            $commands[] = "BT /F1 8 Tf 96 {$rowY} Td (" . $escape(substr((string) ($detalle['producto_nombre'] ?? '-'), 0, 46)) . ") Tj ET";
-            $commands[] = "BT /F1 8 Tf 305 {$rowY} Td (" . $escape(number_format($cantidad, 0, ',', '.')) . ") Tj ET";
-            $commands[] = "BT /F1 8 Tf 350 {$rowY} Td (" . $escape('$' . number_format($precio, 0, ',', '.')) . ") Tj ET";
-            $commands[] = "BT /F1 8 Tf 425 {$rowY} Td (" . $escape(number_format($descuento, 1, ',', '.') . '%') . ") Tj ET";
-            $commands[] = "BT /F1 8 Tf 485 {$rowY} Td (" . $escape('$' . number_format($subtotal, 0, ',', '.')) . ") Tj ET";
+            $commands[] = "BT /F1 8 Tf 40 {$rowY} Td (" . $escape(substr((string) ($detalle['sku'] ?? '-'), 0, 10)) . ") Tj ET";
+            $commands[] = "BT /F1 8 Tf 92 {$rowY} Td (" . $escape(substr((string) ($detalle['producto_nombre'] ?? '-'), 0, 52)) . ") Tj ET";
+            $commands[] = "BT /F1 8 Tf 323 {$rowY} Td (" . $escape(number_format($cantidad, 0, ',', '.')) . ") Tj ET";
+            $commands[] = "BT /F1 8 Tf 362 {$rowY} Td (" . $escape('$' . number_format($precio, 0, ',', '.')) . ") Tj ET";
+            $commands[] = "BT /F1 8 Tf 426 {$rowY} Td (" . $escape(number_format($descuento, 1, ',', '.') . '%') . ") Tj ET";
+            $commands[] = "BT /F1 8 Tf 486 {$rowY} Td (" . $escape('$' . number_format($subtotal, 0, ',', '.')) . ") Tj ET";
 
-            $rowY -= 16;
+            $rowY -= 14;
         }
 
-        $summaryY = max(160, $rowY - 24);
-        $commands[] = "0.95 0.98 0.96 rg 356 {$summaryY} 203 84 re f";
-        $commands[] = "BT /F1 9 Tf 366 " . ($summaryY + 62) . " Td (" . $escape('Subtotal bruto: $' . number_format($totalBruto, 0, ',', '.')) . ") Tj ET";
-        $commands[] = "BT /F1 9 Tf 366 " . ($summaryY + 46) . " Td (" . $escape('Descuentos: $' . number_format($descuentoGlobal, 0, ',', '.')) . ") Tj ET";
-        $commands[] = "BT /F1 9 Tf 366 " . ($summaryY + 30) . " Td (" . $escape('Neto: $' . number_format($total, 0, ',', '.')) . ") Tj ET";
-        $commands[] = "BT /F1 9 Tf 366 " . ($summaryY + 14) . " Td (" . $escape('IVA (19%): $' . number_format($iva, 0, ',', '.')) . ") Tj ET";
-        $commands[] = "BT /F2 11 Tf 366 " . ($summaryY - 2) . " Td (" . $escape('TOTAL: $' . number_format($totalConIva, 0, ',', '.')) . ") Tj ET";
+        $summaryY = max(140, $rowY - 22);
+        $commands[] = "0.96 0.97 0.99 rg 344 {$summaryY} 217 96 re f";
+        $commands[] = "0.17 0.34 0.62 rg 344 " . ($summaryY + 76) . " 217 20 re f";
+        $commands[] = "1 1 1 rg";
+        $commands[] = "BT /F2 9 Tf 350 " . ($summaryY + 82) . " Td (" . $escape('RESUMEN CONTABLE') . ") Tj ET";
+        $commands[] = "0 0 0 rg";
+        $commands[] = "BT /F1 9 Tf 352 " . ($summaryY + 60) . " Td (" . $escape('Subtotal Bruto: $' . number_format($totalBruto, 0, ',', '.')) . ") Tj ET";
+        $commands[] = "BT /F1 9 Tf 352 " . ($summaryY + 46) . " Td (" . $escape('Descuento Aplicado: $' . number_format($descuentoGlobal, 0, ',', '.')) . ") Tj ET";
+        $commands[] = "BT /F1 9 Tf 352 " . ($summaryY + 32) . " Td (" . $escape('Neto Afecto: $' . number_format($total, 0, ',', '.')) . ") Tj ET";
+        $commands[] = "BT /F1 9 Tf 352 " . ($summaryY + 18) . " Td (" . $escape('IVA 19%: $' . number_format($iva, 0, ',', '.')) . ") Tj ET";
+        $commands[] = "BT /F2 11 Tf 352 " . ($summaryY + 4) . " Td (" . $escape('TOTAL DOCUMENTO: $' . number_format($totalConIva, 0, ',', '.')) . ") Tj ET";
 
         if (count($detalles) > $maxRows) {
-            $commands[] = "BT /F1 8 Tf 36 " . ($summaryY + 8) . " Td (" . $escape('Nota: se muestran los primeros ' . $maxRows . ' ítems en este documento.') . ") Tj ET";
+            $commands[] = "BT /F1 8 Tf 34 " . ($summaryY + 12) . " Td (" . $escape('Nota: el documento muestra los primeros ' . $maxRows . ' ítems por límite de página.') . ") Tj ET";
         }
 
-        $commands[] = "BT /F1 8 Tf 36 64 Td (" . $escape('Condiciones: Validez 10 días | Entrega sujeta a stock | Valores expresados en CLP.') . ") Tj ET";
-        $commands[] = "BT /F1 8 Tf 36 50 Td (" . $escape('Documento generado por Tu Lista ERP.') . ") Tj ET";
+        $commands[] = "0.85 0.87 0.90 RG 0.8 w 34 96 m 561 96 l S";
+        $commands[] = "BT /F1 8 Tf 34 80 Td (" . $escape('Condiciones comerciales: Validez 10 días hábiles | Entrega sujeta a disponibilidad de stock | Moneda CLP.') . ") Tj ET";
+        $commands[] = "BT /F1 8 Tf 34 66 Td (" . $escape('Documento tributario referencial de cotización (no constituye factura).') . ") Tj ET";
+        $commands[] = "BT /F1 8 Tf 34 52 Td (" . $escape('Generado por Tu Lista ERP para control comercial y contable.') . ") Tj ET";
 
         $content = implode("\n", $commands);
         return $this->renderPdfDocument($content, $logo);

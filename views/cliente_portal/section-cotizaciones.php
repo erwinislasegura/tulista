@@ -68,7 +68,7 @@ $resumenCotizaciones = [
 
         <div class="table-responsive">
             <table class="table table-sm align-middle mb-0 tl-portal-list-table">
-                <thead><tr><th>ID</th><th>Estado</th><th>Total</th><th>Fecha</th><th>Acciones</th></tr></thead>
+                <thead><tr><th>ID</th><th>Estado</th><th>Total</th><th>Items</th><th>Fecha</th><th>Acciones</th></tr></thead>
                 <tbody>
                 <?php foreach ($cotizaciones as $cotizacion): ?>
                     <?php
@@ -77,59 +77,77 @@ $resumenCotizaciones = [
                         $permiteEdicion = in_array($estadoRaw, ['borrador', 'enviada'], true);
                         $detalles = $detallesPorCotizacion[$cotizacionId] ?? [];
                         $detallesJson = htmlspecialchars(json_encode($detalles, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), ENT_QUOTES, 'UTF-8');
+                        $cantidadItems = count($detalles);
+                        $promedioItem = $cantidadItems > 0 ? ((float) $cotizacion['total'] / $cantidadItems) : 0;
                     ?>
                     <tr>
                         <td>#<?= $cotizacionId ?></td>
                         <td><span class="badge <?= $estadoBadge($estadoRaw) ?> text-capitalize"><?= htmlspecialchars($estadoTexto($estadoRaw)) ?></span></td>
                         <td><?= htmlspecialchars($formatCurrency((float) $cotizacion['total'])) ?></td>
+                        <td>
+                            <div class="d-flex flex-column lh-sm">
+                                <strong><?= $cantidadItems ?></strong>
+                                <small class="text-muted">Prom: <?= htmlspecialchars($formatCurrency($promedioItem)) ?></small>
+                            </div>
+                        </td>
                         <td><?= htmlspecialchars($cotizacion['fecha']) ?></td>
                         <td>
-                            <div class="d-flex flex-wrap gap-1">
-                                <button
-                                    class="btn btn-sm btn-outline-dark js-ver-cotizacion"
-                                    type="button"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#modal-detalle-cotizacion"
-                                    data-id="<?= $cotizacionId ?>"
-                                    data-estado="<?= htmlspecialchars($estadoTexto($estadoRaw)) ?>"
-                                    data-total="<?= htmlspecialchars($formatCurrency((float) $cotizacion['total'])) ?>"
-                                    data-detalles="<?= $detallesJson ?>"
-                                >Ver</button>
-
-                                <a class="btn btn-sm btn-outline-primary" href="cotizar.php?view=cotizaciones&estado=<?= urlencode($estadoFiltro) ?>&download_pdf=<?= $cotizacionId ?>">PDF</a>
-
-                                <?php if ($permiteEdicion): ?>
-                                    <button
-                                        class="btn btn-sm btn-outline-secondary js-editar-cotizacion"
-                                        type="button"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#modal-editar-cotizacion"
-                                        data-id="<?= $cotizacionId ?>"
-                                        data-detalles="<?= $detallesJson ?>"
-                                    >Editar</button>
-
-                                    <form method="post" class="m-0" onsubmit="return confirm('¿Eliminar cotización #<?= $cotizacionId ?>?');">
-                                        <input type="hidden" name="action" value="eliminar_cotizacion_cliente">
-                                        <input type="hidden" name="return_url" value="cotizar.php?view=cotizaciones&estado=<?= urlencode($estadoFiltro) ?>">
-                                        <input type="hidden" name="cotizacion_id" value="<?= $cotizacionId ?>">
-                                        <button class="btn btn-sm btn-outline-danger" type="submit">Borrar</button>
-                                    </form>
-                                <?php endif; ?>
-
-                                <?php if ($estadoRaw === 'enviada'): ?>
-                                    <form method="post" class="m-0">
-                                        <input type="hidden" name="action" value="aprobar_cotizacion_cliente">
-                                        <input type="hidden" name="return_url" value="cotizar.php?view=cotizaciones&estado=<?= urlencode($estadoFiltro) ?>">
-                                        <input type="hidden" name="cotizacion_id" value="<?= $cotizacionId ?>">
-                                        <button class="btn btn-sm btn-success" type="submit">Aprobar</button>
-                                    </form>
-                                <?php endif; ?>
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Opciones
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <button
+                                            class="dropdown-item js-ver-cotizacion"
+                                            type="button"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modal-detalle-cotizacion"
+                                            data-id="<?= $cotizacionId ?>"
+                                            data-estado="<?= htmlspecialchars($estadoTexto($estadoRaw)) ?>"
+                                            data-total="<?= htmlspecialchars($formatCurrency((float) $cotizacion['total'])) ?>"
+                                            data-detalles="<?= $detallesJson ?>"
+                                        >Ver detalle</button>
+                                    </li>
+                                    <li><a class="dropdown-item" href="cotizar.php?view=cotizaciones&estado=<?= urlencode($estadoFiltro) ?>&download_pdf=<?= $cotizacionId ?>">Descargar PDF</a></li>
+                                    <?php if ($permiteEdicion): ?>
+                                        <li>
+                                            <button
+                                                class="dropdown-item js-editar-cotizacion"
+                                                type="button"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#modal-editar-cotizacion"
+                                                data-id="<?= $cotizacionId ?>"
+                                                data-detalles="<?= $detallesJson ?>"
+                                            >Editar cantidades</button>
+                                        </li>
+                                        <li>
+                                            <form method="post" class="m-0" onsubmit="return confirm('¿Eliminar cotización #<?= $cotizacionId ?>?');">
+                                                <input type="hidden" name="action" value="eliminar_cotizacion_cliente">
+                                                <input type="hidden" name="return_url" value="cotizar.php?view=cotizaciones&estado=<?= urlencode($estadoFiltro) ?>">
+                                                <input type="hidden" name="cotizacion_id" value="<?= $cotizacionId ?>">
+                                                <button class="dropdown-item text-danger" type="submit">Eliminar</button>
+                                            </form>
+                                        </li>
+                                    <?php endif; ?>
+                                    <?php if ($estadoRaw === 'enviada'): ?>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <form method="post" class="m-0">
+                                                <input type="hidden" name="action" value="aprobar_cotizacion_cliente">
+                                                <input type="hidden" name="return_url" value="cotizar.php?view=cotizaciones&estado=<?= urlencode($estadoFiltro) ?>">
+                                                <input type="hidden" name="cotizacion_id" value="<?= $cotizacionId ?>">
+                                                <button class="dropdown-item text-success" type="submit">Aprobar y generar pedido</button>
+                                            </form>
+                                        </li>
+                                    <?php endif; ?>
+                                </ul>
                             </div>
                         </td>
                     </tr>
                 <?php endforeach; ?>
                 <?php if (empty($cotizaciones)): ?>
-                    <tr><td colspan="5" class="text-center text-muted py-3">No hay cotizaciones para este estado.</td></tr>
+                    <tr><td colspan="6" class="text-center text-muted py-3">No hay cotizaciones para este estado.</td></tr>
                 <?php endif; ?>
                 </tbody>
             </table>
