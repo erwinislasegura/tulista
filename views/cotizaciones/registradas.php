@@ -59,7 +59,7 @@ $estadoLabel = static function (string $estado): string {
                                             <input type="hidden" name="cotizacion_id" value="<?= (int) $cotizacion['id'] ?>">
                                             <label class="form-label small mb-1">Cambiar estado</label>
                                             <select name="estado" class="form-select form-select-sm tl-compact-input mb-2">
-                                                <?php foreach (['borrador' => 'Sin revisión','enviada' => 'Enviada','aprobada' => 'Aprobada','rechazada' => 'Rechazada'] as $estadoValue => $estadoTexto): ?>
+                                                <?php foreach (['borrador' => 'En revisión','enviada' => 'Enviar al cliente','aprobada' => 'Aprobada por cliente','rechazada' => 'Rechazada'] as $estadoValue => $estadoTexto): ?>
                                                     <option value="<?= $estadoValue ?>" <?= $estadoValue === $cotizacion['estado'] ? 'selected' : '' ?>><?= $estadoTexto ?></option>
                                                 <?php endforeach; ?>
                                             </select>
