@@ -34,7 +34,8 @@
             </select>
         </div>
         <div class="col-md-2"><label class="form-label">Total</label><input type="number" step="0.01" min="0" name="total" class="form-control tl-compact-input" required></div>
-        <div class="col-md-2"><label class="form-label">Estado</label><select name="estado" class="form-select tl-compact-input"><?php foreach (($data['estados_operacion'] ?? []) as $estado): ?><option value="<?= $estado ?>"><?= ucfirst($estado) ?></option><?php endforeach; ?></select></div>
+        <div class="col-md-2"><label class="form-label">Estado</label><select name="estado" class="form-select tl-compact-input"><?php foreach (($data['estados_operacion'] ?? []) as $estado): ?><option value="<?= $estado ?>"><?= ucfirst(str_replace('_', ' ', $estado)) ?></option><?php endforeach; ?></select></div>
+        <div class="col-md-2"><label class="form-label">Pago</label><select name="estado_pago" class="form-select tl-compact-input"><?php foreach (($data['estados_pago'] ?? []) as $estadoPago): ?><option value="<?= $estadoPago ?>"><?= ucfirst($estadoPago) ?></option><?php endforeach; ?></select></div>
         <div class="col-md-3"><label class="form-label">Fecha</label><input type="datetime-local" name="fecha" class="form-control tl-compact-input"></div>
 
         <div class="col-md-3"><label class="form-label">Contacto</label><input id="pedido_contacto" name="contacto_nombre" class="form-control tl-compact-input"></div>
@@ -83,7 +84,7 @@
     </div>
     <div class="table-responsive">
         <table class="table align-middle">
-            <thead><tr><th>#</th><th>Cliente</th><th>Vendedor</th><th>Cotización</th><th>Total</th><th>Fecha</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <thead><tr><th>#</th><th>Cliente</th><th>Vendedor</th><th>Cotización</th><th>Total</th><th>Fecha</th><th>Estado</th><th>Pago</th><th>Acciones</th></tr></thead>
             <tbody>
             <?php foreach ($data['pedidos'] as $pedido): ?>
                 <tr>
@@ -94,6 +95,7 @@
                     <td>$<?= number_format((float) $pedido['total'], 0, ',', '.') ?></td>
                     <td><?= htmlspecialchars($pedido['fecha']) ?></td>
                     <td><span class="badge bg-light text-dark text-capitalize"><?= htmlspecialchars($pedido['estado']) ?></span></td>
+                    <td><span class="badge <?= ($pedido['estado_pago'] ?? 'pendiente') === 'pagado' ? 'bg-success-subtle text-success' : 'bg-warning-subtle text-warning' ?> text-capitalize"><?= htmlspecialchars($pedido['estado_pago'] ?? 'pendiente') ?></span></td>
                     <td>
                         <div class="dropdown">
                             <button class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" data-bs-boundary="viewport" data-bs-display="static" type="button">Acciones</button>
@@ -106,7 +108,7 @@
                                         <label class="form-label small mb-1">Editar estado</label>
                                         <select name="estado" class="form-select form-select-sm tl-compact-input mb-2">
                                             <?php foreach (($data['estados_operacion'] ?? []) as $estado): ?>
-                                                <option value="<?= $estado ?>" <?= $estado === $pedido['estado'] ? 'selected' : '' ?>><?= ucfirst($estado) ?></option>
+                                                <option value="<?= $estado ?>" <?= $estado === $pedido['estado'] ? 'selected' : '' ?>><?= ucfirst(str_replace('_', ' ', $estado)) ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                         <button class="btn btn-primary btn-sm w-100" type="submit">Guardar</button>
@@ -128,7 +130,8 @@
                             <div class="col-md-4"><label class="form-label">Cliente</label><select id="pedido_cliente" name="cliente_id" class="form-select tl-compact-input" required><?php foreach ($data['clientes'] as $cliente): ?><option value="<?= (int) $cliente['id'] ?>" <?= (int) $cliente['id'] === (int) $pedido['cliente_id'] ? 'selected' : '' ?>><?= htmlspecialchars($cliente['nombre']) ?></option><?php endforeach; ?></select></div>
                             <div class="col-md-3"><label class="form-label">Cotización</label><select id="pedido_cotizacion" name="cotizacion_id" class="form-select tl-compact-input"><option value="">Sin cotización</option><?php foreach ($data['cotizaciones'] as $cotizacion): ?><option value="<?= (int) $cotizacion['id'] ?>" <?= (int) $cotizacion['id'] === (int) ($pedido['cotizacion_id'] ?? 0) ? 'selected' : '' ?>>#<?= (int) $cotizacion['id'] ?></option><?php endforeach; ?></select></div>
                             <div class="col-md-3"><label class="form-label">Vendedor</label><select name="usuario_id" class="form-select tl-compact-input"><option value="">Sin asignar</option><?php foreach ($data['vendedores'] as $vendedor): ?><option value="<?= (int) $vendedor['id'] ?>" <?= (int) $vendedor['id'] === (int) ($pedido['usuario_id'] ?? 0) ? 'selected' : '' ?>><?= htmlspecialchars($vendedor['nombre']) ?></option><?php endforeach; ?></select></div>
-                            <div class="col-md-2"><label class="form-label">Estado</label><select name="estado" class="form-select tl-compact-input"><?php foreach (($data['estados_operacion'] ?? []) as $estado): ?><option value="<?= $estado ?>" <?= $estado === $pedido['estado'] ? 'selected' : '' ?>><?= ucfirst($estado) ?></option><?php endforeach; ?></select></div>
+                            <div class="col-md-2"><label class="form-label">Estado</label><select name="estado" class="form-select tl-compact-input"><?php foreach (($data['estados_operacion'] ?? []) as $estado): ?><option value="<?= $estado ?>" <?= $estado === $pedido['estado'] ? 'selected' : '' ?>><?= ucfirst(str_replace('_', ' ', $estado)) ?></option><?php endforeach; ?></select></div>
+                            <div class="col-md-2"><label class="form-label">Pago</label><select name="estado_pago" class="form-select tl-compact-input"><?php foreach (($data['estados_pago'] ?? []) as $estadoPago): ?><option value="<?= $estadoPago ?>" <?= $estadoPago === ($pedido['estado_pago'] ?? 'pendiente') ? 'selected' : '' ?>><?= ucfirst($estadoPago) ?></option><?php endforeach; ?></select></div>
                             <div class="col-md-3"><label class="form-label">Total</label><input type="number" step="0.01" min="0" name="total" class="form-control tl-compact-input" value="<?= htmlspecialchars((string) $pedido['total']) ?>" required></div>
                             <div class="col-md-4"><label class="form-label">Fecha</label><input type="datetime-local" name="fecha" class="form-control tl-compact-input" value="<?= htmlspecialchars(date('Y-m-d\TH:i', strtotime($pedido['fecha']))) ?>"></div>
                             <div class="col-md-3"><label class="form-label">Contacto</label><input name="contacto_nombre" class="form-control tl-compact-input" value="<?= htmlspecialchars($pedido['contacto_nombre'] ?? '') ?>"></div>

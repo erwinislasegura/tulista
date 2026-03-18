@@ -53,7 +53,7 @@
                                         <input type="hidden" name="action" value="marcar_procesado">
                                         <input type="hidden" name="menu" value="resumen">
                                         <input type="hidden" name="pedido_id" value="<?= (int) $cot['pedido_id'] ?>">
-                                        <button class="btn btn-sm btn-success" type="submit">Marcar procesado</button>
+                                        <button class="btn btn-sm btn-success" type="submit">Marcar en proceso</button>
                                     </form>
                                 <?php else: ?>
                                     <span class="badge bg-light text-dark">Sin pedido asociado</span>
@@ -87,19 +87,41 @@
                         </div>
                         <div class="table-responsive">
                             <table class="table table-sm align-middle">
-                                <thead><tr><th>SKU</th><th>Producto</th><th>Cantidad</th><th>Precio</th><th>Subtotal</th></tr></thead>
+                                <thead><tr><th>SKU</th><th>Producto</th><th>Cantidad</th><th>Precio</th><th>Subtotal</th><th>Resolución de faltantes</th></tr></thead>
                                 <tbody>
                                 <?php foreach (($data['detalles_cotizacion'][$cotId] ?? []) as $detalle): ?>
+                                    <?php
+                                        $resolucion = 'Sin revisión de faltantes.';
+                                        $pedidoId = (int) ($cot['pedido_id'] ?? 0);
+                                        $itemsEmpaque = $pedidoId > 0 ? ($data['empaque_por_pedido'][$pedidoId] ?? []) : [];
+                                        foreach ($itemsEmpaque as $itemEmpaque) {
+                                            if ((int) ($itemEmpaque['cotizacion_detalle_id'] ?? 0) !== (int) ($detalle['id'] ?? 0)) {
+                                                continue;
+                                            }
+                                            $accion = (string) ($itemEmpaque['accion'] ?? 'pendiente');
+                                            if ($accion === 'reemplazado') {
+                                                $resolucion = 'Se reemplaza por ' . ($itemEmpaque['reemplazo_nombre'] ?? 'producto alternativo') . '.';
+                                            } elseif ($accion === 'omitido') {
+                                                $resolucion = 'No se incluye en la cotización/pedido final.';
+                                            } elseif ($accion === 'confirmado') {
+                                                $resolucion = 'Producto confirmado sin reemplazo.';
+                                            } else {
+                                                $resolucion = 'Pendiente de resolver en bodega.';
+                                            }
+                                            break;
+                                        }
+                                    ?>
                                     <tr>
                                         <td><?= htmlspecialchars($detalle['sku'] ?? '-') ?></td>
                                         <td><?= htmlspecialchars($detalle['producto_nombre'] ?? '-') ?></td>
                                         <td><?= (int) ($detalle['cantidad'] ?? 0) ?></td>
                                         <td>$<?= number_format((float) ($detalle['precio'] ?? 0), 0, ',', '.') ?></td>
                                         <td>$<?= number_format((float) ($detalle['subtotal'] ?? 0), 0, ',', '.') ?></td>
+                                        <td><?= htmlspecialchars($resolucion) ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                                 <?php if (empty($data['detalles_cotizacion'][$cotId])): ?>
-                                    <tr><td colspan="5" class="text-center text-muted py-3">No hay detalle para esta cotización.</td></tr>
+                                    <tr><td colspan="6" class="text-center text-muted py-3">No hay detalle para esta cotización.</td></tr>
                                 <?php endif; ?>
                                 </tbody>
                             </table>
@@ -216,25 +238,39 @@
         <p class="text-muted">Actualiza estados de pedido sin salir del módulo para acelerar empaquetado, despacho y tránsito.</p>
         <div class="table-responsive">
             <table class="table align-middle mb-0">
-                <thead><tr><th>Pedido</th><th>Cliente</th><th>Estado actual</th><th>Cambiar a</th></tr></thead>
+                <thead><tr><th>Pedido</th><th>Cliente</th><th>Estado operación</th><th>Estado pago</th><th>Cambiar estados</th></tr></thead>
                 <tbody>
                 <?php foreach ($data['pedidos'] as $pedido): ?>
                     <tr>
                         <td>#<?= (int) $pedido['id'] ?></td>
                         <td><?= htmlspecialchars($pedido['cliente_nombre']) ?></td>
                         <td><span class="badge bg-light text-dark text-capitalize"><?= htmlspecialchars($pedido['estado']) ?></span></td>
+                        <td><span class="badge <?= ($pedido['estado_pago'] ?? 'pendiente') === 'pagado' ? 'bg-success-subtle text-success' : 'bg-warning-subtle text-warning' ?> text-capitalize"><?= htmlspecialchars($pedido['estado_pago'] ?? 'pendiente') ?></span></td>
                         <td>
-                            <form method="post" class="d-flex gap-2">
-                                <input type="hidden" name="action" value="cambiar_estado">
-                                <input type="hidden" name="menu" value="logistica">
-                                <input type="hidden" name="pedido_id" value="<?= (int) $pedido['id'] ?>">
-                                <select name="estado" class="form-select form-select-sm" style="max-width: 220px;">
-                                    <?php foreach ($data['estados_operacion'] as $estado): ?>
-                                        <option value="<?= $estado ?>" <?= $estado === $pedido['estado'] ? 'selected' : '' ?>><?= ucfirst($estado) ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                                <button class="btn btn-sm btn-primary" type="submit">Actualizar</button>
-                            </form>
+                            <div class="d-flex flex-wrap gap-2">
+                                <form method="post" class="d-flex gap-2">
+                                    <input type="hidden" name="action" value="cambiar_estado">
+                                    <input type="hidden" name="menu" value="logistica">
+                                    <input type="hidden" name="pedido_id" value="<?= (int) $pedido['id'] ?>">
+                                    <select name="estado" class="form-select form-select-sm" style="max-width: 220px;">
+                                        <?php foreach ($data['estados_operacion'] as $estado): ?>
+                                            <option value="<?= $estado ?>" <?= $estado === $pedido['estado'] ? 'selected' : '' ?>><?= ucfirst(str_replace('_', ' ', $estado)) ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <button class="btn btn-sm btn-primary" type="submit">Actualizar operación</button>
+                                </form>
+                                <form method="post" class="d-flex gap-2">
+                                    <input type="hidden" name="action" value="cambiar_estado_pago">
+                                    <input type="hidden" name="menu" value="logistica">
+                                    <input type="hidden" name="pedido_id" value="<?= (int) $pedido['id'] ?>">
+                                    <select name="estado_pago" class="form-select form-select-sm" style="max-width: 180px;">
+                                        <?php foreach (($data['estados_pago'] ?? []) as $estadoPago): ?>
+                                            <option value="<?= $estadoPago ?>" <?= $estadoPago === ($pedido['estado_pago'] ?? 'pendiente') ? 'selected' : '' ?>><?= ucfirst($estadoPago) ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <button class="btn btn-sm btn-outline-success" type="submit">Actualizar pago</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 <?php endforeach; ?>

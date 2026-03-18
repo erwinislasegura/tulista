@@ -1,29 +1,28 @@
 <div class="card mb-3 shadow-sm border-0">
     <div class="card-body">
-        <h5 class="mb-1">Resumen de mis pedidos</h5>
-        <p class="text-muted mb-3">Vista rápida para entender cómo va tu operación.</p>
+        <h5 class="mb-1">Historial de pedidos</h5>
+        <p class="text-muted mb-3">Aquí verás pedidos cerrados (entregados/cancelados) o pagados para consulta histórica.</p>
 
-        <?php $totalPedidos = count($data['pedidos']); ?>
-        <?php $totalCotizaciones = count($data['cotizaciones']); ?>
-        <div class="row g-3">
-            <div class="col-md-4">
-                <div class="p-3 rounded-3 bg-light border h-100">
-                    <div class="text-muted small">Pedidos totales</div>
-                    <div class="fs-4 fw-semibold"><?= $totalPedidos ?></div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="p-3 rounded-3 bg-light border h-100">
-                    <div class="text-muted small">Cotizaciones registradas</div>
-                    <div class="fs-4 fw-semibold"><?= $totalCotizaciones ?></div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="p-3 rounded-3 bg-light border h-100">
-                    <div class="text-muted small">Último pedido</div>
-                    <div class="fs-6 fw-semibold"><?= !empty($data['pedidos'][0]['fecha']) ? htmlspecialchars($data['pedidos'][0]['fecha']) : 'Sin registros' ?></div>
-                </div>
-            </div>
+        <div class="table-responsive">
+            <table class="table table-sm align-middle mb-0">
+                <thead><tr><th>Pedido</th><th>Cotización</th><th>Estado operación</th><th>Estado pago</th><th>Pagado el</th><th>Total</th><th>Fecha</th></tr></thead>
+                <tbody>
+                <?php foreach (($data['pedidos_historial'] ?? []) as $pedido): ?>
+                    <tr>
+                        <td>#<?= (int) $pedido['id'] ?></td>
+                        <td><?= !empty($pedido['cotizacion_id']) ? ('#' . (int) $pedido['cotizacion_id']) : '-' ?></td>
+                        <td class="text-capitalize"><?= htmlspecialchars((string) ($pedido['estado'] ?? '-')) ?></td>
+                        <td class="text-capitalize"><?= htmlspecialchars((string) ($pedido['estado_pago'] ?? 'pendiente')) ?></td>
+                        <td><?= !empty($pedido['pagado_at']) ? htmlspecialchars((string) $pedido['pagado_at']) : '-' ?></td>
+                        <td><?= htmlspecialchars($formatCurrency((float) ($pedido['total'] ?? 0))) ?></td>
+                        <td><?= htmlspecialchars((string) ($pedido['fecha'] ?? '-')) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                <?php if (empty($data['pedidos_historial'])): ?>
+                    <tr><td colspan="7" class="text-center text-muted py-3">Aún no tienes pedidos en historial.</td></tr>
+                <?php endif; ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
