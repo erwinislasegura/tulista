@@ -221,17 +221,6 @@ if (!isset($sections[$currentView])) {
             color: #fff;
         }
 
-        .tl-cliente .topbar iconify-icon,
-        .tl-cliente .topbar .bx {
-            color: #334155 !important;
-            opacity: 1 !important;
-        }
-
-        .tl-cliente .topbar .tl-menu-toggle iconify-icon,
-        .tl-cliente .topbar .tl-topbar-action iconify-icon {
-            color: #0f172a !important;
-        }
-
         .tl-cliente .table th {
             font-size: 0.72rem;
             font-weight: 600;
