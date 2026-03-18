@@ -2,7 +2,7 @@
 
 class Database
 {
-    private static ?PDO $instance = null;
+    private static $instance = null;
 
     public static function getConnection(): PDO
     {

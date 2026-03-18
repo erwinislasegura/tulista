@@ -6,7 +6,7 @@ require_once __DIR__ . '/../services/AuthorizationService.php';
 
 class CompanyController
 {
-    private CompanyConfig $company;
+    private $company ;
 
     public function __construct()
     {

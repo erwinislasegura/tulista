@@ -12,12 +12,12 @@ require_once __DIR__ . '/../services/AuditService.php';
 
 class CotizacionController
 {
-    private Cotizacion $cotizaciones;
-    private CotizacionDetalle $detalles;
-    private ProductModel $productos;
-    private Cliente $clientes;
-    private Pedido $pedidos;
-    private CompanyConfig $empresa;
+    private $cotizaciones ;
+    private $detalles ;
+    private $productos ;
+    private $clientes ;
+    private $pedidos ;
+    private $empresa ;
 
     public function __construct()
     {

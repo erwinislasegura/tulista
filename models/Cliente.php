@@ -4,7 +4,7 @@ require_once __DIR__ . '/BaseModel.php';
 
 class Cliente extends BaseModel
 {
-    private ?bool $hasTokenAcceso = null;
+    private $hasTokenAcceso = null;
 
     private function hasTokenAcceso(): bool
     {
