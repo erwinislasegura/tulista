@@ -465,6 +465,7 @@ class CotizacionController
 
         $commands = [];
         $commands[] = "1 1 1 rg 0 0 595 842 re f";
+        $commands[] = "0 g 0 G";
         $commands[] = "0 0 0 RG 1 w 24 24 547 794 re S";
 
         $empresaDisplay = trim((string) ($empresa['nombre'] ?? ''));
@@ -504,23 +505,22 @@ class CotizacionController
 
         // INFO BAR
         $infoTop = 638;
-        $commands[] = "0 0 0 rg 24 {$infoTop} 547 16 re f";
-        $commands[] = "1 1 1 rg";
+        $commands[] = "0 g 0 G";
+        $commands[] = "0 0 0 RG 0.5 w 24 {$infoTop} 547 16 re S";
         $commands[] = "BT /F2 7 Tf 30 " . ($infoTop + 5) . " Td (" . $escape('VENDEDOR') . ") Tj ET";
         $commands[] = "BT /F2 7 Tf 118 " . ($infoTop + 5) . " Td (" . $escape('N° O/C') . ") Tj ET";
         $commands[] = "BT /F2 7 Tf 190 " . ($infoTop + 5) . " Td (" . $escape('FECHA ENVIO') . ") Tj ET";
         $commands[] = "BT /F2 7 Tf 292 " . ($infoTop + 5) . " Td (" . $escape('ENVIO') . ") Tj ET";
         $commands[] = "BT /F2 7 Tf 360 " . ($infoTop + 5) . " Td (" . $escape('PUNTO F.O.B') . ") Tj ET";
         $commands[] = "BT /F2 7 Tf 468 " . ($infoTop + 5) . " Td (" . $escape('TERMINOS') . ") Tj ET";
-        $commands[] = "0 0 0 RG 0.6 w 24 " . ($infoTop - 18) . " 547 18 re S";
-        $commands[] = "0 0 0 rg";
+        $commands[] = "0 0 0 RG 0.4 w 24 " . ($infoTop - 18) . " 547 18 re S";
         $commands[] = "BT /F1 8 Tf 30 " . ($infoTop - 13) . " Td (" . $escape($toPdfText((string) ($cotizacion['vendedor'] ?? '-'))) . ") Tj ET";
         $commands[] = "BT /F1 8 Tf 468 " . ($infoTop - 13) . " Td (" . $escape('Contado') . ") Tj ET";
 
         // DETALLE TABLA estilo plantilla
         $tableTop = 594;
-        $commands[] = "0.92 0.92 0.92 rg 24 {$tableTop} 547 18 re f";
-        $commands[] = "0 0 0 RG 0.6 w 24 {$tableTop} 547 18 re S";
+        $commands[] = "0 g 0 G";
+        $commands[] = "0 0 0 RG 0.5 w 24 {$tableTop} 547 18 re S";
         $commands[] = "BT /F2 8 Tf 32 " . ($tableTop + 6) . " Td (" . $escape('CANTIDAD') . ") Tj ET";
         $commands[] = "BT /F2 8 Tf 106 " . ($tableTop + 6) . " Td (" . $escape('DESCRIPCION') . ") Tj ET";
         $commands[] = "BT /F2 8 Tf 365 " . ($tableTop + 6) . " Td (" . $escape('PRECIO UNIT.') . ") Tj ET";
@@ -554,7 +554,7 @@ class CotizacionController
             $impuestoX = 500 - $textWidth($impuestoText, 8);
             $subtotalX = 568 - $textWidth($subtotalText, 8);
 
-            $commands[] = "0 0 0 RG 0.25 w 24 " . ($rowY - 10) . " 547 18 re S";
+            $commands[] = "0 0 0 RG 0.2 w 24 " . ($rowY - 10) . " 547 18 re S";
             $commands[] = "BT /F1 8 Tf {$cantidadX} {$rowY} Td (" . $escape($cantidadText) . ") Tj ET";
             $commands[] = "BT /F1 {$descFont} Tf 106 {$rowY} Td (" . $escape($descripcion) . ") Tj ET";
             $commands[] = "BT /F1 8 Tf {$precioX} {$rowY} Td (" . $escape($precioText) . ") Tj ET";
@@ -566,9 +566,10 @@ class CotizacionController
         // TOTALES
         $totalsX = 380;
         $totalsY = 130;
-        $commands[] = "0 0 0 RG 0.7 w {$totalsX} {$totalsY} 191 54 re S";
-        $commands[] = "0 0 0 RG 0.35 w {$totalsX} " . ($totalsY + 36) . " m " . ($totalsX + 191) . " " . ($totalsY + 36) . " l S";
-        $commands[] = "0 0 0 RG 0.35 w {$totalsX} " . ($totalsY + 18) . " m " . ($totalsX + 191) . " " . ($totalsY + 18) . " l S";
+        $commands[] = "0 g 0 G";
+        $commands[] = "0 0 0 RG 0.5 w {$totalsX} {$totalsY} 191 54 re S";
+        $commands[] = "0 0 0 RG 0.25 w {$totalsX} " . ($totalsY + 36) . " m " . ($totalsX + 191) . " " . ($totalsY + 36) . " l S";
+        $commands[] = "0 0 0 RG 0.25 w {$totalsX} " . ($totalsY + 18) . " m " . ($totalsX + 191) . " " . ($totalsY + 18) . " l S";
         $commands[] = "BT /F1 8 Tf " . ($totalsX + 8) . " " . ($totalsY + 40) . " Td (" . $escape('SUBTOTAL') . ") Tj ET";
         $commands[] = "BT /F1 8 Tf " . ($totalsX + 8) . " " . ($totalsY + 22) . " Td (" . $escape('IVA (19%)') . ") Tj ET";
         $commands[] = "BT /F2 9 Tf " . ($totalsX + 8) . " " . ($totalsY + 6) . " Td (" . $escape('TOTAL') . ") Tj ET";
