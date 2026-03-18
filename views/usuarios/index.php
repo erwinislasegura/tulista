@@ -47,24 +47,41 @@
                 </tr>
 
                 <div class="modal fade" id="editUsuario<?= (int) $usuario['id'] ?>" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content"><div class="modal-body">
-                        <h6 class="mb-3">Editar usuario #<?= (int) $usuario['id'] ?></h6>
-                        <form method="post" class="row g-2 tl-minimal-form">
-                            <input type="hidden" name="action" value="update">
-                            <input type="hidden" name="id" value="<?= (int) $usuario['id'] ?>">
-                            <div class="col-md-4"><label class="form-label">Nombre</label><input name="nombre" class="form-control tl-compact-input" value="<?= htmlspecialchars($usuario['nombre']) ?>" required></div>
-                            <div class="col-md-4"><label class="form-label">Email</label><input type="email" name="email" class="form-control tl-compact-input" value="<?= htmlspecialchars($usuario['email']) ?>" required></div>
-                            <div class="col-md-4"><label class="form-label">Teléfono</label><input name="telefono" class="form-control tl-compact-input" value="<?= htmlspecialchars($usuario['telefono'] ?? '') ?>"></div>
-                            <div class="col-md-4"><label class="form-label">Dirección</label><input name="direccion" class="form-control tl-compact-input" value="<?= htmlspecialchars($usuario['direccion'] ?? '') ?>"></div>
-                            <div class="col-md-3"><label class="form-label">Cargo</label><input name="cargo" class="form-control tl-compact-input" value="<?= htmlspecialchars($usuario['cargo'] ?? '') ?>"></div>
-                            <div class="col-md-3"><label class="form-label">Rol</label><select name="rol" class="form-select tl-compact-input"><?php foreach ($data['roles'] as $rol): ?><option value="<?= htmlspecialchars($rol['codigo']) ?>" <?= $rol['codigo'] === $usuario['rol'] ? 'selected' : '' ?>><?= htmlspecialchars($rol['nombre']) ?></option><?php endforeach; ?></select></div>
-                            <div class="col-md-2"><label class="form-label">Comisión %</label><input type="number" step="0.01" min="0" max="100" name="porcentaje_comision" class="form-control tl-compact-input" value="<?= htmlspecialchars((string) $usuario['porcentaje_comision']) ?>"></div>
-                            <div class="col-md-3"><label class="form-label">Nueva clave</label><input type="password" name="password" class="form-control tl-compact-input" placeholder="Opcional"></div>
-                            <div class="col-md-9"><label class="form-label">Notas</label><input name="notas" class="form-control tl-compact-input" value="<?= htmlspecialchars($usuario['notas'] ?? '') ?>"></div>
-                            <div class="col-md-3 form-check mt-4 ms-2"><input type="checkbox" name="estado" class="form-check-input" <?= (int) $usuario['estado'] ? 'checked' : '' ?>><label class="form-check-label">Activo</label></div>
-                            <div class="col-12 d-flex justify-content-end gap-2 mt-3"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary" type="submit">Guardar</button></div>
-                        </form>
-                    </div></div></div>
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header border-0 pb-0">
+                                <div>
+                                    <h5 class="modal-title">Editar usuario</h5>
+                                    <small class="text-muted">ID #<?= (int) $usuario['id'] ?> · <?= htmlspecialchars($usuario['email']) ?></small>
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                            </div>
+                            <div class="modal-body pt-2">
+                                <form method="post" class="row g-3 tl-minimal-form">
+                                    <input type="hidden" name="action" value="update">
+                                    <input type="hidden" name="id" value="<?= (int) $usuario['id'] ?>">
+                                    <div class="col-12">
+                                        <div class="tl-form-card">
+                                            <h6 class="tl-form-card-title">Información del usuario</h6>
+                                            <div class="row g-2">
+                                                <div class="col-md-4"><label class="form-label">Nombre</label><input name="nombre" class="form-control tl-compact-input" value="<?= htmlspecialchars($usuario['nombre']) ?>" required></div>
+                                                <div class="col-md-4"><label class="form-label">Email</label><input type="email" name="email" class="form-control tl-compact-input" value="<?= htmlspecialchars($usuario['email']) ?>" required></div>
+                                                <div class="col-md-4"><label class="form-label">Teléfono</label><input name="telefono" class="form-control tl-compact-input" value="<?= htmlspecialchars($usuario['telefono'] ?? '') ?>"></div>
+                                                <div class="col-md-4"><label class="form-label">Dirección</label><input name="direccion" class="form-control tl-compact-input" value="<?= htmlspecialchars($usuario['direccion'] ?? '') ?>"></div>
+                                                <div class="col-md-3"><label class="form-label">Cargo</label><input name="cargo" class="form-control tl-compact-input" value="<?= htmlspecialchars($usuario['cargo'] ?? '') ?>"></div>
+                                                <div class="col-md-3"><label class="form-label">Rol</label><select name="rol" class="form-select tl-compact-input"><?php foreach ($data['roles'] as $rol): ?><option value="<?= htmlspecialchars($rol['codigo']) ?>" <?= $rol['codigo'] === $usuario['rol'] ? 'selected' : '' ?>><?= htmlspecialchars($rol['nombre']) ?></option><?php endforeach; ?></select></div>
+                                                <div class="col-md-2"><label class="form-label">Comisión %</label><input type="number" step="0.01" min="0" max="100" name="porcentaje_comision" class="form-control tl-compact-input" value="<?= htmlspecialchars((string) $usuario['porcentaje_comision']) ?>"></div>
+                                                <div class="col-md-3"><label class="form-label">Nueva clave</label><input type="password" name="password" class="form-control tl-compact-input" placeholder="Opcional"></div>
+                                                <div class="col-md-9"><label class="form-label">Notas</label><input name="notas" class="form-control tl-compact-input" value="<?= htmlspecialchars($usuario['notas'] ?? '') ?>"></div>
+                                                <div class="col-md-3 form-check mt-4 ms-2"><input type="checkbox" name="estado" class="form-check-input" <?= (int) $usuario['estado'] ? 'checked' : '' ?>><label class="form-check-label">Activo</label></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-end gap-2"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary" type="submit">Guardar cambios</button></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             <?php endforeach; ?>
             </tbody>
