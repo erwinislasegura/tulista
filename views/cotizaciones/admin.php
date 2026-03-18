@@ -152,6 +152,7 @@
 <script>
 (function () {
     const clientes = <?= $data['clientes_json'] ?: '[]' ?>;
+    const productosIniciales = <?= json_encode($data['productos'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?: '[]' ?>;
     const byId = Object.fromEntries(clientes.map(c => [String(c.id), c]));
     const select = document.getElementById('clienteSelect');
     const productSearch = document.getElementById('productoSearch');
