@@ -31,6 +31,9 @@ $company = CompanyConfigService::get();
             </div>
             <div class="col-12 d-grid"><button class="btn btn-primary" type="submit">Ingresar</button></div>
         </form>
+        <div class="text-center mt-3">
+            <a href="cliente-login.php" class="small text-muted">Ir al login principal de clientes</a>
+        </div>
     </div>
 </div>
 </body>

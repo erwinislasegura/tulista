@@ -1,0 +1,19 @@
+{
+  "id": "/app-cliente",
+  "name": "TuLista Portal Cliente",
+  "short_name": "TuLista Cliente",
+  "start_url": "/cliente-portal.php?source=pwa-cliente",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F5F6FA",
+  "theme_color": "#0D6EFD",
+  "description": "Portal de cotizaciones y pedidos para clientes de TuLista.",
+  "icons": [
+    {
+      "src": "assets/source/images/logo-tulista-mark.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
