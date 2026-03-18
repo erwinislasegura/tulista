@@ -26,6 +26,7 @@ class DashboardController
                 'top_productos' => $dashboard->topProductos(),
                 'top_clientes' => $dashboard->topClientes(),
                 'ventas_mensuales' => $dashboard->ventasPorMes(),
+                'cotizaciones_sin_revision' => $dashboard->cotizacionesSinRevision(),
                 'actividad' => $log->recent(8),
             ];
         } catch (Throwable $e) {
@@ -43,6 +44,7 @@ class DashboardController
                 'top_productos' => [],
                 'top_clientes' => [],
                 'ventas_mensuales' => [],
+                'cotizaciones_sin_revision' => [],
                 'actividad' => [],
             ];
         }

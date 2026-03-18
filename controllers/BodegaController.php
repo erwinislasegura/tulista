@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../models/Pedido.php';
 require_once __DIR__ . '/../models/ProductModel.php';
 require_once __DIR__ . '/../models/BodegaEmpaque.php';
+require_once __DIR__ . '/../models/CotizacionDetalle.php';
 require_once __DIR__ . '/../services/AuthService.php';
 require_once __DIR__ . '/../services/AuthorizationService.php';
 
@@ -11,6 +12,7 @@ class BodegaController
     private $pedidos ;
     private $productos ;
     private $empaque ;
+    private $detalles ;
 
     public function __construct()
     {
@@ -19,6 +21,7 @@ class BodegaController
         $this->pedidos = new Pedido();
         $this->productos = new ProductModel();
         $this->empaque = new BodegaEmpaque();
+        $this->detalles = new CotizacionDetalle();
         $_SESSION['bodega_flash'] = $_SESSION['bodega_flash'] ?? [];
     }
 
@@ -32,6 +35,8 @@ class BodegaController
                 $this->resolverItem();
             } elseif ($action === 'cambiar_estado') {
                 $this->cambiarEstadoPedido();
+            } elseif ($action === 'marcar_procesado') {
+                $this->marcarPedidoProcesado();
             }
 
             header('Location: ' . $this->buildRedirectUrl());
@@ -44,6 +49,14 @@ class BodegaController
         $stockQuery = trim($_GET['stock_q'] ?? '');
         $reviewPedidoId = (int) ($_GET['review_pedido'] ?? 0);
         $itemsRevision = $reviewPedidoId > 0 ? $this->empaque->itemsPorPedido($reviewPedidoId) : [];
+        $cotizacionesAprobadas = $this->pedidos->cotizacionesAceptadasPendientesBodega();
+        $detallesCotizacion = [];
+        foreach ($cotizacionesAprobadas as $cotizacion) {
+            $cotizacionId = (int) ($cotizacion['id'] ?? 0);
+            if ($cotizacionId > 0) {
+                $detallesCotizacion[$cotizacionId] = $this->detalles->findByCotizacion($cotizacionId);
+            }
+        }
 
         return [
             'menu' => $_GET['menu'] ?? 'resumen',
@@ -51,7 +64,8 @@ class BodegaController
             'review_pedido_id' => $reviewPedidoId,
             'review_items' => $itemsRevision,
             'review_summary' => $reviewPedidoId > 0 ? $this->empaque->resumenPorPedido($reviewPedidoId) : ['pendiente' => 0, 'confirmado' => 0, 'reemplazado' => 0, 'omitido' => 0],
-            'cotizaciones_aprobadas' => $this->pedidos->cotizacionesAceptadasPendientesBodega(),
+            'cotizaciones_aprobadas' => $cotizacionesAprobadas,
+            'detalles_cotizacion' => $detallesCotizacion,
             'pedidos' => $this->pedidos->all(),
             'estados_operacion' => Pedido::ESTADOS_OPERACION,
             'productos' => $this->productos->catalog(),
@@ -168,6 +182,24 @@ class BodegaController
         }
 
         $this->flash('danger', 'Error al actualizar el estado del pedido.');
+    }
+
+    private function marcarPedidoProcesado(): void
+    {
+        $pedidoId = (int) ($_POST['pedido_id'] ?? 0);
+        if ($pedidoId <= 0) {
+            $this->flash('warning', 'No se encontró pedido asociado para marcar como procesado.');
+            return;
+        }
+
+        $ok = $this->pedidos->updateEstado($pedidoId, 'procesado');
+        if ($ok) {
+            AuditService::log('pedido_procesado', 'pedidos', $pedidoId, 'Pedido marcado como procesado desde bodega');
+            $this->flash('success', "Pedido #{$pedidoId} marcado como procesado.");
+            return;
+        }
+
+        $this->flash('danger', 'No fue posible marcar el pedido como procesado.');
     }
 
     private function buildRedirectUrl(): string

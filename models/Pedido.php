@@ -4,7 +4,7 @@ require_once __DIR__ . '/BaseModel.php';
 
 class Pedido extends BaseModel
 {
-    public const ESTADOS_OPERACION = ['pendiente', 'empaquetado', 'despachado', 'transito', 'entregado', 'cancelado'];
+    public const ESTADOS_OPERACION = ['pendiente', 'procesado', 'empaquetado', 'despachado', 'transito', 'entregado', 'cancelado'];
 
     public function all(): array
     {
@@ -75,6 +75,7 @@ class Pedido extends BaseModel
     public function cotizacionesAceptadasPendientesBodega(): array
     {
         $sql = "SELECT c.id, c.total, c.fecha, c.estado, cl.nombre AS cliente_nombre,
+                       p.id AS pedido_id, p.estado AS pedido_estado, p.fecha AS pedido_fecha,
                        CASE WHEN p.id IS NULL THEN 0 ELSE 1 END AS ya_en_pedido
                 FROM cotizaciones c
                 INNER JOIN clientes cl ON cl.id = c.cliente_id
