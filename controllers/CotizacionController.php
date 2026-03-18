@@ -503,31 +503,31 @@ class CotizacionController
         if ($hasLogo) {
             $commands[] = "q 38 0 0 38 28 760 cm /Im1 Do Q";
         }
-        $headerX = $hasLogo ? 74 : 30;
-        $commands[] = "BT /F2 18 Tf {$headerX} 790 Td (" . $escape($toPdfText($empresaDisplay)) . ") Tj ET";
-        $commands[] = "BT /F1 8 Tf {$headerX} 776 Td (" . $escape($toPdfText((string) ($empresa['direccion'] ?? '-'))) . ") Tj ET";
-        $commands[] = "BT /F1 8 Tf {$headerX} 765 Td (" . $escape($toPdfText('Tel: ' . ($empresa['telefono'] ?? '-') . '   |   Email: ' . ($empresa['email'] ?? '-'))) . ") Tj ET";
-        $commands[] = "BT /F2 24 Tf 410 790 Td (" . $escape('Cotizacion') . ") Tj ET";
-        $commands[] = "BT /F1 8 Tf 410 775 Td (" . $escape($toPdfText('Fecha: ' . $fechaPdf)) . ") Tj ET";
-        $commands[] = "BT /F1 8 Tf 410 764 Td (" . $escape($toPdfText('N° Cotizacion: ' . (int) ($cotizacion['id'] ?? 0))) . ") Tj ET";
-        $commands[] = "BT /F1 8 Tf 410 753 Td (" . $escape($toPdfText('ID Cliente: ' . (int) ($cotizacion['cliente_id'] ?? 0))) . ") Tj ET";
+        $headerX = $hasLogo ? 78 : 34;
+        $commands[] = "BT /F2 19 Tf {$headerX} 796 Td (" . $escape($toPdfText($empresaDisplay)) . ") Tj ET";
+        $commands[] = "BT /F1 8 Tf {$headerX} 781 Td (" . $escape($toPdfText((string) ($empresa['direccion'] ?? '-'))) . ") Tj ET";
+        $commands[] = "BT /F1 8 Tf {$headerX} 770 Td (" . $escape($toPdfText('Tel: ' . ($empresa['telefono'] ?? '-') . '   |   Email: ' . ($empresa['email'] ?? '-'))) . ") Tj ET";
+        $commands[] = "BT /F2 23 Tf 405 796 Td (" . $escape('Cotizacion') . ") Tj ET";
+        $commands[] = "BT /F1 8 Tf 405 781 Td (" . $escape($toPdfText('Fecha: ' . $fechaPdf)) . ") Tj ET";
+        $commands[] = "BT /F1 8 Tf 405 770 Td (" . $escape($toPdfText('N° Cotizacion: ' . (int) ($cotizacion['id'] ?? 0))) . ") Tj ET";
+        $commands[] = "BT /F1 8 Tf 405 759 Td (" . $escape($toPdfText('ID Cliente: ' . (int) ($cotizacion['cliente_id'] ?? 0))) . ") Tj ET";
 
         // CLIENTE
-        $commands[] = "0 0 0 RG 0.35 w 24 740 m 571 740 l S";
-        $commands[] = "BT /F2 9 Tf 30 724 Td (" . $escape('Cotizacion para:') . ") Tj ET";
-        $commands[] = "BT /F1 8 Tf 30 712 Td (" . $escape($toPdfText((string) ($cotizacion['cliente_nombre'] ?? '-'))) . ") Tj ET";
-        $commands[] = "BT /F1 8 Tf 30 701 Td (" . $escape($toPdfText((string) ($cotizacion['cliente_empresa'] ?? '-'))) . ") Tj ET";
-        $commands[] = "BT /F1 8 Tf 30 690 Td (" . $escape($toPdfText((string) ($cotizacion['cliente_direccion'] ?? '-'))) . ") Tj ET";
-        $commands[] = "BT /F1 8 Tf 30 679 Td (" . $escape($toPdfText('Telefono: ' . (string) ($cotizacion['cliente_telefono'] ?? '-'))) . ") Tj ET";
-        $commands[] = "BT /F1 8 Tf 360 724 Td (" . $escape($toPdfText('Valida hasta: ' . $fechaValidaHasta)) . ") Tj ET";
-        $commands[] = "BT /F1 8 Tf 360 712 Td (" . $escape($toPdfText('Preparada por: ' . (string) ($cotizacion['vendedor'] ?? 'Ventas'))) . ") Tj ET";
+        $commands[] = "0 0 0 RG 0.3 w 24 734 m 571 734 l S";
+        $commands[] = "BT /F2 9 Tf 30 718 Td (" . $escape('Cotizacion para:') . ") Tj ET";
+        $commands[] = "BT /F1 8 Tf 30 705 Td (" . $escape($toPdfText((string) ($cotizacion['cliente_nombre'] ?? '-'))) . ") Tj ET";
+        $commands[] = "BT /F1 8 Tf 30 693 Td (" . $escape($toPdfText((string) ($cotizacion['cliente_empresa'] ?? '-'))) . ") Tj ET";
+        $commands[] = "BT /F1 8 Tf 30 681 Td (" . $escape($toPdfText((string) ($cotizacion['cliente_direccion'] ?? '-'))) . ") Tj ET";
+        $commands[] = "BT /F1 8 Tf 30 669 Td (" . $escape($toPdfText('Telefono: ' . (string) ($cotizacion['cliente_telefono'] ?? '-'))) . ") Tj ET";
+        $commands[] = "BT /F1 8 Tf 360 718 Td (" . $escape($toPdfText('Valida hasta: ' . $fechaValidaHasta)) . ") Tj ET";
+        $commands[] = "BT /F1 8 Tf 360 705 Td (" . $escape($toPdfText('Preparada por: ' . (string) ($cotizacion['vendedor'] ?? 'Ventas'))) . ") Tj ET";
 
         // Comentarios
-        $commands[] = "BT /F2 8 Tf 30 658 Td (" . $escape('Comentarios:') . ") Tj ET";
-        $commands[] = "BT /F1 8 Tf 92 658 Td (" . $escape($toPdfText((string) ($cotizacion['observaciones'] ?? 'Ninguno'))) . ") Tj ET";
+        $commands[] = "BT /F2 8 Tf 30 648 Td (" . $escape('Comentarios:') . ") Tj ET";
+        $commands[] = "BT /F1 8 Tf 92 648 Td (" . $escape($toPdfText((string) ($cotizacion['observaciones'] ?? 'Ninguno'))) . ") Tj ET";
 
         // INFO BAR
-        $infoTop = 638;
+        $infoTop = 612;
         $commands[] = "0 g 0 G";
         $commands[] = "0 0 0 RG 0.35 w";
         $commands[] = $roundedRect(24, $infoTop - 18, 547, 34, 3);
@@ -542,10 +542,10 @@ class CotizacionController
         $commands[] = "BT /F1 8 Tf 468 " . ($infoTop - 13) . " Td (" . $escape('Contado') . ") Tj ET";
 
         // DETALLE TABLA estilo plantilla
-        $tableTop = 594;
+        $tableTop = 560;
         $commands[] = "0 g 0 G";
         $commands[] = "0 0 0 RG 0.35 w";
-        $commands[] = $roundedRect(24, $tableTop - 240, 547, 258, 4);
+        $commands[] = $roundedRect(24, $tableTop - 230, 547, 248, 4);
         $commands[] = "0 0 0 RG 0.3 w 24 {$tableTop} 547 18 re S";
         $commands[] = "BT /F2 8 Tf " . $centerTextX(60, 'CANTIDAD', 8) . " " . ($tableTop + 6) . " Td (" . $escape('CANTIDAD') . ") Tj ET";
         $commands[] = "BT /F2 8 Tf 106 " . ($tableTop + 6) . " Td (" . $escape('DESCRIPCION') . ") Tj ET";
@@ -553,8 +553,8 @@ class CotizacionController
         $commands[] = "BT /F2 8 Tf " . $centerTextX(478, 'IMPUESTO', 8) . " " . ($tableTop + 6) . " Td (" . $escape('IMPUESTO') . ") Tj ET";
         $commands[] = "BT /F2 8 Tf " . $centerTextX(544, 'MONTO', 8) . " " . ($tableTop + 6) . " Td (" . $escape('MONTO') . ") Tj ET";
 
-        $rowY = $tableTop - 14;
-        $maxRows = 12;
+        $rowY = $tableTop - 16;
+        $maxRows = 10;
         foreach (array_slice($detalles, 0, $maxRows) as $detalle) {
             $cantidad = (int) ($detalle['cantidad'] ?? 0);
             $precio = (float) ($detalle['precio'] ?? 0);
@@ -581,18 +581,18 @@ class CotizacionController
             $impuestoX = $centerTextX(478, $impuestoText, 8);
             $subtotalX = $centerTextX(544, $subtotalText, 8);
 
-            $commands[] = "0 0 0 RG 0.15 w 24 " . ($rowY - 10) . " 547 18 re S";
             $commands[] = "BT /F1 8 Tf {$cantidadX} {$rowY} Td (" . $escape($cantidadText) . ") Tj ET";
             $commands[] = "BT /F1 {$descFont} Tf 106 {$rowY} Td (" . $escape($descripcion) . ") Tj ET";
             $commands[] = "BT /F1 8 Tf {$precioX} {$rowY} Td (" . $escape($precioText) . ") Tj ET";
             $commands[] = "BT /F1 8 Tf {$impuestoX} {$rowY} Td (" . $escape($impuestoText) . ") Tj ET";
             $commands[] = "BT /F1 8 Tf {$subtotalX} {$rowY} Td (" . $escape($subtotalText) . ") Tj ET";
-            $rowY -= 18;
+            $commands[] = "[1.2 2.2] 0 d 0 0 0 RG 0.12 w 30 " . ($rowY - 6) . " m 565 " . ($rowY - 6) . " l S [] 0 d";
+            $rowY -= 20;
         }
 
         // TOTALES
         $totalsX = 380;
-        $totalsY = 130;
+        $totalsY = 116;
         $commands[] = "0 g 0 G";
         $commands[] = "0 0 0 RG 0.35 w";
         $commands[] = $roundedRect($totalsX, $totalsY, 191, 54, 4);
@@ -618,8 +618,8 @@ class CotizacionController
         $commands[] = "BT /F1 7 Tf 240 66 Td (" . $escape($toPdfText('4) Garantia legal segun normativa vigente y politicas del fabricante.')) . ") Tj ET";
 
         // Footer
-        $commands[] = "BT /F1 8 Tf 145 50 Td (" . $escape($toPdfText('Si tiene alguna consulta sobre esta cotizacion, contactenos.')) . ") Tj ET";
-        $commands[] = "BT /F2 9 Tf 220 36 Td (" . $escape($toPdfText('¡GRACIAS POR SU COMPRA!')) . ") Tj ET";
+        $commands[] = "BT /F1 8 Tf 145 46 Td (" . $escape($toPdfText('Si tiene alguna consulta sobre esta cotizacion, contactenos.')) . ") Tj ET";
+        $commands[] = "BT /F2 9 Tf 220 32 Td (" . $escape($toPdfText('¡GRACIAS POR SU COMPRA!')) . ") Tj ET";
 
         $content = implode("\n", $commands);
         return $this->renderPdfDocument($content, $logo);
