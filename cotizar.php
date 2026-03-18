@@ -179,6 +179,25 @@ if (!isset($sections[$currentView])) {
             font-size: 0.86rem;
         }
 
+        .tl-cliente .card {
+            border: 1px solid #e6eaf2;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+        }
+
+        .tl-cliente h4,
+        .tl-cliente h5,
+        .tl-cliente .h4,
+        .tl-cliente .h5 {
+            font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+
+        .tl-cliente p,
+        .tl-cliente .form-label,
+        .tl-cliente .text-muted {
+            font-size: 0.86rem;
+        }
+
         .tl-login-gradient {
             background: radial-gradient(circle at top left, #dbe8f7 0%, #f8fafc 48%, #ecf8fb 100%);
         }
@@ -244,6 +263,12 @@ if (!isset($sections[$currentView])) {
 
         .tl-portal-shortcuts .btn-outline-dark {
             border-color: #c7d0e0;
+            color: #334155;
+        }
+
+        .tl-product-name {
+            font-size: 0.84rem;
+            font-weight: 500;
             color: #334155;
         }
     </style>
@@ -405,9 +430,28 @@ if (!isset($sections[$currentView])) {
     const rows = Array.from(document.querySelectorAll('[data-product-row]'));
     const productCount = document.getElementById('resumen-productos');
     const totalText = document.getElementById('resumen-total');
+    const stockToggle = document.getElementById('mostrar-sin-stock');
+    const form = document.getElementById('cotizacion-form');
+    const sinStockModalEl = document.getElementById('sin-stock-modal');
+    const sinStockModalBody = document.getElementById('sin-stock-modal-body');
+    const sinStockConfirmBtn = document.getElementById('confirmar-cotizacion-sin-stock');
+    let allowSubmitWithNoStock = false;
 
     if (rows.length && productCount && totalText) {
         const formatCurrency = (value) => new Intl.NumberFormat('es-CL').format(value);
+
+        const applyFilters = () => {
+            const term = (searchInput?.value || '').trim().toLowerCase();
+            const showWithoutStock = !!stockToggle?.checked;
+
+            rows.forEach((row) => {
+                const nameMatches = row.dataset.name.includes(term);
+                const stock = parseInt(row.dataset.stock || '0', 10);
+                const stockMatches = showWithoutStock || stock > 0;
+                row.classList.toggle('d-none', !(nameMatches && stockMatches));
+            });
+        };
+
         const updateSummary = () => {
             let selected = 0;
             let total = 0;
@@ -427,12 +471,31 @@ if (!isset($sections[$currentView])) {
             totalText.textContent = `$${formatCurrency(total)}`;
         };
 
-        searchInput?.addEventListener('input', () => {
-            const term = searchInput.value.trim().toLowerCase();
-            rows.forEach((row) => {
-                row.classList.toggle('d-none', !row.dataset.name.includes(term));
-            });
-        });
+        const showNoStockWarning = (outOfStockItems) => {
+            const cantidadProductos = outOfStockItems.length;
+            const mensaje = `Estás cotizando ${cantidadProductos} producto${cantidadProductos === 1 ? '' : 's'} sin existencia: <strong>${outOfStockItems.join(', ')}</strong>. La solicitud quedará sujeta a revisión de la empresa vendedora.`;
+            if (sinStockModalBody) {
+                sinStockModalBody.innerHTML = mensaje;
+            }
+
+            if (window.bootstrap?.Modal && sinStockModalEl) {
+                const modal = window.bootstrap.Modal.getOrCreateInstance(sinStockModalEl);
+                modal.show();
+                return;
+            }
+
+            const confirmed = window.confirm(
+                `Estás cotizando ${cantidadProductos} producto(s) sin existencia (${outOfStockItems.join(', ')}). ` +
+                'La solicitud quedará sujeta a revisión de la empresa vendedora. ¿Deseas continuar?'
+            );
+            if (confirmed) {
+                allowSubmitWithNoStock = true;
+                form?.requestSubmit();
+            }
+        };
+
+        searchInput?.addEventListener('input', applyFilters);
+        stockToggle?.addEventListener('change', applyFilters);
 
         rows.forEach((row) => {
             const input = row.querySelector('[data-cantidad]');
@@ -447,6 +510,37 @@ if (!isset($sections[$currentView])) {
             input.addEventListener('input', updateSummary);
         });
 
+        form?.addEventListener('submit', (event) => {
+            if (allowSubmitWithNoStock) {
+                allowSubmitWithNoStock = false;
+                return;
+            }
+
+            const outOfStockItems = [];
+            rows.forEach((row) => {
+                const stock = parseInt(row.dataset.stock || '0', 10);
+                const qty = parseInt(row.querySelector('[data-cantidad]')?.value || '0', 10);
+                if (stock <= 0 && qty > 0) {
+                    const name = row.querySelector('.tl-product-name')?.textContent?.trim() || 'producto';
+                    outOfStockItems.push(name);
+                }
+            });
+
+            if (outOfStockItems.length > 0) {
+                event.preventDefault();
+                showNoStockWarning(outOfStockItems);
+            }
+        });
+
+        sinStockConfirmBtn?.addEventListener('click', () => {
+            allowSubmitWithNoStock = true;
+            if (window.bootstrap?.Modal && sinStockModalEl) {
+                window.bootstrap.Modal.getOrCreateInstance(sinStockModalEl).hide();
+            }
+            form?.requestSubmit();
+        });
+
+        applyFilters();
         updateSummary();
     }
 })();
