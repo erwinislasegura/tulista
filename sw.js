@@ -1,5 +1,5 @@
-const CACHE_NAME = 'tulista-v2';
-const APP_SHELL = ['/', '/index.php', '/manifest.webmanifest', '/assets/source/css/dashboard.css'];
+const CACHE_NAME = 'tulista-v3';
+const APP_SHELL = ['/', '/index.php', '/cliente-portal.php', '/manifest.webmanifest', '/manifest-admin.webmanifest', '/manifest-cliente.webmanifest', '/assets/source/css/dashboard.css'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
