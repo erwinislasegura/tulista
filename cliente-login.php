@@ -16,131 +16,159 @@ $old = $view['old'] ?? [];
     <link href="assets/source/css/dashboard.css" rel="stylesheet">
     <style>
         :root {
-            --tl-bg: #f6f7fb;
+            --tl-bg: #eceef4;
+            --tl-panel: #7569e7;
+            --tl-panel-dark: #6559d8;
             --tl-card: #ffffff;
-            --tl-border: #e9ecf5;
-            --tl-title: #222a3f;
-            --tl-text: #5b6378;
-            --tl-primary: #3a136a;
+            --tl-text: #646b7d;
+            --tl-title: #1e2436;
+            --tl-line: #e7e9f2;
         }
 
         body {
             margin: 0;
-            background: var(--tl-bg);
+            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
             color: var(--tl-text);
+            background: radial-gradient(circle at 20% 10%, #f2f3f8 0%, var(--tl-bg) 40%, #e6e8ef 100%);
         }
 
-        .login-wrap {
+        .auth-shell {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 24px 12px;
+            padding: 20px 12px;
         }
 
-        .login-card {
-            width: 100%;
-            max-width: 560px;
-            background: var(--tl-card);
-            border: 1px solid var(--tl-border);
-            border-radius: 14px;
-            box-shadow: 0 10px 28px rgba(32, 41, 74, 0.08);
+        .auth-device {
+            width: min(1080px, 100%);
+            border-radius: 22px;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr;
+            background: #dfe2eb;
+            box-shadow: 0 24px 60px rgba(34, 42, 63, .18);
         }
 
-        .login-head {
-            text-align: center;
-            padding: 28px 28px 18px;
-            border-bottom: 1px solid var(--tl-border);
+        .auth-hero {
+            background: linear-gradient(145deg, var(--tl-panel) 0%, var(--tl-panel-dark) 100%);
+            color: #fff;
+            padding: 28px 22px 78px;
+            position: relative;
+            min-height: 220px;
         }
 
-        .login-head h1 {
-            margin: 14px 0 6px;
-            font-size: 1.25rem;
-            color: var(--tl-title);
+        .auth-hero h1 {
+            font-size: 1.32rem;
+            margin: 18px 0 8px;
+            font-weight: 700;
+            letter-spacing: .2px;
         }
 
-        .login-head p {
+        .auth-hero p {
             margin: 0;
-            font-size: .95rem;
+            max-width: 320px;
+            font-size: .94rem;
+            color: rgba(255, 255, 255, .88);
         }
 
-        .login-body {
-            padding: 22px 28px 28px;
+        .auth-card {
+            background: var(--tl-card);
+            margin: -54px 16px 16px;
+            border-radius: 16px;
+            border: 1px solid var(--tl-line);
+            box-shadow: 0 12px 28px rgba(40, 49, 85, .12);
+            padding: 16px;
         }
 
-        .nav-minimal {
-            border: 1px solid var(--tl-border);
+        .nav-soft {
+            background: #f6f7fb;
+            border: 1px solid var(--tl-line);
             border-radius: 10px;
-            background: #fafbfe;
             padding: 4px;
             gap: 4px;
         }
 
-        .nav-minimal .nav-link {
+        .nav-soft .nav-link {
             border: 0;
             border-radius: 8px;
-            color: #616985;
-            font-weight: 500;
-            padding: 8px 10px;
-            font-size: .92rem;
+            font-size: .86rem;
+            color: #6a7084;
+            font-weight: 600;
+            padding: 8px 6px;
         }
 
-        .nav-minimal .nav-link.active {
-            background: #fff;
+        .nav-soft .nav-link.active {
             color: var(--tl-title);
-            box-shadow: 0 2px 8px rgba(34, 42, 63, .08);
+            background: #fff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, .08);
         }
 
-        .form-label {
-            color: #3b4256;
-            font-size: .9rem;
-            margin-bottom: .35rem;
-        }
-
-        .form-control {
-            border-color: var(--tl-border);
-            min-height: 42px;
-        }
-
-        .form-control:focus {
-            border-color: #b9abd6;
-            box-shadow: 0 0 0 .2rem rgba(58, 19, 106, .12);
-        }
+        .form-label { color: #3f475e; font-size: .86rem; margin-bottom: .3rem; }
+        .form-control { min-height: 42px; border-color: var(--tl-line); }
+        .form-control:focus { border-color: #b5abff; box-shadow: 0 0 0 .15rem rgba(117, 105, 231, .2); }
 
         .btn-primary {
-            background: var(--tl-primary);
-            border-color: var(--tl-primary);
+            background: linear-gradient(120deg, var(--tl-panel) 0%, var(--tl-panel-dark) 100%);
+            border: 0;
             min-height: 42px;
-            font-weight: 500;
+            font-weight: 600;
         }
 
-        .login-footer {
-            margin-top: 18px;
-            text-align: center;
-            font-size: .88rem;
+        .auth-links {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid var(--tl-line);
+            font-size: .85rem;
         }
 
-        .login-footer a {
-            color: var(--tl-primary);
-            text-decoration: none;
-            font-weight: 500;
+        .auth-links a { color: #5e56c9; text-decoration: none; font-weight: 600; }
+
+        @media (min-width: 992px) {
+            .auth-device {
+                grid-template-columns: 1fr 1.15fr;
+                min-height: 640px;
+            }
+
+            .auth-hero {
+                padding: 48px;
+                min-height: auto;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+
+            .auth-hero h1 { font-size: 2rem; }
+            .auth-hero p { max-width: 390px; font-size: 1rem; }
+
+            .auth-card {
+                margin: 38px;
+                padding: 24px;
+                align-self: center;
+            }
         }
     </style>
 </head>
 <body>
-<div class="login-wrap">
-    <div class="login-card">
-        <div class="login-head">
-            <img src="<?= htmlspecialchars($company['logo_path']) ?>" alt="Logo" style="max-height:54px;width:auto;">
-            <h1>Portal de clientes</h1>
-            <p>Accede, crea tu cuenta o recupera tu contraseña.</p>
-        </div>
+<div class="auth-shell">
+    <div class="auth-device">
+        <section class="auth-hero">
+            <div>
+                <img src="<?= htmlspecialchars($company['logo_path']) ?>" alt="Logo" style="max-height:54px;width:auto;filter:brightness(0) invert(1);">
+                <h1>Portal clientes</h1>
+                <p>Inicia sesión, registra tu cuenta o recupera tu contraseña con una experiencia rápida y clara.</p>
+            </div>
+            <small class="opacity-75">TuLista · acceso seguro</small>
+        </section>
 
-        <div class="login-body">
-            <ul class="nav nav-pills nav-fill nav-minimal mb-4" role="tablist">
+        <section class="auth-card">
+            <ul class="nav nav-pills nav-fill nav-soft mb-3" role="tablist">
                 <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-login" type="button">Ingresar</button></li>
                 <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-register" type="button">Registro</button></li>
-                <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-reset" type="button">Recuperar clave</button></li>
+                <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-reset" type="button">Recuperar</button></li>
             </ul>
 
             <div class="tab-content">
@@ -148,7 +176,7 @@ $old = $view['old'] ?? [];
                     <?php if (!empty($view['login_error'])): ?><div class="alert alert-danger py-2 mb-3"><?= htmlspecialchars($view['login_error']) ?></div><?php endif; ?>
                     <?php if (!empty($view['register_success'])): ?><div class="alert alert-success py-2 mb-3"><?= htmlspecialchars($view['register_success']) ?></div><?php endif; ?>
                     <?php if (!empty($view['reset_success'])): ?><div class="alert alert-success py-2 mb-3"><?= htmlspecialchars($view['reset_success']) ?></div><?php endif; ?>
-                    <form method="post" class="row g-3">
+                    <form method="post" class="row g-2">
                         <input type="hidden" name="action" value="login_cliente">
                         <div class="col-12">
                             <label class="form-label">RUT</label>
@@ -158,13 +186,13 @@ $old = $view['old'] ?? [];
                             <label class="form-label">Contraseña</label>
                             <input type="password" name="password" class="form-control" placeholder="••••••••" required>
                         </div>
-                        <div class="col-12 d-grid"><button class="btn btn-primary" type="submit">Ingresar al portal</button></div>
+                        <div class="col-12 mt-3 d-grid"><button class="btn btn-primary" type="submit">Ingresar al portal</button></div>
                     </form>
                 </div>
 
                 <div class="tab-pane fade" id="tab-register">
                     <?php if (!empty($view['register_error'])): ?><div class="alert alert-danger py-2 mb-3"><?= htmlspecialchars($view['register_error']) ?></div><?php endif; ?>
-                    <form method="post" class="row g-3">
+                    <form method="post" class="row g-2">
                         <input type="hidden" name="action" value="register_cliente">
                         <div class="col-md-6"><label class="form-label">RUT</label><input name="register_rut" class="form-control" value="<?= htmlspecialchars($old['register_rut'] ?? '') ?>" required></div>
                         <div class="col-md-6"><label class="form-label">Nombre</label><input name="register_nombre" class="form-control" value="<?= htmlspecialchars($old['register_nombre'] ?? '') ?>" required></div>
@@ -172,27 +200,28 @@ $old = $view['old'] ?? [];
                         <div class="col-md-6"><label class="form-label">Teléfono</label><input name="register_telefono" class="form-control" value="<?= htmlspecialchars($old['register_telefono'] ?? '') ?>"></div>
                         <div class="col-md-6"><label class="form-label">Contraseña</label><input type="password" name="register_password" class="form-control" minlength="6" required></div>
                         <div class="col-md-6"><label class="form-label">Confirmar contraseña</label><input type="password" name="register_password_confirm" class="form-control" minlength="6" required></div>
-                        <div class="col-12 d-grid"><button class="btn btn-primary" type="submit">Crear cuenta</button></div>
+                        <div class="col-12 mt-3 d-grid"><button class="btn btn-primary" type="submit">Crear cuenta</button></div>
                     </form>
                 </div>
 
                 <div class="tab-pane fade" id="tab-reset">
                     <?php if (!empty($view['reset_error'])): ?><div class="alert alert-danger py-2 mb-3"><?= htmlspecialchars($view['reset_error']) ?></div><?php endif; ?>
-                    <form method="post" class="row g-3">
+                    <form method="post" class="row g-2">
                         <input type="hidden" name="action" value="reset_password_cliente">
                         <div class="col-md-6"><label class="form-label">RUT</label><input name="reset_rut" class="form-control" value="<?= htmlspecialchars($old['reset_rut'] ?? '') ?>" required></div>
                         <div class="col-md-6"><label class="form-label">Email</label><input type="email" name="reset_email" class="form-control" value="<?= htmlspecialchars($old['reset_email'] ?? '') ?>" required></div>
                         <div class="col-md-6"><label class="form-label">Nueva contraseña</label><input type="password" name="reset_password" class="form-control" minlength="6" required></div>
                         <div class="col-md-6"><label class="form-label">Confirmar nueva contraseña</label><input type="password" name="reset_password_confirm" class="form-control" minlength="6" required></div>
-                        <div class="col-12 d-grid"><button class="btn btn-primary" type="submit">Actualizar contraseña</button></div>
+                        <div class="col-12 mt-3 d-grid"><button class="btn btn-primary" type="submit">Actualizar contraseña</button></div>
                     </form>
                 </div>
             </div>
 
-            <div class="login-footer">
-                ¿Eres administrador? <a href="auth-login-usuarios.php">Ir al acceso de administración</a>
+            <div class="auth-links">
+                <span>¿Eres administrador?</span>
+                <a href="auth-login-usuarios.php">Ir al acceso de administración</a>
             </div>
-        </div>
+        </section>
     </div>
 </div>
 
