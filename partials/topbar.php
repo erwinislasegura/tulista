@@ -9,7 +9,7 @@ $companyConfig = CompanyConfigService::get();
 $profileName = $isClientePortal ? ($cliente['nombre'] ?? 'Cliente') : ($user['nombre'] ?? 'Usuario');
 $profileSubtitle = $isClientePortal ? ('RUT: ' . ($cliente['rut'] ?? '-')) : ('Rol: ' . ($user['rol'] ?? 'usuario'));
 $logoutUrl = $isClientePortal ? 'logout-clientes.php' : 'logout-usuarios.php';
-$homeUrl = $isClientePortal ? 'cotizar.php' : 'index.php';
+$homeUrl = $isClientePortal ? 'cliente-portal.php' : 'index.php';
 $profileInitial = strtoupper(substr(trim((string) $profileName), 0, 1));
 $currentTitle = isset($title) && trim((string) $title) !== '' ? (string) $title : 'Dashboard';
 $topbarContext = $isClientePortal ? 'Portal cliente' : ($companyConfig['nombre'] ?? 'Tulista');
