@@ -24,63 +24,53 @@ $old = $view['old'] ?? [];
             --tl-title: #1e2436;
             --tl-line: #e7e9f2;
         }
-
         body {
             margin: 0;
             font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
             color: var(--tl-text);
-            background: radial-gradient(circle at 20% 10%, #f2f3f8 0%, var(--tl-bg) 40%, #e6e8ef 100%);
+            background: linear-gradient(160deg, #f3f4f9 0%, var(--tl-bg) 55%, #e7e9f1 100%);
         }
-
         .auth-shell {
             min-height: 100vh;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px 12px;
+            align-items: stretch;
+            justify-content: stretch;
+            padding: 0;
         }
-
         .auth-device {
-            width: min(1080px, 100%);
-            border-radius: 22px;
+            width: 100vw;
+            min-height: 100vh;
+            border-radius: 0;
             overflow: hidden;
             display: grid;
             grid-template-columns: 1fr;
-            background: #dfe2eb;
-            box-shadow: 0 24px 60px rgba(34, 42, 63, .18);
+            background: #e4e7ef;
+            box-shadow: none;
         }
-
         .auth-hero {
             background: linear-gradient(145deg, var(--tl-panel) 0%, var(--tl-panel-dark) 100%);
             color: #fff;
-            padding: 28px 22px 78px;
-            position: relative;
-            min-height: 220px;
+            padding: 24px 22px;
+            min-height: 210px;
         }
-
         .auth-hero h1 {
-            font-size: 1.32rem;
-            margin: 18px 0 8px;
+            font-size: 1.9rem;
+            margin: 16px 0 8px;
             font-weight: 700;
             letter-spacing: .2px;
         }
-
         .auth-hero p {
             margin: 0;
             max-width: 320px;
             font-size: .94rem;
             color: rgba(255, 255, 255, .88);
         }
-
         .auth-card {
             background: var(--tl-card);
-            margin: -54px 16px 16px;
-            border-radius: 16px;
-            border: 1px solid var(--tl-line);
-            box-shadow: 0 12px 28px rgba(40, 49, 85, .12);
-            padding: 16px;
+            margin: 0;
+            border-top: 1px solid var(--tl-line);
+            padding: 18px 16px 22px;
         }
-
         .nav-soft {
             background: #f6f7fb;
             border: 1px solid var(--tl-line);
@@ -88,7 +78,6 @@ $old = $view['old'] ?? [];
             padding: 4px;
             gap: 4px;
         }
-
         .nav-soft .nav-link {
             border: 0;
             border-radius: 8px;
@@ -97,24 +86,20 @@ $old = $view['old'] ?? [];
             font-weight: 600;
             padding: 8px 6px;
         }
-
         .nav-soft .nav-link.active {
             color: var(--tl-title);
             background: #fff;
             box-shadow: 0 2px 6px rgba(0, 0, 0, .08);
         }
-
         .form-label { color: #3f475e; font-size: .86rem; margin-bottom: .3rem; }
         .form-control { min-height: 42px; border-color: var(--tl-line); }
         .form-control:focus { border-color: #b5abff; box-shadow: 0 0 0 .15rem rgba(117, 105, 231, .2); }
-
         .btn-primary {
             background: linear-gradient(120deg, var(--tl-panel) 0%, var(--tl-panel-dark) 100%);
             border: 0;
             min-height: 42px;
             font-weight: 600;
         }
-
         .auth-links {
             display: flex;
             justify-content: center;
@@ -124,15 +109,46 @@ $old = $view['old'] ?? [];
             border-top: 1px solid var(--tl-line);
             font-size: .85rem;
         }
-
         .auth-links a { color: #5e56c9; text-decoration: none; font-weight: 600; }
+        .social-row {
+            margin-top: 12px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .social-btn {
+            border: 1px solid var(--tl-line);
+            background: #fff;
+            border-radius: 10px;
+            min-height: 40px;
+            font-weight: 600;
+            color: #3d445a;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .social-btn:hover { background: #f8f9ff; }
+        .social-icon {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: .75rem;
+            font-weight: 700;
+        }
+        .facebook .social-icon { background: #1877F2; }
+        .instagram .social-icon { background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af, #515bd4); }
 
         @media (min-width: 992px) {
             .auth-device {
                 grid-template-columns: 1fr 1.15fr;
-                min-height: 640px;
+                min-height: 100vh;
             }
-
             .auth-hero {
                 padding: 48px;
                 min-height: auto;
@@ -140,13 +156,14 @@ $old = $view['old'] ?? [];
                 flex-direction: column;
                 justify-content: space-between;
             }
-
             .auth-hero h1 { font-size: 2rem; }
             .auth-hero p { max-width: 390px; font-size: 1rem; }
-
             .auth-card {
-                margin: 38px;
-                padding: 24px;
+                margin: 34px;
+                border-radius: 18px;
+                border: 1px solid var(--tl-line);
+                box-shadow: 0 16px 34px rgba(40, 49, 85, .14);
+                padding: 26px;
                 align-self: center;
             }
         }
@@ -178,14 +195,8 @@ $old = $view['old'] ?? [];
                     <?php if (!empty($view['reset_success'])): ?><div class="alert alert-success py-2 mb-3"><?= htmlspecialchars($view['reset_success']) ?></div><?php endif; ?>
                     <form method="post" class="row g-2">
                         <input type="hidden" name="action" value="login_cliente">
-                        <div class="col-12">
-                            <label class="form-label">RUT</label>
-                            <input name="rut" class="form-control" placeholder="12.345.678-9" value="<?= htmlspecialchars($old['login_rut'] ?? '') ?>" required>
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label">Contraseña</label>
-                            <input type="password" name="password" class="form-control" placeholder="••••••••" required>
-                        </div>
+                        <div class="col-12"><label class="form-label">RUT</label><input name="rut" class="form-control" placeholder="12.345.678-9" value="<?= htmlspecialchars($old['login_rut'] ?? '') ?>" required></div>
+                        <div class="col-12"><label class="form-label">Contraseña</label><input type="password" name="password" class="form-control" placeholder="••••••••" required></div>
                         <div class="col-12 mt-3 d-grid"><button class="btn btn-primary" type="submit">Ingresar al portal</button></div>
                     </form>
                 </div>
@@ -220,6 +231,17 @@ $old = $view['old'] ?? [];
             <div class="auth-links">
                 <span>¿Eres administrador?</span>
                 <a href="auth-login-usuarios.php">Ir al acceso de administración</a>
+            </div>
+
+            <div class="social-row">
+                <a class="social-btn facebook" href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
+                    <span class="social-icon">f</span>
+                    Facebook
+                </a>
+                <a class="social-btn instagram" href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+                    <span class="social-icon">IG</span>
+                    Instagram
+                </a>
             </div>
         </section>
     </div>
