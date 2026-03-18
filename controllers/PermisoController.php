@@ -8,8 +8,8 @@ require_once __DIR__ . '/../services/AuditService.php';
 
 class PermisoController
 {
-    private RoleModel $roles;
-    private RolePermissionModel $permissions;
+    private $roles ;
+    private $permissions ;
 
     public function __construct()
     {

@@ -7,7 +7,7 @@ require_once __DIR__ . '/../services/AuditService.php';
 
 class ProveedorController
 {
-    private Proveedor $proveedores;
+    private $proveedores ;
 
     public function __construct()
     {

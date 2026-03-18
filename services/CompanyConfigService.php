@@ -6,8 +6,12 @@ class CompanyConfigService
 {
     public static function get(): array
     {
-        $model = new CompanyConfig();
-        $config = $model->get();
+        try {
+            $model = new CompanyConfig();
+            $config = $model->get();
+        } catch (Throwable $e) {
+            $config = null;
+        }
 
         return [
             'nombre' => $config['nombre'] ?? 'TU LISTA',

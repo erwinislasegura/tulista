@@ -7,7 +7,7 @@ require_once __DIR__ . '/../services/AuditService.php';
 
 class ClienteController
 {
-    private Cliente $clientes;
+    private $clientes ;
 
     public function __construct()
     {

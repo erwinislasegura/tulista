@@ -4,21 +4,21 @@ require_once __DIR__ . '/BaseModel.php';
 
 class CompanyConfig extends BaseModel
 {
-    public function __construct()
-    {
-        parent::__construct();
-        $this->ensureTable();
-    }
-
     public function get(): ?array
     {
-        $stmt = $this->db->query('SELECT * FROM empresa_config WHERE id = 1 LIMIT 1');
-        $data = $stmt->fetch();
-        return $data ?: null;
+        try {
+            $stmt = $this->db->query('SELECT * FROM empresa_config WHERE id = 1 LIMIT 1');
+            $data = $stmt->fetch();
+            return $data ?: null;
+        } catch (Throwable $e) {
+            return null;
+        }
     }
 
     public function save(array $payload): void
     {
+        $this->ensureTable();
+
         $sql = 'INSERT INTO empresa_config (id, nombre, razon_social, rut, email, telefono, direccion, sitio_web, logo_path, updated_at)
                 VALUES (1, :nombre, :razon_social, :rut, :email, :telefono, :direccion, :sitio_web, :logo_path, NOW())
                 ON DUPLICATE KEY UPDATE

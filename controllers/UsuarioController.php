@@ -8,8 +8,8 @@ require_once __DIR__ . '/../services/AuditService.php';
 
 class UsuarioController
 {
-    private Usuario $usuarios;
-    private RoleModel $roles;
+    private $usuarios ;
+    private $roles ;
 
     public function __construct()
     {

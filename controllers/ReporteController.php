@@ -6,7 +6,7 @@ require_once __DIR__ . '/../services/AuthorizationService.php';
 
 class ReporteController
 {
-    private ReporteModel $reporte;
+    private $reporte ;
 
     public function __construct()
     {

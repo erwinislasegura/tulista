@@ -8,9 +8,9 @@ require_once __DIR__ . '/../services/AuthorizationService.php';
 
 class BodegaController
 {
-    private Pedido $pedidos;
-    private ProductModel $productos;
-    private BodegaEmpaque $empaque;
+    private $pedidos ;
+    private $productos ;
+    private $empaque ;
 
     public function __construct()
     {

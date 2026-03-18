@@ -8,8 +8,8 @@ require_once __DIR__ . '/../services/AuditService.php';
 
 class InventarioController
 {
-    private MovimientoStock $movimientos;
-    private ProductModel $productos;
+    private $movimientos ;
+    private $productos ;
 
     public function __construct()
     {
