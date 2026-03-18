@@ -141,11 +141,12 @@ if (!isset($sections[$currentView])) {
         .tl-cliente {
             font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
             color: #1f2a3d;
+            font-size: 13px;
         }
 
         .tl-cliente .main-nav,
         .tl-cliente .topbar {
-            background: linear-gradient(145deg, var(--tl-cliente-primary), var(--tl-cliente-secondary));
+            background: var(--tl-cliente-primary);
         }
 
         .tl-cliente .topbar {
@@ -162,7 +163,7 @@ if (!isset($sections[$currentView])) {
         .tl-cliente .main-nav .menu-title,
         .tl-cliente .main-nav .nav-text,
         .tl-cliente .main-nav iconify-icon {
-            font-size: 0.88rem;
+            font-size: 0.8rem;
             letter-spacing: 0.01em;
             color: rgba(255, 255, 255, 0.92) !important;
         }
@@ -202,15 +203,49 @@ if (!isset($sections[$currentView])) {
         .tl-cliente p,
         .tl-cliente .form-label,
         .tl-cliente .text-muted {
-            font-size: 0.86rem;
+            font-size: 0.78rem;
+        }
+
+        .tl-cliente .table,
+        .tl-cliente .list-group-item,
+        .tl-cliente .form-control,
+        .tl-cliente .form-select,
+        .tl-cliente .btn,
+        .tl-cliente small,
+        .tl-cliente .badge {
+            font-size: 0.76rem;
+            font-weight: 400;
+        }
+
+        .tl-cliente .table th {
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+
+        .tl-cliente .table td {
+            font-size: 0.75rem;
+            font-weight: 400;
+        }
+
+        .tl-cliente .tl-portal-list-table td,
+        .tl-cliente .tl-portal-list-table th {
+            padding-top: 0.45rem;
+            padding-bottom: 0.45rem;
+        }
+
+        .tl-cliente .table .btn {
+            font-size: 0.72rem;
+            padding: 0.22rem 0.52rem;
         }
 
         .tl-login-gradient {
-            background: radial-gradient(circle at top left, #dbe8f7 0%, #f8fafc 48%, #ecf8fb 100%);
+            background: #edf2f9;
         }
 
         .tl-portal-dashboard {
-            background: linear-gradient(135deg, #ffffff 0%, #f7fafc 100%);
+            background: #ffffff;
             border-radius: 14px;
             border: 1px solid #e4e9f2;
             padding: 1rem;
