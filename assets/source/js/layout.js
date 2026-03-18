@@ -10,6 +10,7 @@ class ThemeLayout {
           this.html = document.getElementsByTagName('html')[0]
           this.config = {};
           this.defaultConfig = window.config;
+          this.menuBackdrop = null;
      }
 
      // Main Nav
@@ -182,6 +183,7 @@ class ThemeLayout {
                menuToggleBtn.addEventListener('click', function () {
                     var configSize = self.config.menu.size;
                     var size = self.html.getAttribute('data-menu-size', configSize);
+                    var isSidebarEnabled = self.html.classList.contains('sidebar-enable');
 
                     if (size !== 'hidden') {
                          if (size === 'condensed') {
@@ -189,11 +191,19 @@ class ThemeLayout {
                          } else {
                               self.changeMenuSize('condensed', false);
                          }
-                    } else {
-                         self.showBackdrop();
-                    }
 
-                    self.html.classList.toggle('sidebar-enable');
+                         self.hideBackdrop();
+                         self.html.classList.toggle('sidebar-enable');
+                    } else {
+                         if (isSidebarEnabled) {
+                              self.html.classList.remove('sidebar-enable');
+                              self.hideBackdrop();
+                              return;
+                         }
+
+                         self.showBackdrop();
+                         self.html.classList.add('sidebar-enable');
+                    }
                });
           }
 
@@ -223,9 +233,17 @@ class ThemeLayout {
      }
 
      showBackdrop() {
+          if (this.menuBackdrop) return;
+
           const backdrop = document.createElement('div');
-          backdrop.classList = 'offcanvas-backdrop fade show';
+          backdrop.classList = 'offcanvas-backdrop fade show tl-menu-backdrop';
+          const sidebar = document.querySelector('.main-nav');
+          if (sidebar) {
+               const sidebarWidth = Math.round(sidebar.getBoundingClientRect().width);
+               backdrop.style.left = `${sidebarWidth}px`;
+          }
           document.body.appendChild(backdrop);
+          this.menuBackdrop = backdrop;
           document.body.style.overflow = "hidden";
           if (window.innerWidth > 1040) {
                document.body.style.paddingRight = "15px";
@@ -233,10 +251,18 @@ class ThemeLayout {
           const self = this
           backdrop.addEventListener('click', function (e) {
                self.html.classList.remove('sidebar-enable');
-               document.body.removeChild(backdrop);
-               document.body.style.overflow = null;
-               document.body.style.paddingRight = null;
+               self.hideBackdrop();
           })
+     }
+
+     hideBackdrop() {
+          if (this.menuBackdrop && this.menuBackdrop.parentNode) {
+               this.menuBackdrop.parentNode.removeChild(this.menuBackdrop);
+          }
+
+          this.menuBackdrop = null;
+          document.body.style.overflow = null;
+          document.body.style.paddingRight = null;
      }
 
      initWindowSize() {
@@ -253,6 +279,8 @@ class ThemeLayout {
                self.changeMenuSize('hidden', false);
           } else {
                self.changeMenuSize(self.config.menu.size);
+               self.html.classList.remove('sidebar-enable');
+               self.hideBackdrop();
           }
      }
 
