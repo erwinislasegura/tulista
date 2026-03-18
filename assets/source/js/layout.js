@@ -236,7 +236,12 @@ class ThemeLayout {
           if (this.menuBackdrop) return;
 
           const backdrop = document.createElement('div');
-          backdrop.classList = 'offcanvas-backdrop fade show';
+          backdrop.classList = 'offcanvas-backdrop fade show tl-menu-backdrop';
+          const sidebar = document.querySelector('.main-nav');
+          if (sidebar) {
+               const sidebarWidth = Math.round(sidebar.getBoundingClientRect().width);
+               backdrop.style.left = `${sidebarWidth}px`;
+          }
           document.body.appendChild(backdrop);
           this.menuBackdrop = backdrop;
           document.body.style.overflow = "hidden";
