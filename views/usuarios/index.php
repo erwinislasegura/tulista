@@ -49,15 +49,15 @@
                 <div class="modal fade" id="editUsuario<?= (int) $usuario['id'] ?>" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-lg modal-dialog-centered">
                         <div class="modal-content">
-                            <div class="modal-header border-0 pb-0">
+                            <div class="modal-header border-0 pb-2 align-items-start">
                                 <div>
                                     <h5 class="modal-title">Editar usuario</h5>
-                                    <small class="text-muted">ID #<?= (int) $usuario['id'] ?> · <?= htmlspecialchars($usuario['email']) ?></small>
+                                    <small class="text-muted d-block mt-1">ID #<?= (int) $usuario['id'] ?> · <?= htmlspecialchars($usuario['email']) ?></small>
                                 </div>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                             </div>
-                            <div class="modal-body pt-2">
-                                <form method="post" class="row g-3 tl-minimal-form">
+                            <div class="modal-body pt-0">
+                                <form method="post" class="row g-3">
                                     <input type="hidden" name="action" value="update">
                                     <input type="hidden" name="id" value="<?= (int) $usuario['id'] ?>">
                                     <div class="col-12">
