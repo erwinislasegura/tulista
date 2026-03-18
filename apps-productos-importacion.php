@@ -21,7 +21,51 @@ $listFile = __DIR__ . '/views/productos/forms/import_list.php';
 <script>
 (function () {
     const form = document.getElementById('import-form');
+    const templateButton = document.getElementById('download-import-template');
+
+    if (templateButton) {
+        templateButton.addEventListener('click', function () {
+            const headers = [
+                'Categoria',
+                'Marca',
+                'Nombre',
+                'SKU',
+                'Modelo',
+                'Unidad',
+                'Código de barras',
+                'Producto / Servicio',
+                'Costo neto',
+                'Venta: Precio neto',
+                'Venta: Precio total',
+                'Stock mínimo',
+                'Comisión vendedor',
+                'Existencia',
+            ];
+            const templateRow = {
+                'Categoria': 'Electrónica',
+                'Marca': 'Marca ejemplo',
+                'Nombre': 'Producto ejemplo',
+                'SKU': 'SKU-001',
+                'Modelo': 'Modelo X',
+                'Unidad': 'UN',
+                'Código de barras': '1234567890123',
+                'Producto / Servicio': 'Producto',
+                'Costo neto': 10000,
+                'Venta: Precio neto': 15000,
+                'Venta: Precio total': 17850,
+                'Stock mínimo': 5,
+                'Comisión vendedor': 5,
+                'Existencia': 20,
+            };
+            const worksheet = XLSX.utils.json_to_sheet([templateRow], {header: headers});
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Importación');
+            XLSX.writeFile(workbook, 'formato-importacion-productos.xlsx');
+        });
+    }
+
     if (!form) return;
+
     form.addEventListener('submit', function (event) {
         event.preventDefault();
         const input = document.getElementById('excel-file');
