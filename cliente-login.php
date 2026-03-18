@@ -100,16 +100,23 @@ $old = $view['old'] ?? [];
             min-height: 42px;
             font-weight: 600;
         }
-        .auth-links {
-            display: flex;
-            justify-content: center;
-            gap: 14px;
+        .quick-actions {
             margin-top: 14px;
             padding-top: 12px;
             border-top: 1px solid var(--tl-line);
-            font-size: .85rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
         }
-        .auth-links a { color: #5e56c9; text-decoration: none; font-weight: 600; }
+        .btn-soft {
+            min-height: 40px;
+            border-radius: 10px;
+            border: 1px solid #d7daf0;
+            background: #f8f9ff;
+            color: #4b5170;
+            font-weight: 600;
+        }
+        .btn-soft:hover { background: #eef0ff; }
         .social-row {
             margin-top: 12px;
             display: grid;
@@ -143,6 +150,27 @@ $old = $view['old'] ?? [];
         }
         .facebook .social-icon { background: #1877F2; }
         .instagram .social-icon { background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af, #515bd4); }
+
+        .modal-admin .modal-content {
+            border-radius: 16px;
+            border: 1px solid #d7daf0;
+            overflow: hidden;
+            box-shadow: 0 16px 34px rgba(40, 49, 85, .16);
+        }
+        .modal-admin .modal-header {
+            background: linear-gradient(145deg, var(--tl-panel) 0%, var(--tl-panel-dark) 100%);
+            color: #fff;
+            border-bottom: 0;
+        }
+        .modal-admin .modal-title { font-weight: 700; }
+        .modal-admin .btn-close { filter: brightness(0) invert(1); opacity: .95; }
+        .modal-admin .modal-body {
+            color: #4d546d;
+            background: #f9faff;
+            border-top: 1px solid #eceffd;
+            border-bottom: 1px solid #eceffd;
+        }
+        .modal-admin .modal-footer { background: #f9faff; }
 
         @media (min-width: 992px) {
             .auth-device {
@@ -228,9 +256,10 @@ $old = $view['old'] ?? [];
                 </div>
             </div>
 
-            <div class="auth-links">
-                <span>¿Eres administrador?</span>
-                <a href="auth-login-usuarios.php">Ir al acceso de administración</a>
+            <div class="quick-actions">
+                <button type="button" class="btn btn-soft" data-bs-toggle="modal" data-bs-target="#modal-admin-access">Acceso administración</button>
+                <button type="button" id="btn-install-app" class="btn btn-soft" hidden>Instalar app</button>
+                <div id="install-helper" class="small text-muted text-center" hidden>Si no aparece el botón, abre el menú del navegador y elige <strong>Instalar app</strong>.</div>
             </div>
 
             <div class="social-row">
@@ -244,6 +273,24 @@ $old = $view['old'] ?? [];
                 </a>
             </div>
         </section>
+    </div>
+</div>
+
+<div class="modal fade modal-admin" id="modal-admin-access" tabindex="-1" aria-labelledby="modalAdminAccessLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAdminAccessLabel">Acceso de administración</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                Este acceso es para usuarios internos (administración).
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                <a href="https://app.tulista.cl/auth-login-usuarios.php" class="btn btn-primary">Ir a administración</a>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -266,5 +313,37 @@ if (!empty($view['register_error'])) {
     });
 </script>
 <?php endif; ?>
+
+<script>
+    (function () {
+        const installButton = document.getElementById('btn-install-app');
+        const installHelper = document.getElementById('install-helper');
+        if (!installButton) return;
+
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        if (isStandalone) {
+            return;
+        }
+
+        let deferredPrompt = null;
+        installHelper.hidden = false;
+
+        window.addEventListener('beforeinstallprompt', (event) => {
+            event.preventDefault();
+            deferredPrompt = event;
+            installButton.hidden = false;
+            installHelper.hidden = true;
+        });
+
+        installButton.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            await deferredPrompt.userChoice;
+            deferredPrompt = null;
+            installButton.hidden = true;
+            installHelper.hidden = false;
+        });
+    })();
+</script>
 </body>
 </html>
