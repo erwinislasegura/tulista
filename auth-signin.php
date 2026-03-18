@@ -2,13 +2,14 @@
 <?php
 require_once __DIR__ . '/models/Usuario.php';
 require_once __DIR__ . '/services/AuthService.php';
+require_once __DIR__ . '/services/AuthorizationService.php';
 
 AuthService::startSession();
 require_once __DIR__ . '/services/CompanyConfigService.php';
 $company = CompanyConfigService::get();
 
 if (AuthService::user()) {
-    header('Location: index.php');
+    header('Location: ' . (AuthorizationService::firstAccessiblePage() ?? 'index.php'));
     exit;
 }
 
@@ -29,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             AuthService::loginUser($user);
             $_SESSION['user'] = true; // compatibilidad con páginas existentes
-            header('Location: index.php');
+            header('Location: ' . (AuthorizationService::firstAccessiblePage() ?? 'index.php'));
             exit;
         }
     }
