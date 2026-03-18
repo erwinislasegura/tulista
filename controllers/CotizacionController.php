@@ -462,6 +462,9 @@ class CotizacionController
             $len = strlen($text);
             return $len * ($fontSize * 0.48);
         };
+        $centerTextX = static function (float $center, string $text, float $fontSize = 8.0) use ($textWidth): float {
+            return $center - ($textWidth($text, $fontSize) / 2);
+        };
 
         $roundedRect = static function (float $x, float $y, float $w, float $h, float $r = 6): string {
             $k = 0.5522847498;
@@ -544,11 +547,11 @@ class CotizacionController
         $commands[] = "0 0 0 RG 0.35 w";
         $commands[] = $roundedRect(24, $tableTop - 240, 547, 258, 4);
         $commands[] = "0 0 0 RG 0.3 w 24 {$tableTop} 547 18 re S";
-        $commands[] = "BT /F2 8 Tf 32 " . ($tableTop + 6) . " Td (" . $escape('CANTIDAD') . ") Tj ET";
+        $commands[] = "BT /F2 8 Tf " . $centerTextX(60, 'CANTIDAD', 8) . " " . ($tableTop + 6) . " Td (" . $escape('CANTIDAD') . ") Tj ET";
         $commands[] = "BT /F2 8 Tf 106 " . ($tableTop + 6) . " Td (" . $escape('DESCRIPCION') . ") Tj ET";
-        $commands[] = "BT /F2 8 Tf 365 " . ($tableTop + 6) . " Td (" . $escape('PRECIO UNIT.') . ") Tj ET";
-        $commands[] = "BT /F2 8 Tf 450 " . ($tableTop + 6) . " Td (" . $escape('IMPUESTO') . ") Tj ET";
-        $commands[] = "BT /F2 8 Tf 520 " . ($tableTop + 6) . " Td (" . $escape('MONTO') . ") Tj ET";
+        $commands[] = "BT /F2 8 Tf " . $centerTextX(402, 'PRECIO UNIT.', 8) . " " . ($tableTop + 6) . " Td (" . $escape('PRECIO UNIT.') . ") Tj ET";
+        $commands[] = "BT /F2 8 Tf " . $centerTextX(478, 'IMPUESTO', 8) . " " . ($tableTop + 6) . " Td (" . $escape('IMPUESTO') . ") Tj ET";
+        $commands[] = "BT /F2 8 Tf " . $centerTextX(544, 'MONTO', 8) . " " . ($tableTop + 6) . " Td (" . $escape('MONTO') . ") Tj ET";
 
         $rowY = $tableTop - 14;
         $maxRows = 12;
@@ -557,6 +560,7 @@ class CotizacionController
             $precio = (float) ($detalle['precio'] ?? 0);
             $subtotal = (float) ($detalle['subtotal'] ?? 0);
             $impuesto = $subtotal * 0.19;
+            $montoConImpuesto = $subtotal + $impuesto;
             $descripcionRaw = (string) ($detalle['producto_nombre'] ?? '-');
             $descripcion = $toPdfText($descripcionRaw);
             $descFont = 8.0;
@@ -570,12 +574,12 @@ class CotizacionController
             $cantidadText = number_format($cantidad, 0, ',', '.');
             $precioText = $toPdfText('$' . number_format($precio, 0, ',', '.'));
             $impuestoText = $toPdfText('$' . number_format($impuesto, 0, ',', '.'));
-            $subtotalText = $toPdfText('$' . number_format($subtotal, 0, ',', '.'));
+            $subtotalText = $toPdfText('$' . number_format($montoConImpuesto, 0, ',', '.'));
 
-            $cantidadX = 84 - $textWidth($cantidadText, 8);
-            $precioX = 438 - $textWidth($precioText, 8);
-            $impuestoX = 500 - $textWidth($impuestoText, 8);
-            $subtotalX = 568 - $textWidth($subtotalText, 8);
+            $cantidadX = $centerTextX(60, $cantidadText, 8);
+            $precioX = $centerTextX(402, $precioText, 8);
+            $impuestoX = $centerTextX(478, $impuestoText, 8);
+            $subtotalX = $centerTextX(544, $subtotalText, 8);
 
             $commands[] = "0 0 0 RG 0.15 w 24 " . ($rowY - 10) . " 547 18 re S";
             $commands[] = "BT /F1 8 Tf {$cantidadX} {$rowY} Td (" . $escape($cantidadText) . ") Tj ET";
@@ -604,9 +608,18 @@ class CotizacionController
         $commands[] = "BT /F1 8 Tf " . (($totalsX + 184) - $textWidth($ivaTotalText, 8)) . " " . ($totalsY + 22) . " Td (" . $escape($ivaTotalText) . ") Tj ET";
         $commands[] = "BT /F2 9 Tf " . (($totalsX + 184) - $textWidth($grandTotalText, 9)) . " " . ($totalsY + 6) . " Td (" . $escape($grandTotalText) . ") Tj ET";
 
+        // Firma y condiciones de mercado
+        $commands[] = "0 0 0 RG 0.25 w 36 108 m 220 108 l S";
+        $commands[] = "BT /F1 7 Tf 88 98 Td (" . $escape('Firma y timbre') . ") Tj ET";
+        $commands[] = "BT /F2 8 Tf 240 108 Td (" . $escape('Condiciones comerciales') . ") Tj ET";
+        $commands[] = "BT /F1 7 Tf 240 96 Td (" . $escape($toPdfText('1) Validez de oferta: 10 dias corridos desde la emision.')) . ") Tj ET";
+        $commands[] = "BT /F1 7 Tf 240 86 Td (" . $escape($toPdfText('2) Precios expresados en CLP, no incluyen costos de despacho salvo acuerdo escrito.')) . ") Tj ET";
+        $commands[] = "BT /F1 7 Tf 240 76 Td (" . $escape($toPdfText('3) Entrega sujeta a disponibilidad de stock y confirmacion de pago/OC.')) . ") Tj ET";
+        $commands[] = "BT /F1 7 Tf 240 66 Td (" . $escape($toPdfText('4) Garantia legal segun normativa vigente y politicas del fabricante.')) . ") Tj ET";
+
         // Footer
-        $commands[] = "BT /F1 8 Tf 150 60 Td (" . $escape($toPdfText('Si tiene alguna consulta sobre esta cotizacion, contactenos.')) . ") Tj ET";
-        $commands[] = "BT /F2 9 Tf 220 46 Td (" . $escape($toPdfText('¡GRACIAS POR SU COMPRA!')) . ") Tj ET";
+        $commands[] = "BT /F1 8 Tf 145 50 Td (" . $escape($toPdfText('Si tiene alguna consulta sobre esta cotizacion, contactenos.')) . ") Tj ET";
+        $commands[] = "BT /F2 9 Tf 220 36 Td (" . $escape($toPdfText('¡GRACIAS POR SU COMPRA!')) . ") Tj ET";
 
         $content = implode("\n", $commands);
         return $this->renderPdfDocument($content, $logo);
