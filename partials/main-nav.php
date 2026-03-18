@@ -71,7 +71,7 @@ $menu = [
 ?>
 <div class="main-nav">
      <div class="logo-box py-3 px-3">
-          <a href="<?= $isClientePortal ? 'cotizar.php' : 'index.php' ?>" class="logo-dark d-flex align-items-center gap-2 text-decoration-none tl-brand-block">
+          <a href="<?= $isClientePortal ? 'cliente-portal.php' : 'index.php' ?>" class="logo-dark d-flex align-items-center gap-2 text-decoration-none tl-brand-block">
                <img src="<?= htmlspecialchars($logoPath) ?>" class="logo-sm tl-brand-logo" alt="logo" style="height:34px; width:34px;">
                <span class="fw-semibold tl-brand-name text-white"><?= htmlspecialchars($companyConfig['nombre']) ?></span>
           </a>
@@ -84,11 +84,27 @@ $menu = [
      <div class="scrollbar" data-simplebar>
           <ul class="navbar-nav" id="navbar-nav">
                <?php if ($isClientePortal): ?>
+                    <?php
+                    $clienteBasePage = $currentPage === '' ? 'cliente-portal.php' : $currentPage;
+                    $clienteView = (string) ($_GET['view'] ?? 'dashboard');
+                    $clienteMenu = [
+                        ['view' => 'dashboard', 'text' => '1. Dashboard', 'icon' => 'solar:widget-2-broken'],
+                        ['view' => 'cotizar', 'text' => '2. Hacer cotización', 'icon' => 'solar:bill-list-broken'],
+                        ['view' => 'cotizaciones', 'text' => '3. Cotizaciones registradas', 'icon' => 'solar:checklist-minimalistic-broken'],
+                        ['view' => 'seguimiento', 'text' => '4. Seguimiento pedido', 'icon' => 'solar:delivery-broken'],
+                        ['view' => 'consultar', 'text' => '5. Consultar producto', 'icon' => 'solar:magnifer-broken'],
+                        ['view' => 'mis-pedidos', 'text' => '6. Mis pedidos', 'icon' => 'solar:archive-broken'],
+                    ];
+                    ?>
                     <li class="menu-title">Portal cliente</li>
-                    <li class="nav-item"><a class="nav-link" href="<?= $currentPage ?>#hacer-cotizacion"><span class="nav-icon"><iconify-icon icon="solar:bill-list-broken"></iconify-icon></span><span class="nav-text">1. Hacer cotización</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?= $currentPage ?>#aprobar-cotizacion"><span class="nav-icon"><iconify-icon icon="solar:check-circle-broken"></iconify-icon></span><span class="nav-text">2. Aprobar cotización</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?= $currentPage ?>#seguimiento-pedido"><span class="nav-icon"><iconify-icon icon="solar:delivery-broken"></iconify-icon></span><span class="nav-text">3. Seguimiento pedido</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?= $currentPage ?>#estado-pagos"><span class="nav-icon"><iconify-icon icon="solar:wallet-money-broken"></iconify-icon></span><span class="nav-text">4. Estado de pagos</span></a></li>
+                    <?php foreach ($clienteMenu as $item): ?>
+                        <li class="nav-item">
+                            <a class="nav-link <?= $clienteView === $item['view'] ? 'active' : '' ?>" href="<?= htmlspecialchars($clienteBasePage) ?>?view=<?= urlencode($item['view']) ?>">
+                                <span class="nav-icon"><iconify-icon icon="<?= htmlspecialchars($item['icon']) ?>"></iconify-icon></span>
+                                <span class="nav-text"><?= htmlspecialchars($item['text']) ?></span>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
                     <li class="nav-item mt-2"><a class="nav-link" href="logout-clientes.php"><span class="nav-icon"><iconify-icon icon="solar:logout-2-broken"></iconify-icon></span><span class="nav-text">Cerrar sesión</span></a></li>
                <?php else: ?>
                     <?php foreach ($menu as $section => $items): ?>
