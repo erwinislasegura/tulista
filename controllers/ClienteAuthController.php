@@ -5,7 +5,7 @@ require_once __DIR__ . '/../services/AuthService.php';
 
 class ClienteAuthController
 {
-    private Cliente $clientes;
+    private $clientes ;
 
     public function __construct()
     {

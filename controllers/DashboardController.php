@@ -7,8 +7,8 @@ require_once __DIR__ . '/../services/AuthorizationService.php';
 
 class DashboardController
 {
-    private DashboardModel $dashboard;
-    private LogSistema $log;
+    private $dashboard ;
+    private $log ;
 
     public function __construct()
     {

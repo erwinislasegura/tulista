@@ -7,7 +7,7 @@ require_once __DIR__ . '/../services/AuditService.php';
 
 class RoleController
 {
-    private RoleModel $roles;
+    private $roles ;
 
     public function __construct()
     {

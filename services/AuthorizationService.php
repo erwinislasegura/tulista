@@ -35,7 +35,7 @@ class AuthorizationService
         ],
     ];
 
-    private static ?array $dbPermissions = null;
+    private static $dbPermissions = null;
 
     public static function role(): string
     {

@@ -9,10 +9,10 @@ require_once __DIR__ . '/../services/AuthorizationService.php';
 
 class ProductosController
 {
-    private CategoryModel $categories;
-    private BrandModel $brands;
-    private UnitModel $units;
-    private ProductModel $products;
+    private $categories ;
+    private $brands ;
+    private $units ;
+    private $products ;
 
     public function __construct()
     {

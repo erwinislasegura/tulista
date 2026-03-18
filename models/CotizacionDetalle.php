@@ -4,7 +4,7 @@ require_once __DIR__ . '/BaseModel.php';
 
 class CotizacionDetalle extends BaseModel
 {
-    private ?bool $hasDescuentoPct = null;
+    private $hasDescuentoPct = null;
 
     private function hasDescuentoPct(): bool
     {

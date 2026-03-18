@@ -7,7 +7,7 @@ require_once __DIR__ . '/../services/AuditService.php';
 
 class PedidoController
 {
-    private Pedido $pedidos;
+    private $pedidos ;
 
     public function __construct()
     {

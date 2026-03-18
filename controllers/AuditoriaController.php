@@ -6,7 +6,7 @@ require_once __DIR__ . '/../services/AuthorizationService.php';
 
 class AuditoriaController
 {
-    private LogSistema $log;
+    private $log ;
 
     public function __construct()
     {
