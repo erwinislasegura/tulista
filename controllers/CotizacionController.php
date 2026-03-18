@@ -67,6 +67,10 @@ class CotizacionController
     {
         AuthorizationService::requirePermission('cotizaciones.manage');
 
+        if (($_GET['ajax'] ?? '') === 'productos') {
+            $this->handleProductosAjax();
+        }
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $action = $_POST['action'] ?? '';
             if ($action === 'cambiar_estado') {
@@ -105,6 +109,26 @@ class CotizacionController
             'clientes_json' => json_encode($clientes, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
             'flash' => $flash,
         ];
+    }
+
+    private function handleProductosAjax(): void
+    {
+        $term = trim((string) ($_GET['q'] ?? ''));
+        $onlyInStock = (($_GET['solo_stock'] ?? '0') === '1');
+        $productos = $this->productos->searchCatalog($term, $onlyInStock, 80);
+
+        while (ob_get_level() > 0) {
+            ob_end_clean();
+        }
+
+        header('Content-Type: application/json; charset=utf-8');
+        $payload = json_encode([
+            'ok' => true,
+            'count' => count($productos),
+            'productos' => $productos,
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE);
+        echo $payload !== false ? $payload : '{"ok":false,"count":0,"productos":[]}';
+        exit;
     }
 
     private function crearCotizacion(int $clienteId): void

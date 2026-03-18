@@ -43,6 +43,23 @@
                 </div>
             </div>
             <div class="col-12">
+                <div class="tl-form-card mb-2">
+                    <div class="row g-2 align-items-end">
+                        <div class="col-lg-7">
+                            <label class="form-label mb-1">Buscar producto</label>
+                            <input id="productoSearch" type="search" class="form-control tl-compact-input" placeholder="Buscar por nombre o SKU...">
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-check mt-4 pt-1">
+                                <input class="form-check-input" type="checkbox" id="soloStock">
+                                <label class="form-check-label" for="soloStock">Mostrar solo con stock</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 text-lg-end">
+                            <small id="productosStatus" class="text-muted">Mostrando <?= count($data['productos']) ?> productos</small>
+                        </div>
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-sm align-middle">
                         <thead>
@@ -56,7 +73,7 @@
                             <th style="width:130px">Desc. %</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="productosBody">
                         <?php foreach ($data['productos'] as $producto): ?>
                             <tr>
                                 <td><input type="checkbox" class="form-check-input js-item-check" data-id="<?= (int) $producto['id'] ?>"></td>
@@ -71,10 +88,14 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="d-flex flex-wrap gap-3 align-items-center mt-2">
+                    <span id="seleccionResumen" class="badge text-bg-primary">0 productos seleccionados</span>
+                    <span id="totalResumen" class="text-muted small">Total estimado: $0</span>
+                </div>
             </div>
 
             <div class="col-12 d-flex justify-content-between align-items-center">
-                <p class="text-muted mb-0 small">Marca productos para habilitar cantidad y descuentos por línea.</p>
+                <p class="text-muted mb-0 small">Tip: escribe 3+ letras para filtrar más rápido y mantén solo productos con stock para cotizar en menos pasos.</p>
                 <button class="btn btn-primary" type="submit">Guardar cotización</button>
             </div>
         </form>
@@ -131,8 +152,18 @@
 <script>
 (function () {
     const clientes = <?= $data['clientes_json'] ?: '[]' ?>;
+    const productosIniciales = <?= json_encode($data['productos'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?: '[]' ?>;
     const byId = Object.fromEntries(clientes.map(c => [String(c.id), c]));
     const select = document.getElementById('clienteSelect');
+    const productSearch = document.getElementById('productoSearch');
+    const soloStock = document.getElementById('soloStock');
+    const productosBody = document.getElementById('productosBody');
+    const productosStatus = document.getElementById('productosStatus');
+    const seleccionResumen = document.getElementById('seleccionResumen');
+    const totalResumen = document.getElementById('totalResumen');
+    const state = {};
+    let debounceTimer = null;
+    let currentRequest = null;
 
     function setValue(id, value) {
         const el = document.getElementById(id);
@@ -153,21 +184,151 @@
         setValue('f_direccion_entrega', c.direccion);
     });
 
-    document.querySelectorAll('.js-item-check').forEach(function (check) {
-        check.addEventListener('change', function () {
-            const id = this.dataset.id;
-            const qty = document.querySelector('[data-qty="' + id + '"]');
-            const disc = document.querySelector('[data-disc="' + id + '"]');
-            const enabled = this.checked;
-            if (qty) {
-                qty.disabled = !enabled;
-                qty.value = enabled ? (qty.value === '0' ? '1' : qty.value) : '0';
-            }
-            if (disc) {
-                disc.disabled = !enabled;
-                disc.value = enabled ? disc.value : '0';
-            }
+    function formatCLP(value) {
+        return '$' + Number(value || 0).toLocaleString('es-CL');
+    }
+
+    function escapeHtml(value) {
+        return String(value ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    function refreshSummary() {
+        const selected = Object.values(state).filter(item => item.selected && item.qty > 0);
+        const total = selected.reduce((acc, item) => {
+            const bruto = item.price * item.qty;
+            const descuento = bruto * (Math.max(0, Math.min(100, item.disc || 0)) / 100);
+            return acc + (bruto - descuento);
+        }, 0);
+
+        if (seleccionResumen) {
+            seleccionResumen.textContent = selected.length + ' producto' + (selected.length === 1 ? '' : 's') + ' seleccionado' + (selected.length === 1 ? '' : 's');
+        }
+        if (totalResumen) {
+            totalResumen.textContent = 'Total estimado: ' + formatCLP(total);
+        }
+    }
+
+    function bindRowEvents() {
+        document.querySelectorAll('.js-item-check').forEach(function (check) {
+            check.addEventListener('change', function () {
+                const id = this.dataset.id;
+                const qty = document.querySelector('[data-qty="' + id + '"]');
+                const disc = document.querySelector('[data-disc="' + id + '"]');
+                const enabled = this.checked;
+                state[id] = state[id] || { selected: false, qty: 1, disc: 0, price: Number(this.dataset.price || 0) };
+                state[id].selected = enabled;
+                if (qty) {
+                    qty.disabled = !enabled;
+                    qty.value = enabled ? (qty.value === '0' ? '1' : qty.value) : '0';
+                    state[id].qty = Number(qty.value || 0);
+                }
+                if (disc) {
+                    disc.disabled = !enabled;
+                    disc.value = enabled ? disc.value : '0';
+                    state[id].disc = Number(disc.value || 0);
+                }
+                refreshSummary();
+            });
         });
-    });
+
+        document.querySelectorAll('[data-qty]').forEach(function (qty) {
+            qty.addEventListener('input', function () {
+                const id = this.dataset.qty;
+                state[id] = state[id] || { selected: false, qty: 0, disc: 0, price: Number(this.dataset.price || 0) };
+                state[id].qty = Number(this.value || 0);
+                refreshSummary();
+            });
+        });
+
+        document.querySelectorAll('[data-disc]').forEach(function (disc) {
+            disc.addEventListener('input', function () {
+                const id = this.dataset.disc;
+                state[id] = state[id] || { selected: false, qty: 0, disc: 0, price: Number(this.dataset.price || 0) };
+                state[id].disc = Number(this.value || 0);
+                refreshSummary();
+            });
+        });
+    }
+
+    function renderRows(productos) {
+        if (!productosBody) return;
+        if (!productos.length) {
+            productosBody.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-3">No hay productos con ese filtro.</td></tr>';
+            if (productosStatus) productosStatus.textContent = '0 productos encontrados';
+            return;
+        }
+
+        productosBody.innerHTML = productos.map(function (producto) {
+            const id = String(producto.id);
+            const saved = state[id] || { selected: false, qty: 0, disc: 0, price: Number(producto.precio_venta_total || 0) };
+            const selected = !!saved.selected;
+            const qty = selected ? (saved.qty > 0 ? saved.qty : 1) : 0;
+            const disc = selected ? (saved.disc || 0) : 0;
+            state[id] = { selected, qty, disc, price: Number(producto.precio_venta_total || 0) };
+            return '<tr>' +
+                '<td><input type="checkbox" class="form-check-input js-item-check" data-id="' + id + '" data-price="' + Number(producto.precio_venta_total || 0) + '"' + (selected ? ' checked' : '') + '></td>' +
+                '<td>' + escapeHtml(producto.nombre) + '</td>' +
+                '<td>' + escapeHtml(producto.sku) + '</td>' +
+                '<td>' + Number(producto.existencia || 0) + '</td>' +
+                '<td>' + formatCLP(producto.precio_venta_total || 0) + '</td>' +
+                '<td><input type="number" name="items[' + id + '][cantidad]" class="form-control tl-compact-input" min="0" value="' + qty + '" data-qty="' + id + '" data-price="' + Number(producto.precio_venta_total || 0) + '"' + (selected ? '' : ' disabled') + '></td>' +
+                '<td><input type="number" step="0.01" name="items[' + id + '][descuento]" class="form-control tl-compact-input" min="0" max="100" value="' + disc + '" data-disc="' + id + '" data-price="' + Number(producto.precio_venta_total || 0) + '"' + (selected ? '' : ' disabled') + '></td>' +
+            '</tr>';
+        }).join('');
+        if (productosStatus) productosStatus.textContent = 'Mostrando ' + productos.length + ' productos';
+        bindRowEvents();
+        refreshSummary();
+    }
+
+    async function fetchProductos() {
+        const q = (productSearch?.value || '').trim();
+        const params = new URLSearchParams({
+            ajax: 'productos',
+            q: q,
+            solo_stock: soloStock?.checked ? '1' : '0'
+        });
+        if (currentRequest) {
+            currentRequest.abort();
+        }
+        currentRequest = new AbortController();
+        const response = await fetch('apps-cotizaciones.php?' + params.toString(), {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            credentials: 'same-origin',
+            cache: 'no-store',
+            signal: currentRequest.signal
+        });
+        if (!response.ok) throw new Error('No se pudieron cargar productos');
+        const raw = await response.text();
+        let data = null;
+        try {
+            data = JSON.parse(raw);
+        } catch (e) {
+            throw new Error('Respuesta inválida del servidor');
+        }
+        renderRows(Array.isArray(data.productos) ? data.productos : []);
+    }
+
+    function queueSearch() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(function () {
+            fetchProductos().catch(function (error) {
+                if (error && error.name === 'AbortError') {
+                    return;
+                }
+                if (productosStatus) productosStatus.textContent = 'Error al filtrar productos. Recarga la página.';
+            });
+        }, 250);
+    }
+
+    bindRowEvents();
+    renderRows(productosIniciales);
+
+    productSearch?.addEventListener('input', queueSearch);
+    soloStock?.addEventListener('change', queueSearch);
 })();
 </script>
