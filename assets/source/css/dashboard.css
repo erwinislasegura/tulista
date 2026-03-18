@@ -581,6 +581,8 @@ textarea.form-control {
         transform: translateX(0) !important;
         margin-left: 0 !important;
         box-shadow: 6px 0 24px rgba(15, 23, 42, 0.2);
+        z-index: 1046 !important;
+        pointer-events: auto;
     }
 
     .topbar .button-toggle-menu.tl-menu-toggle {
