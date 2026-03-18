@@ -25,6 +25,33 @@ class ProductModel extends BaseModel
         return $this->db->query('SELECT id, nombre, sku, precio_venta_total, existencia FROM productos ORDER BY nombre ASC')->fetchAll();
     }
 
+    public function searchCatalog(string $term = '', bool $onlyInStock = false, int $limit = 80): array
+    {
+        $term = trim($term);
+        $limit = max(1, min(200, $limit));
+        $sql = 'SELECT id, nombre, sku, precio_venta_total, existencia FROM productos';
+        $conditions = [];
+        $params = [];
+
+        if ($term !== '') {
+            $conditions[] = '(nombre LIKE :term OR sku LIKE :term)';
+            $params['term'] = '%' . $term . '%';
+        }
+
+        if ($onlyInStock) {
+            $conditions[] = 'existencia > 0';
+        }
+
+        if (!empty($conditions)) {
+            $sql .= ' WHERE ' . implode(' AND ', $conditions);
+        }
+
+        $sql .= ' ORDER BY nombre ASC LIMIT ' . $limit;
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll();
+    }
+
     public function catalogByIds(array $ids): array
     {
         if (empty($ids)) {
