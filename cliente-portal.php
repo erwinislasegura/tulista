@@ -195,6 +195,14 @@ if (!isset($sections[$currentView])) {
         .tl-cliente .main-nav .nav-link .nav-icon {
             width: 1.2rem;
             color: rgba(148, 163, 184, 0.95);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tl-cliente .main-nav .nav-link .nav-icon iconify-icon {
+            font-size: 1.05rem;
+            color: inherit;
         }
 
         .tl-cliente .main-nav .nav-link:hover {
