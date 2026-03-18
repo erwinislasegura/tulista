@@ -11,8 +11,8 @@
                     <tr>
                         <td>#<?= (int) $pedido['id'] ?></td>
                         <td><?= !empty($pedido['cotizacion_id']) ? ('#' . (int) $pedido['cotizacion_id']) : '-' ?></td>
-                        <td class="text-capitalize"><?= htmlspecialchars((string) ($pedido['estado'] ?? '-')) ?></td>
-                        <td class="text-capitalize"><?= htmlspecialchars((string) ($pedido['estado_pago'] ?? 'pendiente')) ?></td>
+                        <td><span class="badge <?= htmlspecialchars($pedidoEstadoBadge((string) ($pedido['estado'] ?? ''))) ?> text-capitalize"><?= htmlspecialchars($pedidoEstadoLabel((string) ($pedido['estado'] ?? '-'))) ?></span></td>
+                        <td><span class="badge <?= htmlspecialchars($pagoEstadoBadge((string) ($pedido['estado_pago'] ?? 'pendiente'))) ?> text-capitalize"><?= htmlspecialchars((string) ($pedido['estado_pago'] ?? 'pendiente')) ?></span></td>
                         <td><?= !empty($pedido['pagado_at']) ? htmlspecialchars((string) $pedido['pagado_at']) : '-' ?></td>
                         <td><?= htmlspecialchars($formatCurrency((float) ($pedido['total'] ?? 0))) ?></td>
                         <td><?= htmlspecialchars((string) ($pedido['fecha'] ?? '-')) ?></td>
