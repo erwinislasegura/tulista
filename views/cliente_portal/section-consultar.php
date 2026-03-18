@@ -1,4 +1,4 @@
-<div class="card mb-3 shadow-sm border-0">
+<div class="card mb-3 shadow-sm border-0 tl-consulta-list">
     <div class="card-body">
         <h5 class="mb-1">Consultar catálogo</h5>
         <p class="text-muted mb-3">Explora el catálogo, revisa existencias y filtra por nombre de producto.</p>
