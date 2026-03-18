@@ -158,6 +158,8 @@ class ProductosController
         $missingBrands = [];
         $missingUnits = [];
         $rowsWithMissingData = [];
+        $createdBrands = [];
+        $createMissingBrands = (int) ($_POST['create_missing_brands'] ?? 0) === 1;
         $imported = 0;
 
         foreach ($rows as $index => $row) {
@@ -188,10 +190,16 @@ class ProductosController
             if ($brandName !== '') {
                 $brand = $this->brands->findByName($brandName);
                 if (!$brand) {
-                    $missingBrands[$brandName] = true;
-                    continue;
+                    if ($createMissingBrands) {
+                        $brandId = $this->brands->create($brandName);
+                        $createdBrands[$brandName] = true;
+                    } else {
+                        $missingBrands[$brandName] = true;
+                        continue;
+                    }
+                } else {
+                    $brandId = (int) $brand['id'];
                 }
-                $brandId = (int) $brand['id'];
             }
 
             $unitId = null;
@@ -232,6 +240,9 @@ class ProductosController
         }
         if (!empty($missingBrands)) {
             $messages[] = 'Marcas faltantes: ' . implode(', ', array_keys($missingBrands)) . '.';
+        }
+        if (!empty($createdBrands)) {
+            $messages[] = 'Marcas creadas automáticamente: ' . implode(', ', array_keys($createdBrands)) . '.';
         }
         if (!empty($missingUnits)) {
             $messages[] = 'Unidades no encontradas (se importaron sin unidad): ' . implode(', ', array_keys($missingUnits)) . '.';
