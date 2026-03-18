@@ -84,11 +84,26 @@ $menu = [
      <div class="scrollbar" data-simplebar>
           <ul class="navbar-nav" id="navbar-nav">
                <?php if ($isClientePortal): ?>
+                    <?php
+                    $clienteBasePage = $currentPage === '' ? 'cotizar.php' : $currentPage;
+                    $clienteView = (string) ($_GET['view'] ?? 'cotizar');
+                    $clienteMenu = [
+                        ['view' => 'cotizar', 'text' => '1. Hacer cotización', 'icon' => 'solar:bill-list-broken'],
+                        ['view' => 'cotizaciones', 'text' => '2. Cotizaciones registradas', 'icon' => 'solar:checklist-minimalistic-broken'],
+                        ['view' => 'seguimiento', 'text' => '3. Seguimiento pedido', 'icon' => 'solar:delivery-broken'],
+                        ['view' => 'consultar', 'text' => '4. Consultar producto', 'icon' => 'solar:magnifer-broken'],
+                        ['view' => 'mis-pedidos', 'text' => '5. Mis pedidos', 'icon' => 'solar:archive-broken'],
+                    ];
+                    ?>
                     <li class="menu-title">Portal cliente</li>
-                    <li class="nav-item"><a class="nav-link" href="<?= $currentPage ?>#hacer-cotizacion"><span class="nav-icon"><iconify-icon icon="solar:bill-list-broken"></iconify-icon></span><span class="nav-text">1. Hacer cotización</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?= $currentPage ?>#aprobar-cotizacion"><span class="nav-icon"><iconify-icon icon="solar:check-circle-broken"></iconify-icon></span><span class="nav-text">2. Aprobar cotización</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?= $currentPage ?>#seguimiento-pedido"><span class="nav-icon"><iconify-icon icon="solar:delivery-broken"></iconify-icon></span><span class="nav-text">3. Seguimiento pedido</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="<?= $currentPage ?>#estado-pagos"><span class="nav-icon"><iconify-icon icon="solar:wallet-money-broken"></iconify-icon></span><span class="nav-text">4. Estado de pagos</span></a></li>
+                    <?php foreach ($clienteMenu as $item): ?>
+                        <li class="nav-item">
+                            <a class="nav-link <?= $clienteView === $item['view'] ? 'active' : '' ?>" href="<?= htmlspecialchars($clienteBasePage) ?>?view=<?= urlencode($item['view']) ?>">
+                                <span class="nav-icon"><iconify-icon icon="<?= htmlspecialchars($item['icon']) ?>"></iconify-icon></span>
+                                <span class="nav-text"><?= htmlspecialchars($item['text']) ?></span>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
                     <li class="nav-item mt-2"><a class="nav-link" href="logout-clientes.php"><span class="nav-icon"><iconify-icon icon="solar:logout-2-broken"></iconify-icon></span><span class="nav-text">Cerrar sesión</span></a></li>
                <?php else: ?>
                     <?php foreach ($menu as $section => $items): ?>
