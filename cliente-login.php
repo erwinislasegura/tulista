@@ -14,6 +14,8 @@ $old = $view['old'] ?? [];
     <title>Acceso clientes | <?= htmlspecialchars($company['nombre']) ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/source/css/dashboard.css" rel="stylesheet">
+    <link rel="manifest" href="manifest-cliente.webmanifest">
+    <meta name="theme-color" content="#7569e7">
     <style>
         :root {
             --tl-bg: #eceef4;
@@ -283,13 +285,23 @@ $old = $view['old'] ?? [];
                 <h5 class="modal-title" id="modalAdminAccessLabel">Acceso de administración</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
-            <div class="modal-body">
-                Este acceso es para usuarios internos (administración).
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
-                <a href="https://app.tulista.cl/auth-login-usuarios.php" class="btn btn-primary">Ir a administración</a>
-            </div>
+            <form method="post" action="https://app.tulista.cl/auth-login-usuarios.php">
+                <div class="modal-body">
+                    <p class="small mb-3">Ingresa con tu cuenta de administración.</p>
+                    <div class="mb-2">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" class="form-control" placeholder="usuario@tulista.cl" required>
+                    </div>
+                    <div>
+                        <label class="form-label">Contraseña</label>
+                        <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Ingresar administración</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -320,12 +332,23 @@ if (!empty($view['register_error'])) {
         const installHelper = document.getElementById('install-helper');
         if (!installButton) return;
 
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/sw.js').catch(function () {
+                    // no bloquear login
+                });
+            });
+        }
+
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
         if (isStandalone) {
+            installButton.hidden = true;
+            installHelper.hidden = true;
             return;
         }
 
         let deferredPrompt = null;
+        installButton.hidden = false;
         installHelper.hidden = false;
 
         window.addEventListener('beforeinstallprompt', (event) => {
@@ -336,12 +359,17 @@ if (!empty($view['register_error'])) {
         });
 
         installButton.addEventListener('click', async () => {
-            if (!deferredPrompt) return;
-            deferredPrompt.prompt();
-            await deferredPrompt.userChoice;
-            deferredPrompt = null;
-            installButton.hidden = true;
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                await deferredPrompt.userChoice;
+                deferredPrompt = null;
+                installButton.hidden = true;
+                installHelper.hidden = false;
+                return;
+            }
+
             installHelper.hidden = false;
+            installHelper.innerHTML = 'En este dispositivo abre el menú del navegador y selecciona <strong>Instalar app</strong> o <strong>Agregar a pantalla de inicio</strong>.';
         });
     })();
 </script>
