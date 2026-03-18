@@ -11,18 +11,36 @@ class AuthService
             $isSecure = ($httpsHeader !== '' && $httpsHeader !== 'off') || strpos($forwardedProto, 'https') !== false || $serverPort === '443';
 
             $host = (string) ($_SERVER['HTTP_HOST'] ?? '');
-            $cookieDomain = $host !== '' ? explode(':', $host)[0] : '';
+            $cookieDomain = self::cookieDomainFromHost($host);
 
-            session_set_cookie_params([
+            $cookieParams = [
                 'lifetime' => 0,
                 'path' => '/',
-                'domain' => $cookieDomain,
                 'secure' => $isSecure,
                 'httponly' => true,
                 'samesite' => 'Lax',
-            ]);
+            ];
+
+            if ($cookieDomain !== null) {
+                $cookieParams['domain'] = $cookieDomain;
+            }
+
+            session_set_cookie_params($cookieParams);
             session_start();
         }
+    }
+
+    private static function cookieDomainFromHost(string $host): ?string
+    {
+        $host = strtolower(trim(explode(':', $host)[0] ?? ''));
+
+        if ($host === '' || filter_var($host, FILTER_VALIDATE_IP) || $host === 'localhost') {
+            return null;
+        }
+
+        // Host-only cookie by defecto para evitar rechazos por dominio inválido
+        // en proxys con host no esperado (p.ej. encabezados alterados).
+        return null;
     }
 
     public static function loginUser(array $user): void
