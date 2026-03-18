@@ -3,7 +3,7 @@
 <?php endforeach; ?>
 
 <?php
-$portalLink = 'cotizar.php?token=' . urlencode($data['cliente']['token'] ?? '');
+$portalLink = 'cliente-portal.php?token=' . urlencode($data['cliente']['token'] ?? '');
 $cotizaciones = $data['cotizaciones'] ?? [];
 $pedidos = $data['pedidos'] ?? [];
 $productos = $data['productos'] ?? [];
