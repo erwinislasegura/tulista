@@ -108,6 +108,32 @@ $formatCurrency = static function (float $value): string {
     return '$' . number_format($value, 0, ',', '.');
 };
 
+$pedidoEstadoBadge = static function (string $estado): string {
+    return match (strtolower(trim($estado))) {
+        'pendiente' => 'bg-secondary-subtle text-secondary',
+        'en_proceso', 'empaquetado' => 'bg-info-subtle text-info',
+        'despachado', 'transito', 'en_transito', 'en tránsito' => 'bg-warning-subtle text-warning',
+        'entregado' => 'bg-success-subtle text-success',
+        'cancelado' => 'bg-danger-subtle text-danger',
+        default => 'bg-light text-dark',
+    };
+};
+
+$pedidoEstadoLabel = static function (string $estado): string {
+    $raw = strtolower(trim($estado));
+    return match ($raw) {
+        'en_proceso' => 'en proceso',
+        'en_transito' => 'en tránsito',
+        default => str_replace('_', ' ', $raw),
+    };
+};
+
+$pagoEstadoBadge = static function (string $estado): string {
+    return in_array(strtolower(trim($estado)), ['pagado', 'paid'], true)
+        ? 'bg-success-subtle text-success'
+        : 'bg-danger-subtle text-danger';
+};
+
 $sections = [
     'dashboard' => [
         'label' => 'Dashboard',
