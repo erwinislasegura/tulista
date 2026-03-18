@@ -13,11 +13,32 @@
     --tl-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
+html,
+body {
+    font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+    line-height: 1.35;
+}
+
 body,
 .page-content,
 .authentication-bg {
     background: var(--tl-ui-bg) !important;
     color: var(--tl-text);
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+    font-weight: 650;
+    letter-spacing: 0.01em;
+    line-height: 1.25;
+}
+
+p,
+li,
+.list-group-item,
+.table td,
+.table th {
+    line-height: 1.35;
 }
 
 .page-content {
@@ -46,6 +67,11 @@ body,
 .main-nav .logo-box,
 .main-nav iconify-icon {
     color: #fff !important;
+}
+
+.main-nav .nav-link,
+.main-nav .sub-nav-link {
+    font-weight: 600;
 }
 
 .main-nav .nav-link:hover,
@@ -89,6 +115,12 @@ body,
     box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
     padding: 16px;
     background: var(--tl-white);
+}
+
+.card-title,
+.tl-section-title {
+    font-weight: 700;
+    letter-spacing: 0.01em;
 }
 
 .card-header {
@@ -216,6 +248,7 @@ textarea.form-control {
     padding-top: 0.95rem;
     padding-bottom: 0.95rem;
     vertical-align: middle;
+    font-weight: 500;
 }
 
 .table tbody tr:hover {
@@ -275,6 +308,7 @@ textarea.form-control {
 .alert {
     border: 0;
     border-radius: 10px;
+    font-weight: 600;
 }
 
 .alert-info,
@@ -602,6 +636,34 @@ textarea.form-control {
     border-radius: 12px;
     padding: 0.9rem;
     background: #fff;
+}
+
+.list-group {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.list-group-item {
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
+    font-size: 0.82rem;
+    border-color: #edf1f6;
+}
+
+.list-group-item strong {
+    font-weight: 700;
+}
+
+.badge {
+    border-radius: 999px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+.page-title,
+.tl-page-title {
+    font-weight: 700;
+    letter-spacing: 0.01em;
 }
 
 .table-responsive {
