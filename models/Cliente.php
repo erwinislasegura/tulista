@@ -98,4 +98,13 @@ class Cliente extends BaseModel
         $stmt = $this->db->prepare('DELETE FROM clientes WHERE id = :id');
         return $stmt->execute(['id' => $id]);
     }
+
+    public function updatePassword(int $id, string $passwordHash): bool
+    {
+        $stmt = $this->db->prepare('UPDATE clientes SET password = :password WHERE id = :id');
+        return $stmt->execute([
+            'id' => $id,
+            'password' => $passwordHash,
+        ]);
+    }
 }
