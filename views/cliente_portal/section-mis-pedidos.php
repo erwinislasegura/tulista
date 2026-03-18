@@ -1,3 +1,10 @@
+<?php
+$historialPedidos = $data['pedidos_historial'] ?? [];
+if (empty($historialPedidos) && !empty($data['pedidos'])) {
+    $historialPedidos = $data['pedidos'];
+}
+?>
+
 <div class="card mb-3 shadow-sm border-0">
     <div class="card-body">
         <h5 class="mb-1">Historial de pedidos</h5>
@@ -7,7 +14,7 @@
             <table class="table table-sm align-middle mb-0">
                 <thead><tr><th>Pedido</th><th>Cotización</th><th>Estado operación</th><th>Estado pago</th><th>Pagado el</th><th>Total</th><th>Fecha</th><th>Detalle</th></tr></thead>
                 <tbody>
-                <?php foreach (($data['pedidos_historial'] ?? []) as $pedido): ?>
+                <?php foreach ($historialPedidos as $pedido): ?>
                     <tr>
                         <td>#<?= (int) $pedido['id'] ?></td>
                         <td><?= !empty($pedido['cotizacion_id']) ? ('#' . (int) $pedido['cotizacion_id']) : '-' ?></td>
@@ -35,7 +42,7 @@
                         </td>
                     </tr>
                 <?php endforeach; ?>
-                <?php if (empty($data['pedidos_historial'])): ?>
+                <?php if (empty($historialPedidos)): ?>
                     <tr><td colspan="8" class="text-center text-muted py-3">Aún no tienes pedidos en historial.</td></tr>
                 <?php endif; ?>
                 </tbody>
