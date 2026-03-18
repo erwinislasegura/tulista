@@ -22,7 +22,7 @@
                             <?php if (in_array($cotizacion['estado'], ['aprobada', 'enviada'], true)): ?>
                                 <form method="post" class="m-0">
                                     <input type="hidden" name="action" value="crear_pedido">
-                                    <input type="hidden" name="return_url" value="cotizar.php?view=aprobar">
+                                    <input type="hidden" name="return_url" value="cliente-portal.php?view=aprobar">
                                     <input type="hidden" name="cotizacion_id" value="<?= (int) $cotizacion['id'] ?>">
                                     <button class="btn btn-success btn-sm" type="submit">Generar pedido</button>
                                 </form>

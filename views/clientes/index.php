@@ -34,7 +34,7 @@
             <thead><tr><th>Cliente</th><th>Contacto</th><th>Portal cliente</th><th>Cotizaciones</th><th>Pedidos</th><th>Estado</th><th>Acciones</th></tr></thead>
             <tbody>
             <?php foreach ($data['clientes'] as $cliente): ?>
-                <?php $portalUrl = 'cotizar.php?token=' . urlencode($cliente['token']); ?>
+                <?php $portalUrl = 'cliente-portal.php?token=' . urlencode($cliente['token']); ?>
                 <tr>
                     <td><strong><?= htmlspecialchars($cliente['nombre']) ?></strong><div class="small text-muted"><?= htmlspecialchars($cliente['rut']) ?> · <?= htmlspecialchars($cliente['empresa'] ?: '-') ?> · <?= htmlspecialchars($cliente['comuna'] ?: '-') ?></div></td>
                     <td><?= htmlspecialchars($cliente['email']) ?><div class="small text-muted"><?= htmlspecialchars($cliente['telefono'] ?: '-') ?> · <?= htmlspecialchars($cliente['tipo_cliente'] ?: '-') ?></div></td>
