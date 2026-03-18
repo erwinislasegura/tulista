@@ -9,8 +9,14 @@
 <!-- App favicon -->
 <link rel="shortcut icon" href="assets/images/favicon.ico">
 
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#3A136A">
+<?php
+$portalApp = $portalApp ?? 'admin';
+$isClientePortal = $portalApp === 'cliente';
+$manifestFile = $isClientePortal ? 'manifest-cliente.webmanifest' : 'manifest-admin.webmanifest';
+$themeColor = $isClientePortal ? '#0D6EFD' : '#3A136A';
+?>
+<link rel="manifest" href="<?= htmlspecialchars($manifestFile, ENT_QUOTES, 'UTF-8') ?>">
+<meta name="theme-color" content="<?= htmlspecialchars($themeColor, ENT_QUOTES, 'UTF-8') ?>">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
