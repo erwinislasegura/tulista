@@ -4,7 +4,7 @@ require_once __DIR__ . '/controllers/CotizacionController.php';
 $controller = new CotizacionController();
 $data = $controller->handlePortalRequest();
 ?>
-<head><?php $title = 'Portal cliente'; include 'partials/title-meta.php'; include 'partials/head-css.php'; ?></head>
+<head><?php $title = 'Portal cliente'; $portalApp = 'cliente'; include 'partials/title-meta.php'; include 'partials/head-css.php'; ?></head>
 <body>
 <div class="wrapper">
     <?php include 'partials/menu.php'; ?>
