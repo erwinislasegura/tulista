@@ -9,6 +9,7 @@ $hasBuiltJs = file_exists($assetRoot . '/js/vendor.js') && file_exists($assetRoo
 
     <!-- App Javascript (Require in all Page) -->
     <script src="assets/js/app.js"></script>
+    <script src="assets/js/layout.js"></script>
 <?php else: ?>
     <!-- Fallback JS stack when precompiled assets are not available -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -26,6 +27,7 @@ $hasBuiltJs = file_exists($assetRoot . '/js/vendor.js') && file_exists($assetRoo
 
     <!-- Local app behavior scripts (available in repo) -->
     <script src="assets/source/js/app.js"></script>
+    <script src="assets/source/js/layout.js"></script>
 <?php endif; ?>
 
 <script src="assets/source/js/pwa-register.js"></script>
