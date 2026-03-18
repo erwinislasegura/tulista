@@ -19,9 +19,10 @@ $menu = [
             'text' => '1. Cotizaciones clientes',
             'icon' => 'solar:bill-list-broken',
             'perm' => 'cotizaciones.manage',
-            'pages' => ['apps-cotizaciones.php', 'apps-bodega.php'],
+            'pages' => ['apps-cotizaciones.php', 'apps-cotizaciones-registradas.php', 'apps-bodega.php'],
             'children' => [
-                ['page' => 'apps-cotizaciones.php', 'text' => 'Bandeja y detalle', 'icon' => 'solar:bill-list-broken', 'perm' => 'cotizaciones.manage'],
+                ['page' => 'apps-cotizaciones.php', 'text' => 'Crear cotización', 'icon' => 'solar:add-circle-broken', 'perm' => 'cotizaciones.manage'],
+                ['page' => 'apps-cotizaciones-registradas.php', 'text' => 'Bandeja y detalle', 'icon' => 'solar:bill-list-broken', 'perm' => 'cotizaciones.manage'],
                 ['page' => 'apps-bodega.php', 'url' => 'apps-bodega.php?menu=revision', 'text' => 'Faltantes y reemplazos', 'icon' => 'solar:box-minimalistic-broken', 'perm' => 'bodega.view'],
             ],
         ],

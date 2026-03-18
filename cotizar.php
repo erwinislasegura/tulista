@@ -34,10 +34,10 @@ $sections = [
         'icon' => 'solar:bill-list-broken',
         'file' => __DIR__ . '/views/cliente_portal/section-cotizar.php',
     ],
-    'aprobar' => [
-        'label' => 'Aprobar cotización',
-        'icon' => 'solar:check-square-broken',
-        'file' => __DIR__ . '/views/cliente_portal/section-aprobar.php',
+    'cotizaciones' => [
+        'label' => 'Cotizaciones registradas',
+        'icon' => 'solar:bill-list-broken',
+        'file' => __DIR__ . '/views/cliente_portal/section-cotizaciones.php',
     ],
     'seguimiento' => [
         'label' => 'Seguimiento pedido',

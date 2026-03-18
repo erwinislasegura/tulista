@@ -40,12 +40,18 @@ class CotizacionController
             exit('Debes iniciar sesión como cliente.');
         }
 
+        if (isset($_GET['download_pdf'])) {
+            $this->descargarCotizacionPdfCliente((int) $_GET['download_pdf'], $clienteId);
+        }
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $action = $_POST['action'] ?? '';
             if ($action === 'crear_cotizacion') {
                 $this->crearCotizacion($clienteId);
             } elseif ($action === 'crear_pedido') {
                 $this->crearPedidoDesdeCotizacion($clienteId);
+            } elseif ($action === 'aprobar_cotizacion_cliente') {
+                $this->aprobarCotizacionCliente($clienteId);
             }
             header('Location: ' . $this->portalReturnUrl());
             exit;
@@ -63,9 +69,40 @@ class CotizacionController
         ];
     }
 
+    private function aprobarCotizacionCliente(int $clienteId): void
+    {
+        $cotizacionId = (int) ($_POST['cotizacion_id'] ?? 0);
+        if ($cotizacionId <= 0) {
+            $this->flash('warning', 'Cotización inválida para aprobar.');
+            return;
+        }
+
+        $cotizacion = $this->cotizaciones->findByIdAndCliente($cotizacionId, $clienteId);
+        if (!$cotizacion) {
+            $this->flash('warning', 'La cotización no pertenece a tu cuenta.');
+            return;
+        }
+
+        if (($cotizacion['estado'] ?? '') !== 'enviada') {
+            $this->flash('warning', 'Solo las cotizaciones en estado enviada pueden aprobarse desde el portal.');
+            return;
+        }
+
+        $this->cotizaciones->updateEstado($cotizacionId, 'aprobada');
+        AuditService::log('aprobar', 'cotizaciones', $cotizacionId, 'Cotización aprobada por cliente');
+        $this->flash('success', 'Cotización #' . $cotizacionId . ' aprobada correctamente.');
+    }
+
     public function handleAdminRequest(): array
     {
         AuthorizationService::requirePermission('cotizaciones.manage');
+        $estadoFiltro = (string) ($_GET['estado'] ?? 'todas');
+        $estadoSql = $estadoFiltro === 'sin_revision' ? 'borrador' : $estadoFiltro;
+        $filtrosPermitidos = ['todas', 'sin_revision', 'enviada', 'aprobada', 'rechazada'];
+        if (!in_array($estadoFiltro, $filtrosPermitidos, true)) {
+            $estadoFiltro = 'todas';
+            $estadoSql = 'todas';
+        }
 
         if (($_GET['ajax'] ?? '') === 'productos') {
             $this->handleProductosAjax();
@@ -90,7 +127,7 @@ class CotizacionController
                     AuditService::log('eliminar', 'cotizaciones', $id, 'Cotización eliminada');
                 }
             }
-            header('Location: apps-cotizaciones.php');
+            header('Location: ' . $this->portalReturnUrl());
             exit;
         }
 
@@ -102,11 +139,17 @@ class CotizacionController
         $_SESSION['cotizaciones_flash'] = [];
 
         $clientes = $this->clientes->all();
+        $cotizaciones = $this->cotizaciones->all();
+        if ($estadoSql !== 'todas') {
+            $cotizaciones = array_values(array_filter($cotizaciones, static fn ($c) => ($c['estado'] ?? '') === $estadoSql));
+        }
+
         return [
-            'cotizaciones' => $this->cotizaciones->all(),
+            'cotizaciones' => $cotizaciones,
             'productos' => $this->productos->catalog(),
             'clientes' => $clientes,
             'clientes_json' => json_encode($clientes, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+            'estado_filtro' => $estadoFiltro,
             'flash' => $flash,
         ];
     }
@@ -201,6 +244,30 @@ class CotizacionController
         if (!$cotizacion) {
             http_response_code(404);
             exit('Cotización no encontrada.');
+        }
+
+        $detalles = $this->detalles->findByCotizacion($cotizacionId);
+        $empresa = $this->empresa->get() ?: [];
+        $pdf = $this->buildCorporatePdf($cotizacion, $detalles, $empresa);
+
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="cotizacion-' . $cotizacionId . '.pdf"');
+        header('Content-Length: ' . strlen($pdf));
+        echo $pdf;
+        exit;
+    }
+
+    private function descargarCotizacionPdfCliente(int $cotizacionId, int $clienteId): void
+    {
+        if ($cotizacionId <= 0 || $clienteId <= 0) {
+            http_response_code(400);
+            exit('Cotización inválida.');
+        }
+
+        $cotizacion = $this->cotizaciones->findByIdAndCliente($cotizacionId, $clienteId);
+        if (!$cotizacion) {
+            http_response_code(404);
+            exit('Cotización no encontrada para este cliente.');
         }
 
         $detalles = $this->detalles->findByCotizacion($cotizacionId);
