@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } catch (Throwable $e) {
             error_log('[auth-signin] Error autenticando usuario: ' . $e->getMessage());
-            $error = 'No fue posible iniciar sesión en este momento. Intenta nuevamente en unos minutos.';
+            $error = 'No fue posible iniciar sesión: revisa conexión/credenciales de base de datos en hosting.';
         }
     }
 }
