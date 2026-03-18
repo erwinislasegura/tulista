@@ -21,16 +21,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!filter_var($email, FILTER_VALIDATE_EMAIL) || $password === '') {
         $error = 'Debes ingresar email y contraseña válidos.';
     } else {
-        $usuarioModel = new Usuario();
-        $user = $usuarioModel->findByEmail($email);
+        try {
+            $usuarioModel = new Usuario();
+            $user = $usuarioModel->findByEmail($email);
 
-        if (!$user || (int) $user['estado'] !== 1 || !password_verify($password, $user['password'])) {
-            $error = 'Credenciales inválidas.';
-        } else {
-            AuthService::loginUser($user);
-            $_SESSION['user'] = true; // compatibilidad con páginas existentes
-            header('Location: ' . (AuthorizationService::firstAccessiblePage() ?? 'index.php'));
-            exit;
+            if (!$user || (int) $user['estado'] !== 1 || !password_verify($password, $user['password'])) {
+                $error = 'Credenciales inválidas.';
+            } else {
+                AuthService::loginUser($user);
+                $_SESSION['user'] = true; // compatibilidad con páginas existentes
+                header('Location: ' . (AuthorizationService::firstAccessiblePage() ?? 'index.php'));
+                exit;
+            }
+        } catch (Throwable $e) {
+            error_log('[auth-signin] Error autenticando usuario: ' . $e->getMessage());
+            $error = 'No fue posible iniciar sesión en este momento. Intenta nuevamente en unos minutos.';
         }
     }
 }
