@@ -130,7 +130,7 @@ $sections = [
         'file' => __DIR__ . '/views/cliente_portal/section-consultar.php',
     ],
     'mis-pedidos' => [
-        'label' => 'Mis pedidos',
+        'label' => 'Historial de pedidos',
         'file' => __DIR__ . '/views/cliente_portal/section-mis-pedidos.php',
     ],
 ];
@@ -164,10 +164,73 @@ if (!isset($sections[$currentView])) {
             letter-spacing: 0.01em;
         }
 
+        .tl-cliente .page-content {
+            padding-top: calc(var(--rsk-topbar-height, 70px) + 1rem);
+            background: #f4f7fb;
+        }
+
+        .tl-cliente .main-nav {
+            background: #0f1f35;
+            border-right: 1px solid rgba(148, 163, 184, 0.16);
+        }
+
+        .tl-cliente .main-nav .menu-title {
+            color: rgba(241, 245, 249, 0.72);
+            font-size: 0.68rem;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            margin-top: .45rem;
+            margin-bottom: .35rem;
+        }
+
+        .tl-cliente .main-nav .nav-link {
+            min-height: 42px;
+            border-radius: 10px;
+            margin: 0.12rem 0.45rem;
+            padding-inline: .7rem;
+            color: rgba(241, 245, 249, 0.9);
+            transition: all .18s ease;
+        }
+
+        .tl-cliente .main-nav .nav-link .nav-icon {
+            width: 1.2rem;
+            color: rgba(148, 163, 184, 0.95);
+        }
+
+        .tl-cliente .main-nav .nav-link:hover {
+            background: rgba(59, 130, 246, 0.2);
+            color: #fff;
+            transform: translateX(2px);
+        }
+
+        .tl-cliente .main-nav .nav-link.active {
+            background: linear-gradient(90deg, rgba(37, 99, 235, 0.92), rgba(14, 116, 144, 0.9));
+            color: #fff;
+            box-shadow: 0 8px 18px rgba(2, 6, 23, 0.24);
+        }
+
+        .tl-cliente .main-nav .nav-link.active .nav-icon {
+            color: #fff;
+        }
+
         .tl-cliente .table th {
             font-size: 0.72rem;
             font-weight: 600;
             text-transform: uppercase;
+            padding: 0.42rem 0.55rem;
+            vertical-align: middle;
+        }
+
+        .tl-cliente .table td {
+            padding: 0.38rem 0.55rem;
+            vertical-align: middle;
+            line-height: 1.2;
+        }
+
+        .tl-cliente .table.table-sm th,
+        .tl-cliente .table.table-sm td {
+            padding-top: 0.34rem;
+            padding-bottom: 0.34rem;
         }
 
         .section-chip {

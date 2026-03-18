@@ -88,12 +88,12 @@ $menu = [
                     $clienteBasePage = $currentPage === '' ? 'cliente-portal.php' : $currentPage;
                     $clienteView = (string) ($_GET['view'] ?? 'dashboard');
                     $clienteMenu = [
-                        ['view' => 'dashboard', 'text' => '1. Dashboard', 'icon' => 'solar:widget-2-broken'],
-                        ['view' => 'cotizar', 'text' => '2. Hacer cotización', 'icon' => 'solar:bill-list-broken'],
-                        ['view' => 'cotizaciones', 'text' => '3. Cotizaciones registradas', 'icon' => 'solar:checklist-minimalistic-broken'],
-                        ['view' => 'seguimiento', 'text' => '4. Seguimiento pedido', 'icon' => 'solar:delivery-broken'],
-                        ['view' => 'consultar', 'text' => '5. Consultar producto', 'icon' => 'solar:magnifer-broken'],
-                        ['view' => 'mis-pedidos', 'text' => '6. Mis pedidos', 'icon' => 'solar:archive-broken'],
+                        ['view' => 'dashboard', 'text' => 'Dashboard', 'icon' => 'solar:widget-2-broken'],
+                        ['view' => 'cotizar', 'text' => 'Hacer cotización', 'icon' => 'solar:bill-list-broken'],
+                        ['view' => 'cotizaciones', 'text' => 'Cotizaciones registradas', 'icon' => 'solar:checklist-minimalistic-broken'],
+                        ['view' => 'seguimiento', 'text' => 'Seguimiento pedido', 'icon' => 'solar:delivery-broken'],
+                        ['view' => 'consultar', 'text' => 'Consultar producto', 'icon' => 'solar:magnifer-broken'],
+                        ['view' => 'mis-pedidos', 'text' => 'Historial de pedidos', 'icon' => 'solar:archive-broken'],
                     ];
                     ?>
                     <li class="menu-title">Portal cliente</li>
