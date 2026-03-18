@@ -475,86 +475,7 @@ if (!isset($sections[$currentView])) {
 <body>
 <div class="wrapper tl-cliente">
     <?php if ($cliente): ?>
-        <header class="topbar">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <div class="d-flex align-items-center gap-2">
-                        <div class="topbar-item">
-                            <button type="button" class="button-toggle-menu me-2">
-                                <iconify-icon icon="solar:hamburger-menu-broken" class="fs-24 align-middle"></iconify-icon>
-                            </button>
-                        </div>
-                        <h5 class="mb-0 text-white">Portal de clientes</h5>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <div class="dropdown">
-                            <button class="tl-notif-bell" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notificaciones">
-                                <iconify-icon icon="solar:bell-bing-broken" class="fs-20"></iconify-icon>
-                                <?php if ($notificationTotal > 0): ?><span class="tl-notif-dot"></span><?php endif; ?>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-end p-2 tl-top-dropdown">
-                                <h6 class="dropdown-header">Notificaciones</h6>
-                                <?php if (!empty($notificationItems)): ?>
-                                    <?php foreach ($notificationItems as $item): ?>
-                                        <a class="dropdown-item d-flex justify-content-between align-items-center" href="<?= htmlspecialchars($item['href']) ?>">
-                                            <span><?= (int) $item['count'] ?> <?= htmlspecialchars($item['label']) ?></span>
-                                            <span class="badge text-bg-danger">!</span>
-                                        </a>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <div class="dropdown-item text-muted">Sin alertas pendientes.</div>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-
-                        <div class="dropdown">
-                            <button class="tl-profile-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <span class="tl-profile-name">Hola, <?= htmlspecialchars($cliente['nombre']) ?></span>
-                                <iconify-icon icon="solar:user-circle-broken" class="fs-18"></iconify-icon>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end tl-top-dropdown">
-                                <li><h6 class="dropdown-header"><?= htmlspecialchars($cliente['empresa'] ?? 'Mi cuenta') ?></h6></li>
-                                <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#modal-cambiar-password"><iconify-icon icon="solar:key-broken" class="me-1"></iconify-icon> Cambiar contraseña</button></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <form method="post" class="m-0">
-                                        <input type="hidden" name="action" value="cerrar_sesion">
-                                        <button class="dropdown-item text-danger" type="submit"><iconify-icon icon="solar:logout-2-broken" class="me-1"></iconify-icon> Cerrar sesión</button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <div class="main-nav">
-            <div class="logo-box py-3 px-3">
-                <a href="cotizar.php?view=cotizar" class="logo-dark d-flex align-items-center gap-2 text-decoration-none tl-brand-block">
-                    <img src="assets/source/images/logo-tulista-mark.svg" class="logo-sm tl-brand-logo" alt="logo" style="height:34px; width:34px;">
-                    <span class="fw-semibold tl-brand-name text-white">Portal cliente</span>
-                </a>
-            </div>
-
-            <button type="button" class="button-sm-hover" aria-label="Mostrar sidebar completo">
-                <iconify-icon icon="solar:hamburger-menu-broken" class="button-sm-hover-icon"></iconify-icon>
-            </button>
-
-            <div class="scrollbar" data-simplebar>
-                <ul class="navbar-nav" id="navbar-nav-cliente">
-                    <li class="menu-title">Menú cliente</li>
-                    <?php foreach ($sections as $key => $section): ?>
-                        <li class="nav-item">
-                            <a class="nav-link <?= $currentView === $key ? 'active' : '' ?>" href="cotizar.php?view=<?= urlencode($key) ?>">
-                                <span class="nav-icon"><iconify-icon icon="<?= htmlspecialchars($section['icon']) ?>"></iconify-icon></span>
-                                <span class="nav-text"><?= htmlspecialchars($section['label']) ?></span>
-                            </a>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        </div>
+        <?php include 'partials/menu.php'; ?>
 
         <div class="page-content">
             <div class="container-fluid">
@@ -575,6 +496,17 @@ if (!isset($sections[$currentView])) {
                         Vista independiente
                     </div>
                 </div>
+
+                <?php if (!empty($notificationItems)): ?>
+                    <div class="alert alert-warning d-flex flex-wrap gap-2 align-items-center mb-3">
+                        <strong class="me-1">Pendientes:</strong>
+                        <?php foreach ($notificationItems as $item): ?>
+                            <a class="badge text-bg-light text-decoration-none" href="<?= htmlspecialchars($item['href']) ?>">
+                                <?= (int) $item['count'] ?> <?= htmlspecialchars($item['label']) ?>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
 
                 <section class="tl-portal-dashboard">
                     <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
