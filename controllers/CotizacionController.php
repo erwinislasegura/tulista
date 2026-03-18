@@ -458,6 +458,11 @@ class CotizacionController
             return $text;
         };
 
+        $textWidth = static function (string $text, float $fontSize = 8.0): float {
+            $len = strlen($text);
+            return $len * ($fontSize * 0.48);
+        };
+
         $commands = [];
         $commands[] = "1 1 1 rg 0 0 595 842 re f";
         $commands[] = "0 0 0 RG 1 w 24 24 547 794 re S";
@@ -523,39 +528,60 @@ class CotizacionController
         $commands[] = "BT /F2 8 Tf 520 " . ($tableTop + 6) . " Td (" . $escape('MONTO') . ") Tj ET";
 
         $rowY = $tableTop - 14;
-        $maxRows = 14;
+        $maxRows = 12;
         foreach (array_slice($detalles, 0, $maxRows) as $detalle) {
             $cantidad = (int) ($detalle['cantidad'] ?? 0);
             $precio = (float) ($detalle['precio'] ?? 0);
             $subtotal = (float) ($detalle['subtotal'] ?? 0);
             $impuesto = $subtotal * 0.19;
-            $descripcion = substr((string) ($detalle['producto_nombre'] ?? '-'), 0, 44);
+            $descripcionRaw = (string) ($detalle['producto_nombre'] ?? '-');
+            $descripcion = $toPdfText($descripcionRaw);
+            $descFont = 8.0;
+            while ($descFont > 6.6 && $textWidth($descripcion, $descFont) > 246) {
+                $descFont -= 0.2;
+            }
+            if ($textWidth($descripcion, $descFont) > 250) {
+                $descripcion = substr($descripcion, 0, 52) . '...';
+            }
 
-            $commands[] = "0 0 0 RG 0.35 w 24 " . ($rowY - 10) . " 547 18 re S";
-            $commands[] = "BT /F1 8 Tf 40 {$rowY} Td (" . $escape(number_format($cantidad, 0, ',', '.')) . ") Tj ET";
-            $commands[] = "BT /F1 8 Tf 106 {$rowY} Td (" . $escape($toPdfText($descripcion)) . ") Tj ET";
-            $commands[] = "BT /F1 8 Tf 370 {$rowY} Td (" . $escape($toPdfText('$' . number_format($precio, 0, ',', '.'))) . ") Tj ET";
-            $commands[] = "BT /F1 8 Tf 456 {$rowY} Td (" . $escape($toPdfText('$' . number_format($impuesto, 0, ',', '.'))) . ") Tj ET";
-            $commands[] = "BT /F1 8 Tf 520 {$rowY} Td (" . $escape($toPdfText('$' . number_format($subtotal, 0, ',', '.'))) . ") Tj ET";
+            $cantidadText = number_format($cantidad, 0, ',', '.');
+            $precioText = $toPdfText('$' . number_format($precio, 0, ',', '.'));
+            $impuestoText = $toPdfText('$' . number_format($impuesto, 0, ',', '.'));
+            $subtotalText = $toPdfText('$' . number_format($subtotal, 0, ',', '.'));
+
+            $cantidadX = 84 - $textWidth($cantidadText, 8);
+            $precioX = 438 - $textWidth($precioText, 8);
+            $impuestoX = 500 - $textWidth($impuestoText, 8);
+            $subtotalX = 568 - $textWidth($subtotalText, 8);
+
+            $commands[] = "0 0 0 RG 0.25 w 24 " . ($rowY - 10) . " 547 18 re S";
+            $commands[] = "BT /F1 8 Tf {$cantidadX} {$rowY} Td (" . $escape($cantidadText) . ") Tj ET";
+            $commands[] = "BT /F1 {$descFont} Tf 106 {$rowY} Td (" . $escape($descripcion) . ") Tj ET";
+            $commands[] = "BT /F1 8 Tf {$precioX} {$rowY} Td (" . $escape($precioText) . ") Tj ET";
+            $commands[] = "BT /F1 8 Tf {$impuestoX} {$rowY} Td (" . $escape($impuestoText) . ") Tj ET";
+            $commands[] = "BT /F1 8 Tf {$subtotalX} {$rowY} Td (" . $escape($subtotalText) . ") Tj ET";
             $rowY -= 18;
         }
 
         // TOTALES
         $totalsX = 380;
-        $totalsY = max(180, $rowY - 14);
+        $totalsY = 130;
         $commands[] = "0 0 0 RG 0.7 w {$totalsX} {$totalsY} 191 54 re S";
         $commands[] = "0 0 0 RG 0.35 w {$totalsX} " . ($totalsY + 36) . " m " . ($totalsX + 191) . " " . ($totalsY + 36) . " l S";
         $commands[] = "0 0 0 RG 0.35 w {$totalsX} " . ($totalsY + 18) . " m " . ($totalsX + 191) . " " . ($totalsY + 18) . " l S";
         $commands[] = "BT /F1 8 Tf " . ($totalsX + 8) . " " . ($totalsY + 40) . " Td (" . $escape('SUBTOTAL') . ") Tj ET";
         $commands[] = "BT /F1 8 Tf " . ($totalsX + 8) . " " . ($totalsY + 22) . " Td (" . $escape('IVA (19%)') . ") Tj ET";
         $commands[] = "BT /F2 9 Tf " . ($totalsX + 8) . " " . ($totalsY + 6) . " Td (" . $escape('TOTAL') . ") Tj ET";
-        $commands[] = "BT /F1 8 Tf " . ($totalsX + 120) . " " . ($totalsY + 40) . " Td (" . $escape($toPdfText('$' . number_format($total, 0, ',', '.'))) . ") Tj ET";
-        $commands[] = "BT /F1 8 Tf " . ($totalsX + 120) . " " . ($totalsY + 22) . " Td (" . $escape($toPdfText('$' . number_format($iva, 0, ',', '.'))) . ") Tj ET";
-        $commands[] = "BT /F2 9 Tf " . ($totalsX + 120) . " " . ($totalsY + 6) . " Td (" . $escape($toPdfText('$' . number_format($totalConIva, 0, ',', '.'))) . ") Tj ET";
+        $subtotalTotalText = $toPdfText('$' . number_format($total, 0, ',', '.'));
+        $ivaTotalText = $toPdfText('$' . number_format($iva, 0, ',', '.'));
+        $grandTotalText = $toPdfText('$' . number_format($totalConIva, 0, ',', '.'));
+        $commands[] = "BT /F1 8 Tf " . (($totalsX + 184) - $textWidth($subtotalTotalText, 8)) . " " . ($totalsY + 40) . " Td (" . $escape($subtotalTotalText) . ") Tj ET";
+        $commands[] = "BT /F1 8 Tf " . (($totalsX + 184) - $textWidth($ivaTotalText, 8)) . " " . ($totalsY + 22) . " Td (" . $escape($ivaTotalText) . ") Tj ET";
+        $commands[] = "BT /F2 9 Tf " . (($totalsX + 184) - $textWidth($grandTotalText, 9)) . " " . ($totalsY + 6) . " Td (" . $escape($grandTotalText) . ") Tj ET";
 
         // Footer
-        $commands[] = "BT /F1 8 Tf 172 60 Td (" . $escape($toPdfText('Si tiene alguna consulta sobre esta cotizacion, contactenos.')) . ") Tj ET";
-        $commands[] = "BT /F2 9 Tf 228 46 Td (" . $escape($toPdfText('¡GRACIAS POR SU COMPRA!')) . ") Tj ET";
+        $commands[] = "BT /F1 8 Tf 150 60 Td (" . $escape($toPdfText('Si tiene alguna consulta sobre esta cotizacion, contactenos.')) . ") Tj ET";
+        $commands[] = "BT /F2 9 Tf 220 46 Td (" . $escape($toPdfText('¡GRACIAS POR SU COMPRA!')) . ") Tj ET";
 
         $content = implode("\n", $commands);
         return $this->renderPdfDocument($content, $logo);
