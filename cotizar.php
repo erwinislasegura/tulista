@@ -464,7 +464,9 @@ if (!isset($sections[$currentView])) {
                 const nameMatches = row.dataset.name.includes(term);
                 const stock = parseInt(row.dataset.stock || '0', 10);
                 const stockMatches = showWithoutStock || stock > 0;
-                row.classList.toggle('d-none', !(nameMatches && stockMatches));
+                const qty = parseInt(row.querySelector('[data-cantidad]')?.value || '0', 10);
+                const hasSelection = qty > 0;
+                row.classList.toggle('d-none', !(nameMatches && stockMatches) && !hasSelection);
             });
         };
 
@@ -511,6 +513,11 @@ if (!isset($sections[$currentView])) {
         };
 
         searchInput?.addEventListener('input', applyFilters);
+        searchInput?.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+            }
+        });
         stockToggle?.addEventListener('change', applyFilters);
 
         rows.forEach((row) => {
@@ -518,12 +525,17 @@ if (!isset($sections[$currentView])) {
             row.querySelector('[data-plus]')?.addEventListener('click', () => {
                 input.value = Math.max(0, parseInt(input.value || '0', 10)) + 1;
                 updateSummary();
+                applyFilters();
             });
             row.querySelector('[data-minus]')?.addEventListener('click', () => {
                 input.value = Math.max(0, parseInt(input.value || '0', 10) - 1);
                 updateSummary();
+                applyFilters();
             });
-            input.addEventListener('input', updateSummary);
+            input.addEventListener('input', () => {
+                updateSummary();
+                applyFilters();
+            });
         });
 
         form?.addEventListener('submit', (event) => {
