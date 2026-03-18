@@ -24,6 +24,42 @@ if ($cliente) {
     $data = $controller->handlePortalRequest();
 }
 
+$clienteMetrics = [
+    'cotizaciones_pendientes' => 0,
+    'pedidos_no_pagados' => 0,
+    'pedidos_en_transito' => 0,
+    'pedidos_activos' => 0,
+    'monto_no_pagado' => 0.0,
+];
+
+if ($data) {
+    foreach (($data['cotizaciones'] ?? []) as $cotizacion) {
+        $estado = (string) ($cotizacion['estado'] ?? '');
+        if (in_array($estado, ['borrador', 'enviada'], true)) {
+            $clienteMetrics['cotizaciones_pendientes']++;
+        }
+    }
+
+    foreach (($data['pedidos'] ?? []) as $pedido) {
+        $estadoOperacion = strtolower((string) ($pedido['estado'] ?? ''));
+        $estadoPago = strtolower((string) ($pedido['estado_pago'] ?? 'pendiente'));
+        $totalPedido = (float) ($pedido['total'] ?? 0);
+
+        if (!in_array($estadoOperacion, ['entregado', 'cancelado'], true)) {
+            $clienteMetrics['pedidos_activos']++;
+        }
+
+        if (in_array($estadoOperacion, ['en_transito', 'en tránsito', 'despachado'], true)) {
+            $clienteMetrics['pedidos_en_transito']++;
+        }
+
+        if (!in_array($estadoPago, ['pagado', 'paid'], true)) {
+            $clienteMetrics['pedidos_no_pagados']++;
+            $clienteMetrics['monto_no_pagado'] += $totalPedido;
+        }
+    }
+}
+
 $formatCurrency = static function (float $value): string {
     return '$' . number_format($value, 0, ',', '.');
 };
@@ -67,9 +103,18 @@ if (!isset($sections[$currentView])) {
     <?php $title = 'Portal cliente'; include 'partials/title-meta.php'; include 'partials/head-css.php'; ?>
     <style>
         :root {
-            --tl-cliente-primary: #0d9488;
-            --tl-cliente-secondary: #14b8a6;
-            --tl-cliente-soft: #ccfbf1;
+            --tl-cliente-primary: #18253b;
+            --tl-cliente-secondary: #243855;
+            --tl-cliente-accent: #2fa6b9;
+            --tl-cliente-accent-soft: #e6f4f7;
+            --tl-cliente-success: #37b24d;
+            --tl-cliente-danger: #d6455d;
+            --tl-cliente-surface: #f3f5f9;
+        }
+
+        .tl-cliente {
+            font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+            color: #1f2a3d;
         }
 
         .tl-cliente .main-nav,
@@ -77,26 +122,129 @@ if (!isset($sections[$currentView])) {
             background: linear-gradient(145deg, var(--tl-cliente-primary), var(--tl-cliente-secondary));
         }
 
+        .tl-cliente .topbar {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.18);
+        }
+
+        .tl-cliente .page-content {
+            padding-top: calc(var(--rsk-topbar-height, 70px) + 1.25rem);
+            background: var(--tl-cliente-surface) !important;
+        }
+
+        .tl-cliente .main-nav .nav-link,
+        .tl-cliente .main-nav .menu-title,
+        .tl-cliente .main-nav .nav-text,
+        .tl-cliente .main-nav iconify-icon {
+            font-size: 0.88rem;
+            letter-spacing: 0.01em;
+            color: rgba(255, 255, 255, 0.92) !important;
+        }
+
         .tl-cliente .main-nav .nav-link.active,
         .tl-cliente .main-nav .nav-link:hover {
-            background: rgba(255, 255, 255, 0.2);
-            color: #fff;
+            background: rgba(47, 166, 185, 0.22) !important;
+            color: #fff !important;
         }
 
         .tl-cliente .section-chip {
-            background: var(--tl-cliente-soft);
-            color: #0f766e;
+            background: var(--tl-cliente-accent-soft);
+            color: #1f5662;
+            border: 1px solid rgba(47, 166, 185, 0.18);
             border-radius: 999px;
             display: inline-flex;
             align-items: center;
             gap: .35rem;
             padding: .35rem .8rem;
-            font-size: .85rem;
+            font-size: .78rem;
             font-weight: 600;
         }
 
+        .tl-cliente .card {
+            border: 1px solid #e6eaf2;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+        }
+
+        .tl-cliente h4,
+        .tl-cliente h5,
+        .tl-cliente .h4,
+        .tl-cliente .h5 {
+            font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+
+        .tl-cliente p,
+        .tl-cliente .form-label,
+        .tl-cliente .text-muted {
+            font-size: 0.86rem;
+        }
+
         .tl-login-gradient {
-            background: radial-gradient(circle at top left, #d1fae5 0%, #f8fafc 45%, #cffafe 100%);
+            background: radial-gradient(circle at top left, #dbe8f7 0%, #f8fafc 48%, #ecf8fb 100%);
+        }
+
+        .tl-portal-dashboard {
+            background: linear-gradient(135deg, #ffffff 0%, #f7fafc 100%);
+            border-radius: 14px;
+            border: 1px solid #e4e9f2;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .tl-portal-kpi {
+            border-radius: 12px;
+            border: 1px solid #e5ebf3;
+            background: #ffffff;
+            padding: 0.85rem;
+            height: 100%;
+        }
+
+        .tl-portal-kpi__label {
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+        }
+
+        .tl-portal-kpi__value {
+            font-size: 1.35rem;
+            font-weight: 700;
+            line-height: 1.15;
+            color: #0f172a;
+        }
+
+        .tl-portal-kpi--danger .tl-portal-kpi__value {
+            color: var(--tl-cliente-danger);
+        }
+
+        .tl-portal-kpi--accent .tl-portal-kpi__value {
+            color: var(--tl-cliente-accent);
+        }
+
+        .tl-portal-kpi--success .tl-portal-kpi__value {
+            color: var(--tl-cliente-success);
+        }
+
+        .tl-portal-shortcuts .btn {
+            font-size: 0.82rem;
+            border-radius: 10px;
+            padding-inline: 0.9rem;
+        }
+
+        .tl-portal-shortcuts .btn-primary {
+            background: var(--tl-cliente-accent);
+            border-color: var(--tl-cliente-accent);
+        }
+
+        .tl-portal-shortcuts .btn-success {
+            background: var(--tl-cliente-success);
+            border-color: var(--tl-cliente-success);
+        }
+
+        .tl-portal-shortcuts .btn-outline-dark {
+            border-color: #c7d0e0;
+            color: #334155;
         }
     </style>
 </head>
@@ -173,6 +321,47 @@ if (!isset($sections[$currentView])) {
                         Vista independiente
                     </div>
                 </div>
+
+                <section class="tl-portal-dashboard">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                        <div>
+                            <h5 class="mb-1">Dashboard cliente</h5>
+                            <p class="text-muted mb-0">Accesos rápidos e indicadores claves para gestionar cotizaciones y pedidos.</p>
+                        </div>
+                        <div class="tl-portal-shortcuts d-flex flex-wrap gap-2">
+                            <a class="btn btn-sm btn-primary" href="cotizar.php?view=cotizaciones">Cotizaciones</a>
+                            <a class="btn btn-sm btn-success" href="cotizar.php?view=seguimiento">Pedidos</a>
+                            <a class="btn btn-sm btn-outline-dark" href="cotizar.php?view=consultar">Consultar productos</a>
+                        </div>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-sm-6 col-xl-3">
+                            <article class="tl-portal-kpi tl-portal-kpi--accent">
+                                <p class="tl-portal-kpi__label">Cotizaciones pendientes</p>
+                                <p class="tl-portal-kpi__value mb-0"><?= (int) $clienteMetrics['cotizaciones_pendientes'] ?></p>
+                            </article>
+                        </div>
+                        <div class="col-sm-6 col-xl-3">
+                            <article class="tl-portal-kpi tl-portal-kpi--danger">
+                                <p class="tl-portal-kpi__label">Pedidos no pagados</p>
+                                <p class="tl-portal-kpi__value mb-0"><?= (int) $clienteMetrics['pedidos_no_pagados'] ?></p>
+                                <small class="text-muted">Total: <?= htmlspecialchars($formatCurrency((float) $clienteMetrics['monto_no_pagado'])) ?></small>
+                            </article>
+                        </div>
+                        <div class="col-sm-6 col-xl-3">
+                            <article class="tl-portal-kpi tl-portal-kpi--success">
+                                <p class="tl-portal-kpi__label">Pedidos en tránsito</p>
+                                <p class="tl-portal-kpi__value mb-0"><?= (int) $clienteMetrics['pedidos_en_transito'] ?></p>
+                            </article>
+                        </div>
+                        <div class="col-sm-6 col-xl-3">
+                            <article class="tl-portal-kpi">
+                                <p class="tl-portal-kpi__label">Pedidos activos</p>
+                                <p class="tl-portal-kpi__value mb-0"><?= (int) $clienteMetrics['pedidos_activos'] ?></p>
+                            </article>
+                        </div>
+                    </div>
+                </section>
 
                 <?php include $sections[$currentView]['file']; ?>
             </div>
