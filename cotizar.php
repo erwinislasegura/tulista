@@ -205,44 +205,6 @@ if (!isset($sections[$currentView])) {
             font-size: 0.86rem;
         }
 
-        .tl-cliente .card {
-            border: 1px solid #e6eaf2;
-            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
-        }
-
-        .tl-cliente h4,
-        .tl-cliente h5,
-        .tl-cliente .h4,
-        .tl-cliente .h5 {
-            font-weight: 600;
-            letter-spacing: 0.01em;
-        }
-
-        .tl-cliente p,
-        .tl-cliente .form-label,
-        .tl-cliente .text-muted {
-            font-size: 0.86rem;
-        }
-
-        .tl-cliente .card {
-            border: 1px solid #e6eaf2;
-            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
-        }
-
-        .tl-cliente h4,
-        .tl-cliente h5,
-        .tl-cliente .h4,
-        .tl-cliente .h5 {
-            font-weight: 600;
-            letter-spacing: 0.01em;
-        }
-
-        .tl-cliente p,
-        .tl-cliente .form-label,
-        .tl-cliente .text-muted {
-            font-size: 0.86rem;
-        }
-
         .tl-login-gradient {
             background: radial-gradient(circle at top left, #dbe8f7 0%, #f8fafc 48%, #ecf8fb 100%);
         }
