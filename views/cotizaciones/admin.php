@@ -1,6 +1,48 @@
 <?php foreach (($data['flash'] ?? []) as $alert): ?>
 <div class="alert alert-<?= htmlspecialchars($alert['type']) ?> py-2"><?= htmlspecialchars($alert['message']) ?></div>
 <?php endforeach; ?>
+<style>
+    .tl-cotizaciones-table {
+        font-size: 0.86rem;
+    }
+    .tl-cotizaciones-table th,
+    .tl-cotizaciones-table td {
+        padding-top: 0.38rem;
+        padding-bottom: 0.38rem;
+        vertical-align: middle;
+    }
+    .tl-cotizaciones-table .tl-product-name {
+        line-height: 1.1;
+        margin-bottom: 0;
+    }
+    .tl-cotizaciones-table .tl-product-sku {
+        font-size: 0.74rem;
+    }
+    .tl-stock-badge {
+        min-width: 94px;
+        font-size: 0.74rem;
+        padding: 0.26rem 0.45rem;
+    }
+    .tl-qty-wrapper {
+        display: flex;
+        gap: 0.2rem;
+        align-items: center;
+    }
+    .tl-qty-step {
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        border-radius: 6px;
+        line-height: 1;
+    }
+    .tl-qty-input {
+        min-width: 72px;
+        text-align: center;
+    }
+    .tl-table-tip {
+        font-size: 0.74rem;
+    }
+</style>
 
 <style>
     .tl-cotizar-admin .table th,
