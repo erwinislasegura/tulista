@@ -69,14 +69,13 @@ $menu = [
     ],
 ];
 ?>
-<div class="main-nav">
+<div class="main-nav <?= $isClientePortal ? "tl-main-nav-cliente" : "tl-main-nav-adminlte" ?>">
      <div class="logo-box py-3 px-3">
           <a href="<?= $isClientePortal ? 'cliente-portal.php' : 'index.php' ?>" class="logo-dark d-flex align-items-center gap-2 text-decoration-none tl-brand-block">
                <img src="<?= htmlspecialchars($logoPath) ?>" class="logo-sm tl-brand-logo" alt="logo" style="height:34px; width:34px;">
                <span class="fw-semibold tl-brand-name text-white"><?= htmlspecialchars($companyConfig['nombre']) ?></span>
           </a>
      </div>
-
      <button type="button" class="button-sm-hover" aria-label="Show Full Sidebar">
           <iconify-icon icon="solar:hamburger-menu-broken" class="button-sm-hover-icon"></iconify-icon>
      </button>
