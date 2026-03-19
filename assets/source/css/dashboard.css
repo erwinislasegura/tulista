@@ -815,3 +815,103 @@ textarea.form-control {
         padding: 0.35rem 0.7rem;
     }
 }
+
+/* ===== Admin panel style inspired by AdminLTE (no portal cliente) ===== */
+.main-nav.tl-main-nav-adminlte {
+    background: linear-gradient(180deg, #1f2d3d 0%, #121a23 100%) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.main-nav.tl-main-nav-adminlte .logo-box {
+    background: rgba(47, 167, 238, 0.14);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    margin-bottom: .25rem;
+}
+
+.main-nav.tl-main-nav-adminlte .menu-title {
+    color: rgba(148, 163, 184, 0.75) !important;
+    text-transform: uppercase;
+    font-size: 0.68rem;
+    letter-spacing: .08em;
+    margin: .75rem .85rem .35rem;
+}
+
+.main-nav.tl-main-nav-adminlte .nav-link,
+.main-nav.tl-main-nav-adminlte .sub-nav-link {
+    border-radius: 10px;
+    margin: 0.12rem 0.45rem;
+    color: rgba(226, 232, 240, 0.92) !important;
+    font-weight: 600;
+    min-height: 40px;
+}
+
+.main-nav.tl-main-nav-adminlte .nav-link .nav-icon,
+.main-nav.tl-main-nav-adminlte .sub-nav-link .nav-icon {
+    color: #8bb6d9 !important;
+}
+
+.main-nav.tl-main-nav-adminlte .nav-link.active,
+.main-nav.tl-main-nav-adminlte .sub-nav-link.active,
+.main-nav.tl-main-nav-adminlte .nav-link:hover,
+.main-nav.tl-main-nav-adminlte .sub-nav-link:hover {
+    background: rgba(58, 161, 222, 0.22) !important;
+    color: #fff !important;
+}
+
+.topbar.tl-topbar-adminlte {
+    background: #3c8dbc;
+    border-bottom: 0;
+}
+
+.topbar.tl-topbar-adminlte .tl-topbar-layout {
+    min-height: 62px;
+}
+
+.topbar.tl-topbar-adminlte .tl-topbar-title,
+.topbar.tl-topbar-adminlte .tl-topbar-context,
+.topbar.tl-topbar-adminlte .tl-user-name,
+.topbar.tl-topbar-adminlte .tl-user-role,
+.topbar.tl-topbar-adminlte .tl-topbar-action,
+.topbar.tl-topbar-adminlte .tl-menu-toggle,
+.topbar.tl-topbar-adminlte .tl-user-trigger {
+    color: #fff;
+}
+
+.topbar.tl-topbar-adminlte .tl-topbar-action,
+.topbar.tl-topbar-adminlte .tl-menu-toggle,
+.topbar.tl-topbar-adminlte .tl-user-trigger {
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: rgba(15, 23, 42, 0.1);
+}
+
+.topbar.tl-topbar-adminlte .tl-user-avatar {
+    background: rgba(15, 23, 42, 0.28);
+}
+
+.topbar.tl-topbar-adminlte .tl-topbar-context {
+    opacity: 0.85;
+    font-size: .62rem;
+}
+
+.topbar.tl-topbar-adminlte .tl-topbar-title {
+    font-size: 1.05rem;
+    line-height: 1.1;
+}
+
+.topbar.tl-topbar-adminlte .tl-topbar-title-wrap {
+    gap: 0;
+}
+
+.wrapper:not(.tl-cliente) .page-content {
+    padding-top: max(92px, calc(var(--rsk-topbar-height, 70px) + 1.25rem));
+}
+
+.wrapper:not(.tl-cliente) .page-content > .container-fluid {
+    padding-top: .6rem;
+}
+
+.topbar.tl-topbar-adminlte .tl-topbar-action:hover,
+.topbar.tl-topbar-adminlte .tl-menu-toggle:hover,
+.topbar.tl-topbar-adminlte .tl-user-trigger:hover {
+    background: rgba(15, 23, 42, 0.22);
+}
