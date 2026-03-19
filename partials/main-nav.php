@@ -76,22 +76,6 @@ $menu = [
                <span class="fw-semibold tl-brand-name text-white"><?= htmlspecialchars($companyConfig['nombre']) ?></span>
           </a>
      </div>
-     <?php if (!$isClientePortal): ?>
-     <div class="tl-admin-user-panel px-3 pt-2 pb-3">
-          <div class="tl-admin-user-row">
-               <span class="tl-admin-avatar"><?= htmlspecialchars(strtoupper(substr((string) ($user['nombre'] ?? 'A'), 0, 1))) ?></span>
-               <div class="min-w-0">
-                    <div class="tl-admin-name text-truncate"><?= htmlspecialchars($user['nombre'] ?? 'Administrador') ?></div>
-                    <div class="tl-admin-status"><i></i> En línea</div>
-               </div>
-          </div>
-          <div class="tl-admin-search mt-2">
-               <iconify-icon icon="solar:magnifer-broken"></iconify-icon>
-               <input type="text" id="admin-menu-search" placeholder="Buscar módulo..." aria-label="Buscar en menú administrativo">
-          </div>
-     </div>
-     <?php endif; ?>
-
      <button type="button" class="button-sm-hover" aria-label="Show Full Sidebar">
           <iconify-icon icon="solar:hamburger-menu-broken" class="button-sm-hover-icon"></iconify-icon>
      </button>

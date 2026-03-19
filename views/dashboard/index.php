@@ -17,26 +17,26 @@ $progresoPedidos = min(100, ((int) ($k['pedidos_proceso'] ?? 0) / $pedidosObjeti
 $progresoClientes = min(100, ((int) ($k['clientes_nuevos'] ?? 0) / 20) * 100);
 ?>
 <style>
-    .ad-shell { display: grid; gap: .75rem; }
-    .ad-panel { border: 1px solid #d7dce2; border-radius: 4px; background: #fff; padding: 1rem; box-shadow: 0 1px 1px rgba(0,0,0,.03); }
-    .ad-title { font-size: 1.7rem; font-weight: 500; color: #2f3a46; margin-bottom: .15rem; }
+    .ad-shell { display: grid; gap: .85rem; }
+    .ad-panel { border: 1px solid #dbe2ea; border-radius: 14px; background: #fff; padding: 1rem; box-shadow: 0 6px 18px rgba(15, 23, 42, .05); }
+    .ad-title { font-size: 1.35rem; font-weight: 700; color: #243548; margin-bottom: .2rem; }
     .ad-subtitle { color: #6b7280; margin-bottom: 0; }
     .ad-kpis { display: grid; gap: .75rem; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    .ad-kpi { border-radius: 2px; border: 1px solid #dce2e8; background:#fff; min-height: 92px; display:grid; grid-template-columns:80px 1fr; overflow:hidden; }
+    .ad-kpi { border-radius: 12px; border: 1px solid #dbe2ea; background:#fff; min-height: 98px; display:grid; grid-template-columns:72px 1fr; overflow:hidden; }
     .ad-kpi-icon { display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.7rem; }
     .ad-kpi-body { padding:.75rem .85rem; }
-    .ad-kpi-label { font-size: .8rem; text-transform: uppercase; letter-spacing: .02em; color: #555; margin-bottom: .15rem; }
-    .ad-kpi-value { font-size: 1.75rem; line-height:1.05; font-weight: 700; margin-bottom: 0; color:#222; }
+    .ad-kpi-label { font-size: .73rem; text-transform: uppercase; letter-spacing: .04em; color: #64748b; margin-bottom: .2rem; font-weight:700; }
+    .ad-kpi-value { font-size: 1.65rem; line-height:1.05; font-weight: 700; margin-bottom: 0; color:#1e293b; }
     .ad-kpi small { color: #6b7280 !important; font-size:.74rem; }
     .ad-kpi--teal .ad-kpi-icon { background:#00c0ef; }
     .ad-kpi--purple .ad-kpi-icon { background:#3c8dbc; }
     .ad-kpi--green .ad-kpi-icon { background:#00a65a; }
     .ad-kpi--red .ad-kpi-icon { background:#f39c12; }
     .ad-grid-2 { display: grid; gap: .75rem; grid-template-columns: 2fr 1fr; }
-    .ad-progress { height: 9px; border-radius: 0; background: #eceff3; overflow: hidden; }
+    .ad-progress { height: 9px; border-radius: 999px; background: #eceff3; overflow: hidden; }
     .ad-progress i { display: block; height: 100%; }
     .ad-bars { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: .35rem; align-items: end; min-height: 130px; padding:0 .3rem 1.1rem; }
-    .ad-bar { position: relative; background: rgba(60,141,188,.3); border-radius: 2px 2px 0 0; min-height: 8px; }
+    .ad-bar { position: relative; background: rgba(60,141,188,.28); border-radius: 8px 8px 4px 4px; min-height: 8px; }
     .ad-bar span { position: absolute; bottom: -1.05rem; left: 50%; transform: translateX(-50%); font-size: .62rem; color: #6b7b93; }
     .ad-table thead th { font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: #5f718d; }
     .ad-section-title { font-size: 1.04rem; font-weight: 600; margin-bottom: .75rem; color: #2f3a46; }
