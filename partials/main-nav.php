@@ -152,3 +152,40 @@ $menu = [
           </ul>
      </div>
 </div>
+<?php if (!$isClientePortal): ?>
+<script>
+(() => {
+    const searchInput = document.getElementById('admin-menu-search');
+    const menuRoot = document.getElementById('navbar-nav');
+    if (!searchInput || !menuRoot) return;
+
+    const normalize = (value) => (value || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const sections = [];
+    let currentSection = null;
+    Array.from(menuRoot.children).forEach((child) => {
+        if (child.classList.contains('menu-title')) {
+            currentSection = { title: child, items: [] };
+            sections.push(currentSection);
+            return;
+        }
+        if (child.classList.contains('nav-item') && currentSection) {
+            currentSection.items.push(child);
+        }
+    });
+
+    searchInput.addEventListener('input', () => {
+        const term = normalize(searchInput.value.trim());
+        sections.forEach((section) => {
+            let visibleItems = 0;
+            section.items.forEach((item) => {
+                const text = normalize(item.textContent);
+                const visible = term === '' || text.includes(term);
+                item.style.display = visible ? '' : 'none';
+                if (visible) visibleItems++;
+            });
+            section.title.style.display = visibleItems > 0 ? '' : 'none';
+        });
+    });
+})();
+</script>
+<?php endif; ?>
