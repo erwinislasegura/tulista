@@ -1,6 +1,48 @@
 <?php foreach (($data['flash'] ?? []) as $alert): ?>
 <div class="alert alert-<?= htmlspecialchars($alert['type']) ?> py-2"><?= htmlspecialchars($alert['message']) ?></div>
 <?php endforeach; ?>
+<style>
+    .tl-cotizaciones-table {
+        font-size: 0.86rem;
+    }
+    .tl-cotizaciones-table th,
+    .tl-cotizaciones-table td {
+        padding-top: 0.38rem;
+        padding-bottom: 0.38rem;
+        vertical-align: middle;
+    }
+    .tl-cotizaciones-table .tl-product-name {
+        line-height: 1.1;
+        margin-bottom: 0;
+    }
+    .tl-cotizaciones-table .tl-product-sku {
+        font-size: 0.74rem;
+    }
+    .tl-stock-badge {
+        min-width: 94px;
+        font-size: 0.74rem;
+        padding: 0.26rem 0.45rem;
+    }
+    .tl-qty-wrapper {
+        display: flex;
+        gap: 0.2rem;
+        align-items: center;
+    }
+    .tl-qty-step {
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        border-radius: 6px;
+        line-height: 1;
+    }
+    .tl-qty-input {
+        min-width: 72px;
+        text-align: center;
+    }
+    .tl-table-tip {
+        font-size: 0.74rem;
+    }
+</style>
 
 <div class="card mb-4">
     <div class="card-body">
@@ -61,12 +103,11 @@
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-sm align-middle">
+                    <table class="table table-sm align-middle tl-cotizaciones-table">
                         <thead>
                         <tr>
                             <th style="width:60px">Sel.</th>
                             <th>Producto</th>
-                            <th>SKU</th>
                             <th>Stock</th>
                             <th>Precio</th>
                             <th style="width:120px">Cantidad</th>
@@ -77,11 +118,26 @@
                         <?php foreach ($data['productos'] as $producto): ?>
                             <tr data-product-row data-name="<?= htmlspecialchars(strtolower((string) $producto['nombre'])) ?>" data-sku="<?= htmlspecialchars(strtolower((string) $producto['sku'])) ?>" data-stock="<?= (int) $producto['existencia'] ?>">
                                 <td><input type="checkbox" class="form-check-input js-item-check" data-id="<?= (int) $producto['id'] ?>" data-price="<?= (float) $producto['precio_venta_total'] ?>"></td>
-                                <td><?= htmlspecialchars($producto['nombre']) ?></td>
-                                <td><?= htmlspecialchars($producto['sku']) ?></td>
-                                <td><?= (int) $producto['existencia'] ?></td>
+                                <td>
+                                    <p class="fw-semibold tl-product-name"><?= htmlspecialchars($producto['nombre']) ?></p>
+                                    <small class="text-muted tl-product-sku"><?= htmlspecialchars($producto['sku']) ?></small>
+                                </td>
+                                <td>
+                                    <?php
+                                        $stock = (int) $producto['existencia'];
+                                        $stockClass = $stock <= 0 ? 'text-bg-danger' : ($stock <= 5 ? 'text-bg-warning' : 'text-bg-success');
+                                        $stockLabel = $stock <= 0 ? 'Sin stock' : ($stock <= 5 ? 'Stock bajo' : 'Disponible');
+                                    ?>
+                                    <span class="badge <?= $stockClass ?> tl-stock-badge"><?= $stockLabel ?> · <?= $stock ?></span>
+                                </td>
                                 <td>$<?= number_format((float) $producto['precio_venta_total'], 0, ',', '.') ?></td>
-                                <td><input type="number" name="items[<?= (int) $producto['id'] ?>][cantidad]" class="form-control tl-compact-input" min="0" value="0" data-qty="<?= (int) $producto['id'] ?>" data-price="<?= (float) $producto['precio_venta_total'] ?>" disabled></td>
+                                <td>
+                                    <div class="tl-qty-wrapper">
+                                        <button type="button" class="btn btn-outline-secondary btn-sm tl-qty-step" data-qty-step="<?= (int) $producto['id'] ?>" data-delta="-1" disabled>-</button>
+                                        <input type="number" inputmode="numeric" name="items[<?= (int) $producto['id'] ?>][cantidad]" class="form-control tl-compact-input tl-qty-input" min="0" step="1" value="0" data-qty="<?= (int) $producto['id'] ?>" data-price="<?= (float) $producto['precio_venta_total'] ?>" disabled>
+                                        <button type="button" class="btn btn-outline-secondary btn-sm tl-qty-step" data-qty-step="<?= (int) $producto['id'] ?>" data-delta="1" disabled>+</button>
+                                    </div>
+                                </td>
                                 <td><input type="number" step="0.01" name="items[<?= (int) $producto['id'] ?>][descuento]" class="form-control tl-compact-input" min="0" max="100" value="0" data-disc="<?= (int) $producto['id'] ?>" data-price="<?= (float) $producto['precio_venta_total'] ?>" disabled></td>
                             </tr>
                         <?php endforeach; ?>
@@ -91,6 +147,7 @@
                 <div class="d-flex flex-wrap gap-3 align-items-center mt-2">
                     <span id="seleccionResumen" class="badge text-bg-primary">0 productos seleccionados</span>
                     <span id="totalResumen" class="text-muted small">Total estimado: $0</span>
+                    <span class="text-muted tl-table-tip">Tip rápido: selecciona la fila y ajusta cantidad con + / -</span>
                 </div>
             </div>
 
@@ -160,6 +217,11 @@
             totalResumen.textContent = 'Total estimado: $' + Number(total || 0).toLocaleString('es-CL');
         }
     }
+    function setStepButtonsEnabled(id, enabled) {
+        document.querySelectorAll('[data-qty-step="' + id + '"]').forEach(function (button) {
+            button.disabled = !enabled;
+        });
+    }
 
     function applyFilter() {
         const term = (productSearch?.value || '').trim().toLowerCase();
@@ -196,6 +258,7 @@
                 disc.disabled = !enabled;
                 disc.value = enabled ? disc.value : '0';
             }
+            setStepButtonsEnabled(id, enabled);
             refreshSummary();
         });
     });
@@ -203,9 +266,30 @@
     document.querySelectorAll('[data-qty], [data-disc]').forEach(function (input) {
         input.addEventListener('input', refreshSummary);
     });
+    document.querySelectorAll('[data-product-row]').forEach(function (row) {
+        row.addEventListener('click', function (event) {
+            if (event.target.closest('input,button,label,a')) return;
+            const check = row.querySelector('.js-item-check');
+            if (!check) return;
+            check.checked = !check.checked;
+            check.dispatchEvent(new Event('change'));
+        });
+    });
+    document.querySelectorAll('[data-qty-step]').forEach(function (button) {
+        button.addEventListener('click', function () {
+            const id = this.getAttribute('data-qty-step');
+            const delta = Number(this.getAttribute('data-delta') || 0);
+            const qty = document.querySelector('[data-qty="' + id + '"]');
+            if (!qty || qty.disabled) return;
+            const next = Math.max(0, Number(qty.value || 0) + delta);
+            qty.value = String(next);
+            qty.dispatchEvent(new Event('input'));
+        });
+    });
 
     productSearch?.addEventListener('input', applyFilter);
     soloStock?.addEventListener('change', applyFilter);
+    productSearch?.focus();
     applyFilter();
     refreshSummary();
 })();
