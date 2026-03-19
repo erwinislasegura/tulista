@@ -29,7 +29,7 @@ $progresoClientes = min(100, ((int) ($k['clientes_nuevos'] ?? 0) / 20) * 100);
     .ad-kpi-value { font-size: 1.75rem; line-height:1.05; font-weight: 700; margin-bottom: 0; color:#222; }
     .ad-kpi small { color: #6b7280 !important; font-size:.74rem; }
     .ad-kpi--teal .ad-kpi-icon { background:#00c0ef; }
-    .ad-kpi--purple .ad-kpi-icon { background:#dd4b39; }
+    .ad-kpi--purple .ad-kpi-icon { background:#3c8dbc; }
     .ad-kpi--green .ad-kpi-icon { background:#00a65a; }
     .ad-kpi--red .ad-kpi-icon { background:#f39c12; }
     .ad-grid-2 { display: grid; gap: .75rem; grid-template-columns: 2fr 1fr; }
@@ -48,8 +48,8 @@ $progresoClientes = min(100, ((int) ($k['clientes_nuevos'] ?? 0) / 20) * 100);
 <section class="ad-shell">
     <article class="ad-panel d-flex justify-content-between align-items-center flex-wrap gap-2">
         <div>
-            <h5 class="ad-title">Dashboard</h5>
-            <p class="ad-subtitle">Panel administrativo con apariencia clásica estilo AdminLTE y foco en operación diaria.</p>
+            <h5 class="ad-title">Dashboard administrativo</h5>
+            <p class="ad-subtitle">Métricas reales de cotizaciones, pedidos, clientes e inventario del proyecto.</p>
         </div>
         <div class="d-flex gap-2">
             <a href="apps-cotizaciones.php" class="btn btn-primary btn-sm">Gestionar cotizaciones</a>
@@ -59,42 +59,42 @@ $progresoClientes = min(100, ((int) ($k['clientes_nuevos'] ?? 0) / 20) * 100);
 
     <section class="ad-kpis">
         <article class="ad-kpi ad-kpi--teal">
-            <div class="ad-kpi-icon"><iconify-icon icon="solar:cpu-bolt-broken"></iconify-icon></div>
+            <div class="ad-kpi-icon"><iconify-icon icon="solar:money-bag-broken"></iconify-icon></div>
             <div class="ad-kpi-body">
-                <p class="ad-kpi-label">CPU TRAFFIC</p>
-                <p class="ad-kpi-value"><?= number_format(min(100, max(10, (int) ($progresoPedidos))), 0, ',', '.') ?>%</p>
-                <small>Capacidad operativa</small>
+                <p class="ad-kpi-label">VENTAS DEL DÍA</p>
+                <p class="ad-kpi-value">$<?= number_format((float) ($k['ventas_dia'] ?? 0), 0, ',', '.') ?></p>
+                <small>Facturación actual</small>
             </div>
         </article>
         <article class="ad-kpi ad-kpi--purple">
-            <div class="ad-kpi-icon"><iconify-icon icon="ri:google-fill"></iconify-icon></div>
+            <div class="ad-kpi-icon"><iconify-icon icon="solar:chart-square-broken"></iconify-icon></div>
             <div class="ad-kpi-body">
-                <p class="ad-kpi-label">LIKES</p>
-                <p class="ad-kpi-value"><?= number_format((float) ($k['ventas_mes'] ?? 0), 0, ',', '.') ?></p>
-                <small>Interacciones comerciales</small>
+                <p class="ad-kpi-label">VENTAS DEL MES</p>
+                <p class="ad-kpi-value">$<?= number_format((float) ($k['ventas_mes'] ?? 0), 0, ',', '.') ?></p>
+                <small>Acumulado mensual</small>
             </div>
         </article>
         <article class="ad-kpi ad-kpi--green">
             <div class="ad-kpi-icon"><iconify-icon icon="solar:cart-large-2-broken"></iconify-icon></div>
             <div class="ad-kpi-body">
-                <p class="ad-kpi-label">SALES</p>
-                <p class="ad-kpi-value">$<?= number_format((float) ($k['ganancia_mes'] ?? 0), 0, ',', '.') ?></p>
-                <small>Margen consolidado</small>
+                <p class="ad-kpi-label">PEDIDOS EN PROCESO</p>
+                <p class="ad-kpi-value"><?= number_format((int) ($k['pedidos_proceso'] ?? 0), 0, ',', '.') ?></p>
+                <small>Órdenes activas</small>
             </div>
         </article>
         <article class="ad-kpi ad-kpi--red">
             <div class="ad-kpi-icon"><iconify-icon icon="solar:users-group-rounded-broken"></iconify-icon></div>
             <div class="ad-kpi-body">
-                <p class="ad-kpi-label">NEW MEMBERS</p>
-                <p class="ad-kpi-value"><?= number_format((float) ($k['clientes_nuevos'] ?? 0), 0, ',', '.') ?></p>
-                <small>Clientes nuevos</small>
+                <p class="ad-kpi-label">COTIZACIONES PENDIENTES</p>
+                <p class="ad-kpi-value"><?= number_format((int) ($k['cotizaciones_pendientes'] ?? 0), 0, ',', '.') ?></p>
+                <small>Por revisión comercial</small>
             </div>
         </article>
     </section>
 
     <section class="ad-grid-2">
         <article class="ad-panel">
-            <h6 class="ad-section-title">Goal completion</h6>
+            <h6 class="ad-section-title">Cumplimiento operativo</h6>
             <div class="d-grid gap-3">
                 <div>
                     <div class="d-flex justify-content-between mb-1 small">
@@ -128,7 +128,7 @@ $progresoClientes = min(100, ((int) ($k['clientes_nuevos'] ?? 0) / 20) * 100);
         </article>
 
         <article class="ad-panel">
-            <h6 class="ad-section-title">Monthly recap report</h6>
+            <h6 class="ad-section-title">Resumen mensual de ventas</h6>
             <div class="ad-bars" aria-label="Gráfico mensual de ventas">
                 <?php foreach ($ventasMensuales as $mesNumero => $monto): ?>
                     <?php $altura = max(8, ($monto / $maxMensual) * 100); ?>

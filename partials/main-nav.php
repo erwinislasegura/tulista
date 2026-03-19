@@ -76,6 +76,21 @@ $menu = [
                <span class="fw-semibold tl-brand-name text-white"><?= htmlspecialchars($companyConfig['nombre']) ?></span>
           </a>
      </div>
+     <?php if (!$isClientePortal): ?>
+     <div class="tl-admin-user-panel px-3 pt-2 pb-3">
+          <div class="tl-admin-user-row">
+               <span class="tl-admin-avatar"><?= htmlspecialchars(strtoupper(substr((string) ($user['nombre'] ?? 'A'), 0, 1))) ?></span>
+               <div class="min-w-0">
+                    <div class="tl-admin-name text-truncate"><?= htmlspecialchars($user['nombre'] ?? 'Administrador') ?></div>
+                    <div class="tl-admin-status"><i></i> En línea</div>
+               </div>
+          </div>
+          <div class="tl-admin-search mt-2">
+               <iconify-icon icon="solar:magnifer-broken"></iconify-icon>
+               <input type="text" id="admin-menu-search" placeholder="Buscar módulo..." aria-label="Buscar en menú administrativo">
+          </div>
+     </div>
+     <?php endif; ?>
 
      <button type="button" class="button-sm-hover" aria-label="Show Full Sidebar">
           <iconify-icon icon="solar:hamburger-menu-broken" class="button-sm-hover-icon"></iconify-icon>
@@ -153,3 +168,40 @@ $menu = [
           </ul>
      </div>
 </div>
+<?php if (!$isClientePortal): ?>
+<script>
+(() => {
+    const searchInput = document.getElementById('admin-menu-search');
+    const menuRoot = document.getElementById('navbar-nav');
+    if (!searchInput || !menuRoot) return;
+
+    const normalize = (value) => (value || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const sections = [];
+    let currentSection = null;
+    Array.from(menuRoot.children).forEach((child) => {
+        if (child.classList.contains('menu-title')) {
+            currentSection = { title: child, items: [] };
+            sections.push(currentSection);
+            return;
+        }
+        if (child.classList.contains('nav-item') && currentSection) {
+            currentSection.items.push(child);
+        }
+    });
+
+    searchInput.addEventListener('input', () => {
+        const term = normalize(searchInput.value.trim());
+        sections.forEach((section) => {
+            let visibleItems = 0;
+            section.items.forEach((item) => {
+                const text = normalize(item.textContent);
+                const visible = term === '' || text.includes(term);
+                item.style.display = visible ? '' : 'none';
+                if (visible) visibleItems++;
+            });
+            section.title.style.display = visibleItems > 0 ? '' : 'none';
+        });
+    });
+})();
+</script>
+<?php endif; ?>
