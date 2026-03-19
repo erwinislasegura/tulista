@@ -93,8 +93,8 @@
                         </div>
                         <div class="col-lg-3">
                             <div class="form-check mt-4 pt-1">
-                                <input class="form-check-input" type="checkbox" id="soloStock">
-                                <label class="form-check-label" for="soloStock">Mostrar solo con stock</label>
+                                <input class="form-check-input" type="checkbox" id="mostrarSinStock">
+                                <label class="form-check-label" for="mostrarSinStock">Mostrar productos sin stock</label>
                             </div>
                         </div>
                         <div class="col-lg-2 text-lg-end">
@@ -169,11 +169,14 @@
     const byId = Object.fromEntries(clientes.map(c => [String(c.id), c]));
     const select = document.getElementById('clienteSelect');
     const productSearch = document.getElementById('productoSearch');
-    const soloStock = document.getElementById('soloStock');
+    const mostrarSinStock = document.getElementById('mostrarSinStock');
     const rows = Array.from(document.querySelectorAll('[data-product-row]'));
     const productosStatus = document.getElementById('productosStatus');
     const seleccionResumen = document.getElementById('seleccionResumen');
     const totalResumen = document.getElementById('totalResumen');
+    const selectedItems = new Map();
+    let selectedCount = 0;
+    let totalEstimate = 0;
 
     function setValue(id, value) {
         const el = document.getElementById(id);
@@ -195,26 +198,11 @@
     });
 
     function refreshSummary() {
-        let selected = 0;
-        let total = 0;
-        document.querySelectorAll('.js-item-check').forEach(function (check) {
-            const id = check.dataset.id;
-            const qty = document.querySelector('[data-qty="' + id + '"]');
-            const disc = document.querySelector('[data-disc="' + id + '"]');
-            const price = Number(check.dataset.price || 0);
-            const quantity = Math.max(0, Number(qty?.value || 0));
-            const discount = Math.max(0, Math.min(100, Number(disc?.value || 0)));
-            if (check.checked && quantity > 0) {
-                const bruto = price * quantity;
-                total += bruto - (bruto * discount / 100);
-                selected += 1;
-            }
-        });
         if (seleccionResumen) {
-            seleccionResumen.textContent = selected + ' producto' + (selected === 1 ? '' : 's') + ' seleccionado' + (selected === 1 ? '' : 's');
+            seleccionResumen.textContent = selectedCount + ' producto' + (selectedCount === 1 ? '' : 's') + ' seleccionado' + (selectedCount === 1 ? '' : 's');
         }
         if (totalResumen) {
-            totalResumen.textContent = 'Total estimado: $' + Number(total || 0).toLocaleString('es-CL');
+            totalResumen.textContent = 'Total estimado: $' + Number(totalEstimate || 0).toLocaleString('es-CL');
         }
     }
     function setStepButtonsEnabled(id, enabled) {
@@ -223,9 +211,33 @@
         });
     }
 
+    function recalculateItem(id) {
+        const check = document.querySelector('.js-item-check[data-id="' + id + '"]');
+        const qty = document.querySelector('[data-qty="' + id + '"]');
+        const disc = document.querySelector('[data-disc="' + id + '"]');
+        const price = Number(check?.dataset.price || 0);
+        const quantity = Math.max(0, Number(qty?.value || 0));
+        const discount = Math.max(0, Math.min(100, Number(disc?.value || 0)));
+        const bruto = price * quantity;
+        const lineTotal = bruto - (bruto * discount / 100);
+        const previous = selectedItems.get(id) || 0;
+
+        if (check?.checked && quantity > 0) {
+            if (!selectedItems.has(id)) selectedCount += 1;
+            selectedItems.set(id, lineTotal);
+            totalEstimate += lineTotal - previous;
+        } else if (selectedItems.has(id)) {
+            selectedItems.delete(id);
+            selectedCount = Math.max(0, selectedCount - 1);
+            totalEstimate = Math.max(0, totalEstimate - previous);
+        }
+
+        refreshSummary();
+    }
+
     function applyFilter() {
         const term = (productSearch?.value || '').trim().toLowerCase();
-        const onlyStock = !!soloStock?.checked;
+        const includeNoStock = !!mostrarSinStock?.checked;
         let visibles = 0;
 
         rows.forEach(function (row) {
@@ -233,7 +245,7 @@
             const sku = row.dataset.sku || '';
             const stock = Number(row.dataset.stock || 0);
             const matchText = term === '' || name.includes(term) || sku.includes(term);
-            const matchStock = !onlyStock || stock > 0;
+            const matchStock = includeNoStock || stock > 0;
             const visible = matchText && matchStock;
             row.classList.toggle('d-none', !visible);
             if (visible) visibles++;
@@ -259,12 +271,36 @@
                 disc.value = enabled ? disc.value : '0';
             }
             setStepButtonsEnabled(id, enabled);
-            refreshSummary();
+            recalculateItem(id);
         });
     });
 
     document.querySelectorAll('[data-qty], [data-disc]').forEach(function (input) {
-        input.addEventListener('input', refreshSummary);
+        input.addEventListener('input', function () {
+            const id = this.getAttribute('data-qty') || this.getAttribute('data-disc');
+            if (!id) return;
+            recalculateItem(id);
+        });
+    });
+    document.querySelectorAll('[data-product-row]').forEach(function (row) {
+        row.addEventListener('click', function (event) {
+            if (event.target.closest('input,button,label,a')) return;
+            const check = row.querySelector('.js-item-check');
+            if (!check) return;
+            check.checked = !check.checked;
+            check.dispatchEvent(new Event('change'));
+        });
+    });
+    document.querySelectorAll('[data-qty-step]').forEach(function (button) {
+        button.addEventListener('click', function () {
+            const id = this.getAttribute('data-qty-step');
+            const delta = Number(this.getAttribute('data-delta') || 0);
+            const qty = document.querySelector('[data-qty="' + id + '"]');
+            if (!qty || qty.disabled) return;
+            const next = Math.max(0, Number(qty.value || 0) + delta);
+            qty.value = String(next);
+            qty.dispatchEvent(new Event('input'));
+        });
     });
     document.querySelectorAll('[data-product-row]').forEach(function (row) {
         row.addEventListener('click', function (event) {
@@ -288,7 +324,7 @@
     });
 
     productSearch?.addEventListener('input', applyFilter);
-    soloStock?.addEventListener('change', applyFilter);
+    mostrarSinStock?.addEventListener('change', applyFilter);
     productSearch?.focus();
     applyFilter();
     refreshSummary();
