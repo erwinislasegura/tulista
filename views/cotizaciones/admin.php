@@ -302,6 +302,26 @@
             qty.dispatchEvent(new Event('input'));
         });
     });
+    document.querySelectorAll('[data-product-row]').forEach(function (row) {
+        row.addEventListener('click', function (event) {
+            if (event.target.closest('input,button,label,a')) return;
+            const check = row.querySelector('.js-item-check');
+            if (!check) return;
+            check.checked = !check.checked;
+            check.dispatchEvent(new Event('change'));
+        });
+    });
+    document.querySelectorAll('[data-qty-step]').forEach(function (button) {
+        button.addEventListener('click', function () {
+            const id = this.getAttribute('data-qty-step');
+            const delta = Number(this.getAttribute('data-delta') || 0);
+            const qty = document.querySelector('[data-qty="' + id + '"]');
+            if (!qty || qty.disabled) return;
+            const next = Math.max(0, Number(qty.value || 0) + delta);
+            qty.value = String(next);
+            qty.dispatchEvent(new Event('input'));
+        });
+    });
 
     productSearch?.addEventListener('input', applyFilter);
     mostrarSinStock?.addEventListener('change', applyFilter);
