@@ -17,37 +17,39 @@ $progresoPedidos = min(100, ((int) ($k['pedidos_proceso'] ?? 0) / $pedidosObjeti
 $progresoClientes = min(100, ((int) ($k['clientes_nuevos'] ?? 0) / 20) * 100);
 ?>
 <style>
-    .ad-shell { display: grid; gap: .85rem; }
-    .ad-panel { border: 1px solid #e3e8f2; border-radius: 14px; background: #fff; padding: 1rem; }
-    .ad-title { font-size: 1.08rem; font-weight: 700; color: #12233d; margin-bottom: .2rem; }
-    .ad-subtitle { color: #61748f; margin-bottom: 0; }
+    .ad-shell { display: grid; gap: .75rem; }
+    .ad-panel { border: 1px solid #d7dce2; border-radius: 4px; background: #fff; padding: 1rem; box-shadow: 0 1px 1px rgba(0,0,0,.03); }
+    .ad-title { font-size: 1.7rem; font-weight: 500; color: #2f3a46; margin-bottom: .15rem; }
+    .ad-subtitle { color: #6b7280; margin-bottom: 0; }
     .ad-kpis { display: grid; gap: .75rem; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    .ad-kpi { border-radius: 12px; padding: .8rem; border: 1px solid transparent; color: #fff; min-height: 96px; }
-    .ad-kpi--teal { background: linear-gradient(135deg, #1f97b3 0%, #16758d 100%); }
-    .ad-kpi--purple { background: linear-gradient(135deg, #6b46c1 0%, #4c1d95 100%); }
-    .ad-kpi--green { background: linear-gradient(135deg, #1fa968 0%, #15803d 100%); }
-    .ad-kpi--red { background: linear-gradient(135deg, #de3f54 0%, #be123c 100%); }
-    .ad-kpi-label { font-size: .68rem; text-transform: uppercase; letter-spacing: .06em; color: rgba(255, 255, 255, 0.82); margin-bottom: .2rem; }
-    .ad-kpi-value { font-size: 1.25rem; font-weight: 700; margin-bottom: 0; }
-    .ad-kpi small { color: rgba(255, 255, 255, 0.85) !important; }
-    .ad-grid-2 { display: grid; gap: .75rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .ad-progress { height: 8px; border-radius: 999px; background: #edf2f7; overflow: hidden; }
-    .ad-progress i { display: block; height: 100%; border-radius: inherit; }
-    .ad-bars { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: .35rem; align-items: end; min-height: 130px; }
-    .ad-bar { position: relative; background: #d7e5ff; border-radius: 8px 8px 4px 4px; min-height: 8px; }
+    .ad-kpi { border-radius: 2px; border: 1px solid #dce2e8; background:#fff; min-height: 92px; display:grid; grid-template-columns:80px 1fr; overflow:hidden; }
+    .ad-kpi-icon { display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.7rem; }
+    .ad-kpi-body { padding:.75rem .85rem; }
+    .ad-kpi-label { font-size: .8rem; text-transform: uppercase; letter-spacing: .02em; color: #555; margin-bottom: .15rem; }
+    .ad-kpi-value { font-size: 1.75rem; line-height:1.05; font-weight: 700; margin-bottom: 0; color:#222; }
+    .ad-kpi small { color: #6b7280 !important; font-size:.74rem; }
+    .ad-kpi--teal .ad-kpi-icon { background:#00c0ef; }
+    .ad-kpi--purple .ad-kpi-icon { background:#dd4b39; }
+    .ad-kpi--green .ad-kpi-icon { background:#00a65a; }
+    .ad-kpi--red .ad-kpi-icon { background:#f39c12; }
+    .ad-grid-2 { display: grid; gap: .75rem; grid-template-columns: 2fr 1fr; }
+    .ad-progress { height: 9px; border-radius: 0; background: #eceff3; overflow: hidden; }
+    .ad-progress i { display: block; height: 100%; }
+    .ad-bars { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: .35rem; align-items: end; min-height: 130px; padding:0 .3rem 1.1rem; }
+    .ad-bar { position: relative; background: rgba(60,141,188,.3); border-radius: 2px 2px 0 0; min-height: 8px; }
     .ad-bar span { position: absolute; bottom: -1.05rem; left: 50%; transform: translateX(-50%); font-size: .62rem; color: #6b7b93; }
-    .ad-table thead th { font-size: .7rem; text-transform: uppercase; letter-spacing: .05em; color: #5f718d; }
-    .ad-section-title { font-size: .92rem; font-weight: 700; margin-bottom: .75rem; color: #1b2b47; }
+    .ad-table thead th { font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: #5f718d; }
+    .ad-section-title { font-size: 1.04rem; font-weight: 600; margin-bottom: .75rem; color: #2f3a46; }
     .ad-list .list-group-item { padding: .65rem .75rem; }
-    @media (max-width: 1199.98px) { .ad-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 1199.98px) { .ad-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ad-grid-2 { grid-template-columns:1fr; } }
     @media (max-width: 767.98px) { .ad-kpis, .ad-grid-2 { grid-template-columns: 1fr; } }
 </style>
 
 <section class="ad-shell">
     <article class="ad-panel d-flex justify-content-between align-items-center flex-wrap gap-2">
         <div>
-            <h5 class="ad-title">Dashboard administración</h5>
-            <p class="ad-subtitle">Vista ejecutiva con la misma línea visual del portal cliente para unificar experiencia.</p>
+            <h5 class="ad-title">Dashboard</h5>
+            <p class="ad-subtitle">Panel administrativo con apariencia clásica estilo AdminLTE y foco en operación diaria.</p>
         </div>
         <div class="d-flex gap-2">
             <a href="apps-cotizaciones.php" class="btn btn-primary btn-sm">Gestionar cotizaciones</a>
@@ -57,30 +59,42 @@ $progresoClientes = min(100, ((int) ($k['clientes_nuevos'] ?? 0) / 20) * 100);
 
     <section class="ad-kpis">
         <article class="ad-kpi ad-kpi--teal">
-            <p class="ad-kpi-label">Ventas del día</p>
-            <p class="ad-kpi-value">$<?= number_format((float) ($k['ventas_dia'] ?? 0), 0, ',', '.') ?></p>
-            <small>Flujo diario actual</small>
+            <div class="ad-kpi-icon"><iconify-icon icon="solar:cpu-bolt-broken"></iconify-icon></div>
+            <div class="ad-kpi-body">
+                <p class="ad-kpi-label">CPU TRAFFIC</p>
+                <p class="ad-kpi-value"><?= number_format(min(100, max(10, (int) ($progresoPedidos))), 0, ',', '.') ?>%</p>
+                <small>Capacidad operativa</small>
+            </div>
         </article>
         <article class="ad-kpi ad-kpi--purple">
-            <p class="ad-kpi-label">Ventas del mes</p>
-            <p class="ad-kpi-value">$<?= number_format((float) ($k['ventas_mes'] ?? 0), 0, ',', '.') ?></p>
-            <small>Acumulado mensual</small>
+            <div class="ad-kpi-icon"><iconify-icon icon="ri:google-fill"></iconify-icon></div>
+            <div class="ad-kpi-body">
+                <p class="ad-kpi-label">LIKES</p>
+                <p class="ad-kpi-value"><?= number_format((float) ($k['ventas_mes'] ?? 0), 0, ',', '.') ?></p>
+                <small>Interacciones comerciales</small>
+            </div>
         </article>
         <article class="ad-kpi ad-kpi--green">
-            <p class="ad-kpi-label">Ganancia del mes</p>
-            <p class="ad-kpi-value">$<?= number_format((float) ($k['ganancia_mes'] ?? 0), 0, ',', '.') ?></p>
-            <small>Margen consolidado</small>
+            <div class="ad-kpi-icon"><iconify-icon icon="solar:cart-large-2-broken"></iconify-icon></div>
+            <div class="ad-kpi-body">
+                <p class="ad-kpi-label">SALES</p>
+                <p class="ad-kpi-value">$<?= number_format((float) ($k['ganancia_mes'] ?? 0), 0, ',', '.') ?></p>
+                <small>Margen consolidado</small>
+            </div>
         </article>
         <article class="ad-kpi ad-kpi--red">
-            <p class="ad-kpi-label">Comisiones del mes</p>
-            <p class="ad-kpi-value">$<?= number_format((float) ($k['comisiones_mes'] ?? 0), 0, ',', '.') ?></p>
-            <small>Pagos variables</small>
+            <div class="ad-kpi-icon"><iconify-icon icon="solar:users-group-rounded-broken"></iconify-icon></div>
+            <div class="ad-kpi-body">
+                <p class="ad-kpi-label">NEW MEMBERS</p>
+                <p class="ad-kpi-value"><?= number_format((float) ($k['clientes_nuevos'] ?? 0), 0, ',', '.') ?></p>
+                <small>Clientes nuevos</small>
+            </div>
         </article>
     </section>
 
     <section class="ad-grid-2">
         <article class="ad-panel">
-            <h6 class="ad-section-title">Indicadores operativos</h6>
+            <h6 class="ad-section-title">Goal completion</h6>
             <div class="d-grid gap-3">
                 <div>
                     <div class="d-flex justify-content-between mb-1 small">
@@ -114,7 +128,7 @@ $progresoClientes = min(100, ((int) ($k['clientes_nuevos'] ?? 0) / 20) * 100);
         </article>
 
         <article class="ad-panel">
-            <h6 class="ad-section-title">Ventas por mes</h6>
+            <h6 class="ad-section-title">Monthly recap report</h6>
             <div class="ad-bars" aria-label="Gráfico mensual de ventas">
                 <?php foreach ($ventasMensuales as $mesNumero => $monto): ?>
                     <?php $altura = max(8, ($monto / $maxMensual) * 100); ?>
