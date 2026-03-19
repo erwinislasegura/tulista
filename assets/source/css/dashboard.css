@@ -903,7 +903,11 @@ textarea.form-control {
 }
 
 .wrapper:not(.tl-cliente) .page-content {
-    padding-top: calc(var(--rsk-topbar-height, 70px) + 1.8rem);
+    padding-top: max(92px, calc(var(--rsk-topbar-height, 70px) + 1.25rem));
+}
+
+.wrapper:not(.tl-cliente) .page-content > .container-fluid {
+    padding-top: .6rem;
 }
 
 .topbar.tl-topbar-adminlte .tl-topbar-action:hover,
