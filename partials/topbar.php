@@ -14,7 +14,7 @@ $profileInitial = strtoupper(substr(trim((string) $profileName), 0, 1));
 $currentTitle = isset($title) && trim((string) $title) !== '' ? (string) $title : 'Dashboard';
 $topbarContext = $isClientePortal ? 'Portal cliente' : ($companyConfig['nombre'] ?? 'Tulista');
 ?>
-<header class="topbar tl-topbar-clean">
+<header class="topbar tl-topbar-clean <?= $isClientePortal ? "tl-topbar-cliente" : "tl-topbar-adminlte" ?>">
      <div class="container-fluid">
           <div class="navbar-header tl-topbar-layout">
                <div class="tl-topbar-left min-w-0">
