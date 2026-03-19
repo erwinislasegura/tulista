@@ -44,10 +44,37 @@
     }
 </style>
 
-<div class="card mb-4">
+<style>
+    .tl-cotizar-admin .table th,
+    .tl-cotizar-admin .table td {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        vertical-align: middle;
+    }
+    .tl-cotizar-admin .tl-product-name {
+        line-height: 1.15;
+        margin-bottom: 0;
+        font-weight: 600;
+    }
+    .tl-cotizar-admin .tl-product-sku {
+        font-size: 0.76rem;
+    }
+    .tl-cotizar-admin .tl-stock-badge {
+        font-size: 0.74rem;
+    }
+</style>
+
+<div class="card mb-4 tl-cotizar-admin">
     <div class="card-body">
-        <h5 class="tl-section-title mb-3">Nueva cotización ERP</h5>
-        <form method="post" class="row g-3">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+            <div>
+                <h5 class="mb-1">Crear nueva cotización</h5>
+                <p class="text-muted mb-0">Usa el mismo flujo del portal cliente, seleccionando primero el cliente para completar contacto y despacho.</p>
+            </div>
+            <span class="badge rounded-pill text-bg-info">Paso 1 de 3</span>
+        </div>
+
+        <form method="post" class="row g-3" id="cotizacion-admin-form">
             <input type="hidden" name="action" value="crear_admin">
 
             <div class="col-lg-4">
@@ -71,7 +98,6 @@
                 </div>
             </div>
 
-
             <div class="col-12">
                 <div class="tl-form-card">
                     <h6 class="tl-form-card-title">Datos de contacto y despacho</h6>
@@ -84,78 +110,70 @@
                     </div>
                 </div>
             </div>
+
             <div class="col-12">
-                <div class="tl-form-card mb-2">
-                    <div class="row g-2 align-items-end">
-                        <div class="col-lg-7">
-                            <label class="form-label mb-1">Buscar producto</label>
-                            <input id="productoSearch" type="search" class="form-control tl-compact-input" placeholder="Buscar por nombre o SKU...">
+                <div class="row g-3 mb-3">
+                    <div class="col-lg-8">
+                        <label for="buscar-producto" class="form-label">Buscar producto</label>
+                        <input type="search" id="buscar-producto" class="form-control" placeholder="Ej: Etiqueta térmica 100x150">
+                        <div class="form-check form-switch mt-2">
+                            <input class="form-check-input" type="checkbox" role="switch" id="mostrar-sin-stock">
+                            <label class="form-check-label small text-muted" for="mostrar-sin-stock">Mostrar también productos sin existencia</label>
                         </div>
-                        <div class="col-lg-3">
-                            <div class="form-check mt-4 pt-1">
-                                <input class="form-check-input" type="checkbox" id="soloStock">
-                                <label class="form-check-label" for="soloStock">Mostrar solo con stock</label>
-                            </div>
-                        </div>
-                        <div class="col-lg-2 text-lg-end">
-                            <small id="productosStatus" class="text-muted">Mostrando <?= count($data['productos']) ?> productos</small>
+                    </div>
+                    <div class="col-lg-4">
+                        <label class="form-label">Resumen</label>
+                        <div class="alert alert-info mb-0 py-2">
+                            <strong id="resumen-productos">0 productos</strong>
+                            <span class="text-muted"> seleccionados</span>
+                            <div class="small mt-1">Total estimado: <strong id="resumen-total">$0</strong></div>
                         </div>
                     </div>
                 </div>
-                <div class="table-responsive">
-                    <table class="table table-sm align-middle tl-cotizaciones-table">
-                        <thead>
-                        <tr>
-                            <th style="width:60px">Sel.</th>
-                            <th>Producto</th>
-                            <th>Stock</th>
-                            <th>Precio</th>
-                            <th style="width:120px">Cantidad</th>
-                            <th style="width:130px">Desc. %</th>
-                        </tr>
+
+                <div class="table-responsive border rounded-3">
+                    <table class="table align-middle mb-0" id="tabla-productos">
+                        <thead class="table-light">
+                        <tr><th>Producto</th><th>Stock</th><th>Precio</th><th style="width:220px;">Cantidad</th></tr>
                         </thead>
-                        <tbody id="productosBody">
+                        <tbody>
                         <?php foreach ($data['productos'] as $producto): ?>
-                            <tr data-product-row data-name="<?= htmlspecialchars(strtolower((string) $producto['nombre'])) ?>" data-sku="<?= htmlspecialchars(strtolower((string) $producto['sku'])) ?>" data-stock="<?= (int) $producto['existencia'] ?>">
-                                <td><input type="checkbox" class="form-check-input js-item-check" data-id="<?= (int) $producto['id'] ?>" data-price="<?= (float) $producto['precio_venta_total'] ?>"></td>
+                            <?php $precio = (float) $producto['precio_venta_total']; ?>
+                            <?php $stock = (int) ($producto['existencia'] ?? 0); ?>
+                            <tr data-product-row data-name="<?= htmlspecialchars(strtolower($producto['nombre'])) ?>" data-sku="<?= htmlspecialchars(strtolower((string) $producto['sku'])) ?>" data-stock="<?= $stock ?>" class="<?= $stock <= 0 ? 'd-none' : '' ?>">
                                 <td>
-                                    <p class="fw-semibold tl-product-name"><?= htmlspecialchars($producto['nombre']) ?></p>
-                                    <small class="text-muted tl-product-sku"><?= htmlspecialchars($producto['sku']) ?></small>
+                                    <p class="tl-product-name"><?= htmlspecialchars($producto['nombre']) ?></p>
+                                    <small class="text-muted tl-product-sku"><?= htmlspecialchars((string) $producto['sku']) ?></small>
                                 </td>
                                 <td>
-                                    <?php
-                                        $stock = (int) $producto['existencia'];
-                                        $stockClass = $stock <= 0 ? 'text-bg-danger' : ($stock <= 5 ? 'text-bg-warning' : 'text-bg-success');
-                                        $stockLabel = $stock <= 0 ? 'Sin stock' : ($stock <= 5 ? 'Stock bajo' : 'Disponible');
-                                    ?>
-                                    <span class="badge <?= $stockClass ?> tl-stock-badge"><?= $stockLabel ?> · <?= $stock ?></span>
+                                    <?php if ($stock > 5): ?>
+                                        <span class="badge bg-success-subtle text-success tl-stock-badge">Disponible: <?= $stock ?></span>
+                                    <?php elseif ($stock > 0): ?>
+                                        <span class="badge bg-warning-subtle text-warning-emphasis tl-stock-badge">Stock bajo: <?= $stock ?></span>
+                                    <?php else: ?>
+                                        <span class="badge bg-danger tl-stock-badge">Sin existencia</span>
+                                    <?php endif; ?>
                                 </td>
-                                <td>$<?= number_format((float) $producto['precio_venta_total'], 0, ',', '.') ?></td>
+                                <td data-precio="<?= $precio ?>"><?= '$' . number_format($precio, 0, ',', '.') ?></td>
                                 <td>
-                                    <div class="tl-qty-wrapper">
-                                        <button type="button" class="btn btn-outline-secondary btn-sm tl-qty-step" data-qty-step="<?= (int) $producto['id'] ?>" data-delta="-1" disabled>-</button>
-                                        <input type="number" inputmode="numeric" name="items[<?= (int) $producto['id'] ?>][cantidad]" class="form-control tl-compact-input tl-qty-input" min="0" step="1" value="0" data-qty="<?= (int) $producto['id'] ?>" data-price="<?= (float) $producto['precio_venta_total'] ?>" disabled>
-                                        <button type="button" class="btn btn-outline-secondary btn-sm tl-qty-step" data-qty-step="<?= (int) $producto['id'] ?>" data-delta="1" disabled>+</button>
+                                    <div class="input-group input-group-sm">
+                                        <button class="btn btn-outline-secondary" type="button" data-minus>-</button>
+                                        <input type="number" min="0" step="1" class="form-control text-center" data-cantidad name="items[<?= (int) $producto['id'] ?>][cantidad]" value="0">
+                                        <button class="btn btn-outline-secondary" type="button" data-plus>+</button>
                                     </div>
                                 </td>
-                                <td><input type="number" step="0.01" name="items[<?= (int) $producto['id'] ?>][descuento]" class="form-control tl-compact-input" min="0" max="100" value="0" data-disc="<?= (int) $producto['id'] ?>" data-price="<?= (float) $producto['precio_venta_total'] ?>" disabled></td>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
-                <div class="d-flex flex-wrap gap-3 align-items-center mt-2">
-                    <span id="seleccionResumen" class="badge text-bg-primary">0 productos seleccionados</span>
-                    <span id="totalResumen" class="text-muted small">Total estimado: $0</span>
-                    <span class="text-muted tl-table-tip">Tip rápido: selecciona la fila y ajusta cantidad con + / -</span>
-                </div>
             </div>
 
-            <div class="col-12 d-flex justify-content-between align-items-center">
-                <p class="text-muted mb-0 small">Tip: escribe 3+ letras para filtrar más rápido y mantén solo productos con stock para cotizar en menos pasos.</p>
+            <div class="col-12 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <small class="text-muted">Tip: usa los botones +/- para completar más rápido.</small>
                 <div class="d-flex gap-2">
                     <a href="apps-cotizaciones-registradas.php" class="btn btn-light">Ver cotizaciones registradas</a>
-                    <button class="btn btn-primary" type="submit">Guardar cotización</button>
+                    <button class="btn btn-primary" type="submit">Crear cotización</button>
                 </div>
             </div>
         </form>
@@ -163,17 +181,18 @@
 </div>
 
 <script>
-(function () {
+(() => {
     const clientes = <?= $data['clientes_json'] ?: '[]' ?>;
-    const productosIniciales = <?= json_encode($data['productos'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?: '[]' ?>;
     const byId = Object.fromEntries(clientes.map(c => [String(c.id), c]));
+
     const select = document.getElementById('clienteSelect');
-    const productSearch = document.getElementById('productoSearch');
-    const soloStock = document.getElementById('soloStock');
+    const searchInput = document.getElementById('buscar-producto');
+    const mostrarSinStock = document.getElementById('mostrar-sin-stock');
     const rows = Array.from(document.querySelectorAll('[data-product-row]'));
-    const productosStatus = document.getElementById('productosStatus');
-    const seleccionResumen = document.getElementById('seleccionResumen');
-    const totalResumen = document.getElementById('totalResumen');
+    const productCount = document.getElementById('resumen-productos');
+    const totalText = document.getElementById('resumen-total');
+
+    const formatCurrency = (value) => new Intl.NumberFormat('es-CL').format(value);
 
     function setValue(id, value) {
         const el = document.getElementById(id);
@@ -194,103 +213,61 @@
         setValue('f_direccion_entrega', c.direccion);
     });
 
-    function refreshSummary() {
+    const updateSummary = () => {
         let selected = 0;
         let total = 0;
-        document.querySelectorAll('.js-item-check').forEach(function (check) {
-            const id = check.dataset.id;
-            const qty = document.querySelector('[data-qty="' + id + '"]');
-            const disc = document.querySelector('[data-disc="' + id + '"]');
-            const price = Number(check.dataset.price || 0);
-            const quantity = Math.max(0, Number(qty?.value || 0));
-            const discount = Math.max(0, Math.min(100, Number(disc?.value || 0)));
-            if (check.checked && quantity > 0) {
-                const bruto = price * quantity;
-                total += bruto - (bruto * discount / 100);
+
+        rows.forEach((row) => {
+            const qtyInput = row.querySelector('[data-cantidad]');
+            const qty = Math.max(0, parseInt(qtyInput.value || '0', 10));
+            const price = parseFloat(row.querySelector('[data-precio]').dataset.precio || '0');
+            if (qty > 0) {
                 selected += 1;
+                total += qty * price;
             }
+            qtyInput.value = qty;
         });
-        if (seleccionResumen) {
-            seleccionResumen.textContent = selected + ' producto' + (selected === 1 ? '' : 's') + ' seleccionado' + (selected === 1 ? '' : 's');
-        }
-        if (totalResumen) {
-            totalResumen.textContent = 'Total estimado: $' + Number(total || 0).toLocaleString('es-CL');
-        }
-    }
-    function setStepButtonsEnabled(id, enabled) {
-        document.querySelectorAll('[data-qty-step="' + id + '"]').forEach(function (button) {
-            button.disabled = !enabled;
-        });
-    }
 
-    function applyFilter() {
-        const term = (productSearch?.value || '').trim().toLowerCase();
-        const onlyStock = !!soloStock?.checked;
-        let visibles = 0;
+        if (productCount) {
+            productCount.textContent = `${selected} producto${selected === 1 ? '' : 's'}`;
+        }
+        if (totalText) {
+            totalText.textContent = `$${formatCurrency(total)}`;
+        }
+    };
 
-        rows.forEach(function (row) {
+    const applyFilters = () => {
+        const term = (searchInput?.value || '').trim().toLowerCase();
+        const includeNoStock = !!mostrarSinStock?.checked;
+
+        rows.forEach((row) => {
+            const stock = Number(row.dataset.stock || 0);
             const name = row.dataset.name || '';
             const sku = row.dataset.sku || '';
-            const stock = Number(row.dataset.stock || 0);
-            const matchText = term === '' || name.includes(term) || sku.includes(term);
-            const matchStock = !onlyStock || stock > 0;
-            const visible = matchText && matchStock;
-            row.classList.toggle('d-none', !visible);
-            if (visible) visibles++;
+            const matchTerm = term === '' || name.includes(term) || sku.includes(term);
+            const matchStock = includeNoStock || stock > 0;
+            row.classList.toggle('d-none', !(matchTerm && matchStock));
         });
+    };
 
-        if (productosStatus) {
-            productosStatus.textContent = 'Mostrando ' + visibles + ' productos';
-        }
-    }
+    searchInput?.addEventListener('input', applyFilters);
+    mostrarSinStock?.addEventListener('change', applyFilters);
 
-    document.querySelectorAll('.js-item-check').forEach(function (check) {
-        check.addEventListener('change', function () {
-            const id = this.dataset.id;
-            const qty = document.querySelector('[data-qty="' + id + '"]');
-            const disc = document.querySelector('[data-disc="' + id + '"]');
-            const enabled = this.checked;
-            if (qty) {
-                qty.disabled = !enabled;
-                qty.value = enabled ? (qty.value === '0' ? '1' : qty.value) : '0';
-            }
-            if (disc) {
-                disc.disabled = !enabled;
-                disc.value = enabled ? disc.value : '0';
-            }
-            setStepButtonsEnabled(id, enabled);
-            refreshSummary();
+    rows.forEach((row) => {
+        const input = row.querySelector('[data-cantidad]');
+        row.querySelector('[data-plus]')?.addEventListener('click', () => {
+            input.value = Math.max(0, parseInt(input.value || '0', 10)) + 1;
+            updateSummary();
         });
+        row.querySelector('[data-minus]')?.addEventListener('click', () => {
+            input.value = Math.max(0, parseInt(input.value || '0', 10) - 1);
+            updateSummary();
+        });
+        input.addEventListener('input', updateSummary);
     });
 
-    document.querySelectorAll('[data-qty], [data-disc]').forEach(function (input) {
-        input.addEventListener('input', refreshSummary);
-    });
-    document.querySelectorAll('[data-product-row]').forEach(function (row) {
-        row.addEventListener('click', function (event) {
-            if (event.target.closest('input,button,label,a')) return;
-            const check = row.querySelector('.js-item-check');
-            if (!check) return;
-            check.checked = !check.checked;
-            check.dispatchEvent(new Event('change'));
-        });
-    });
-    document.querySelectorAll('[data-qty-step]').forEach(function (button) {
-        button.addEventListener('click', function () {
-            const id = this.getAttribute('data-qty-step');
-            const delta = Number(this.getAttribute('data-delta') || 0);
-            const qty = document.querySelector('[data-qty="' + id + '"]');
-            if (!qty || qty.disabled) return;
-            const next = Math.max(0, Number(qty.value || 0) + delta);
-            qty.value = String(next);
-            qty.dispatchEvent(new Event('input'));
-        });
-    });
-
-    productSearch?.addEventListener('input', applyFilter);
-    soloStock?.addEventListener('change', applyFilter);
-    productSearch?.focus();
-    applyFilter();
-    refreshSummary();
+    applyFilters();
+    updateSummary();
+    searchInput?.focus();
 })();
 </script>
