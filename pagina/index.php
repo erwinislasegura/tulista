@@ -121,7 +121,11 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
 
 <main>
   <section class="hero">
-    <div class="hero-bg"><div class="hero-slide"></div><div class="hero-slide"></div><div class="hero-slide"></div></div>
+    <div class="hero-bg" id="heroParallax" aria-hidden="true">
+      <?php for ($i = 1; $i <= 31; $i++): ?>
+        <div class="hero-slide<?= $i === 1 ? ' is-active' : '' ?>" style="background-image:url('../assets/source/images/<?= $i ?>.png')"></div>
+      <?php endfor; ?>
+    </div>
     <div class="container">
       <div>
         <span class="eyebrow"><b>Compra simple</b> útiles escolares, arte y oficina</span>
@@ -141,7 +145,7 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
       </aside>
     </div>
   </section>
-  <div class="trust">
+  <div class="trust section-bg" style="--section-bg:url('../assets/source/images/4.png')">
     <div class="container trust-grid">
       <div class="trust-item"><div class="trust-icon">✓</div><div><strong>Fácil de comprar</strong><span>Cantidad por producto.</span></div></div>
       <div class="trust-item"><div class="trust-icon">💬</div><div><strong>WhatsApp directo</strong><span>Pedido o cotización.</span></div></div>
@@ -149,7 +153,7 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
       <div class="trust-item"><div class="trust-icon">🎒</div><div><strong>Listas escolares</strong><span>Envíala y cotiza.</span></div></div>
     </div>
   </div>
-  <section id="categorias">
+  <section id="categorias" class="section-bg" style="--section-bg:url('../assets/source/images/8.png')">
     <div class="container">
       <div class="section-head"><div><span class="kicker">Categorías</span><h2 class="section-title">Compra por tipo de producto.</h2><p class="section-copy">Organizado para apoderados, oficinas, colegios y negocios que necesitan encontrar rápido lo básico.</p></div><a class="btn ghost" href="#productos">Ver catálogo</a></div>
       <div class="category-strip">
@@ -166,7 +170,7 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
       </div>
     </div>
   </section>
-  <section id="productos">
+  <section id="productos" class="section-bg" style="--section-bg:url('../assets/source/images/14.png')">
     <div class="container">
       <div class="section-head"><div><span class="kicker">Más pedidos</span><h2 class="section-title">Productos listos para agregar al pedido.</h2><p class="section-copy">Selecciona la cantidad antes de agregar al carrito. Después finalizas por WhatsApp.</p></div><button class="btn ghost" id="clearFilters" type="button">Limpiar filtros</button></div>
       <div class="shop-layout">
@@ -179,7 +183,7 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
       </div>
     </div>
   </section>
-  <section id="mayoristas">
+  <section id="mayoristas" class="section-bg" style="--section-bg:url('../assets/source/images/21.png')">
     <div class="container banner-grid">
       <article class="banner big"><div class="banner-copy"><span class="kicker">Mayoristas</span><h3>Precios especiales para librerías, comercio, colegios y oficinas.</h3><p>Cotiza por volumen productos escolares, papelería, arte y oficina. Ideal para reposición, temporada escolar y compras institucionales.</p><a class="btn orange" href="cotizador-lista.php">Solicitar precio mayorista</a></div><img src="assets/images/hero-oficina.png" alt="Compra mayorista"></article>
       <div style="display:grid;gap:16px">
