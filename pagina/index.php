@@ -59,7 +59,7 @@ try {
             'cat' => $category,
             'price' => $price,
             'old' => 0,
-            'img' => paginaProductImage($category),
+            'img' => !empty($product['imagen_principal']) ? '../' . ltrim((string) $product['imagen_principal'], '/') : paginaProductImage($category),
             'tag' => ((float) ($product['existencia'] ?? 0)) > 0 ? 'Stock' : 'Consultar',
             'desc' => $details ? implode(' · ', $details) : 'Producto disponible para cotización.',
         ];

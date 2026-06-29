@@ -43,6 +43,10 @@ class ProductosController
                     $this->addUnit();
                 } elseif ($action === 'add_product') {
                     $this->addProduct();
+                } elseif ($action === 'update_product') {
+                    $this->updateProduct();
+                } elseif ($action === 'delete_product') {
+                    $this->deleteProduct();
                 } elseif ($action === 'import_products') {
                     $this->importProducts();
                 }
@@ -59,12 +63,15 @@ class ProductosController
         $last = $_SESSION['productos_last'];
         $_SESSION['productos_last'] = [];
 
+        $products = $this->products->all();
+
         return [
             'section' => $section,
             'categories' => $this->categories->all(),
             'brands' => $this->brands->all(),
             'units' => $this->units->all(),
-            'products' => $this->products->all(),
+            'products' => $products,
+            'product_images' => $this->products->imagesByProductIds(array_column($products, 'id')),
             'flash' => $flash,
             'last' => $last,
         ];
@@ -136,8 +143,54 @@ class ProductosController
             return;
         }
 
-        $this->products->create($this->mapProductData($_POST));
+        $productId = $this->products->create($this->mapProductData($_POST));
+        $images = $this->uploadedProductImages();
+        if (!empty($images)) {
+            $this->products->insertImages($productId, $images);
+        }
         $this->flash('success', 'Producto guardado correctamente.');
+    }
+
+    private function updateProduct(): void
+    {
+        $id = (int) ($_POST['id'] ?? 0);
+        $categoriaId = (int) ($_POST['categoria_id'] ?? 0);
+        $nombre = trim($_POST['nombre'] ?? '');
+
+        if ($id <= 0) {
+            $this->flash('danger', 'Producto inválido.');
+            return;
+        }
+
+        if ($categoriaId <= 0 || $nombre === '') {
+            $this->flash('warning', 'Categoría y nombre son obligatorios para el producto.');
+            return;
+        }
+
+        $this->products->update($id, $this->mapProductData($_POST));
+        $images = $this->uploadedProductImages();
+        if (!empty($images)) {
+            $oldPaths = $this->products->imagePaths($id);
+            $this->products->replaceImages($id, $images);
+            $this->deleteStoredFiles($oldPaths);
+        } elseif (!empty($_POST['principal_image_id'])) {
+            $this->products->setPrincipalImage($id, (int) $_POST['principal_image_id']);
+        }
+        $this->flash('success', 'Producto actualizado correctamente.');
+    }
+
+    private function deleteProduct(): void
+    {
+        $id = (int) ($_POST['id'] ?? 0);
+        if ($id <= 0) {
+            $this->flash('danger', 'Producto inválido.');
+            return;
+        }
+
+        $paths = $this->products->imagePaths($id);
+        $this->products->delete($id);
+        $this->deleteStoredFiles($paths);
+        $this->flash('success', 'Producto eliminado correctamente.');
     }
 
     private function importProducts(): void
@@ -253,6 +306,86 @@ class ProductosController
 
         $hasWarnings = !empty($missingCategories) || !empty($missingBrands) || !empty($missingUnits) || !empty($rowsWithMissingData);
         $this->flash($hasWarnings ? 'warning' : 'success', implode(' ', $messages));
+    }
+
+    private function uploadedProductImages(): array
+    {
+        if (empty($_FILES['product_images']) || !is_array($_FILES['product_images']['name'] ?? null)) {
+            return [];
+        }
+
+        $principalIndex = (int) ($_POST['principal_image_index'] ?? 0);
+        $files = $_FILES['product_images'];
+        $images = [];
+        $maxFiles = 3;
+        $uploadDir = __DIR__ . '/../uploads/productos';
+
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0775, true);
+        }
+
+        foreach ($files['name'] as $index => $originalName) {
+            if (count($images) >= $maxFiles) {
+                $this->flash('warning', 'Solo se permiten hasta 3 fotos por producto. Se omitieron archivos adicionales.');
+                break;
+            }
+
+            $error = (int) ($files['error'][$index] ?? UPLOAD_ERR_NO_FILE);
+            if ($error === UPLOAD_ERR_NO_FILE) {
+                continue;
+            }
+
+            if ($error !== UPLOAD_ERR_OK) {
+                $this->flash('warning', 'Una imagen no pudo subirse correctamente.');
+                continue;
+            }
+
+            $tmpName = (string) ($files['tmp_name'][$index] ?? '');
+            if ($tmpName === '' || !is_uploaded_file($tmpName)) {
+                continue;
+            }
+
+            $mime = (string) (mime_content_type($tmpName) ?: '');
+            $extensions = [
+                'image/jpeg' => 'jpg',
+                'image/png' => 'png',
+                'image/webp' => 'webp',
+                'image/gif' => 'gif',
+            ];
+
+            if (!isset($extensions[$mime])) {
+                $this->flash('warning', 'Solo se aceptan imágenes JPG, PNG, WEBP o GIF.');
+                continue;
+            }
+
+            $filename = bin2hex(random_bytes(10)) . '.' . $extensions[$mime];
+            $target = $uploadDir . '/' . $filename;
+            if (!move_uploaded_file($tmpName, $target)) {
+                $this->flash('warning', 'No fue posible guardar una imagen del producto.');
+                continue;
+            }
+
+            $images[] = [
+                'ruta' => 'uploads/productos/' . $filename,
+                'es_principal' => $index === $principalIndex,
+            ];
+        }
+
+        if (!empty($images) && !array_filter($images, static fn (array $image): bool => !empty($image['es_principal']))) {
+            $images[0]['es_principal'] = true;
+        }
+
+        return $images;
+    }
+
+    private function deleteStoredFiles(array $paths): void
+    {
+        foreach ($paths as $path) {
+            $fullPath = __DIR__ . '/../' . ltrim((string) $path, '/');
+            if (is_file($fullPath)) {
+                @unlink($fullPath);
+            }
+        }
     }
 
     private function mapProductData(array $source): array
