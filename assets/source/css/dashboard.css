@@ -1661,3 +1661,170 @@ h1, h2, h3, h4, h5, h6 {
     background: var(--tl-brand-cream-2) !important;
     color: #9a4b00 !important;
 }
+
+/* Sidebar corporate v2: cleaner, lighter and closer to the public site's white navigation */
+.tl-main-nav-adminlte.main-nav {
+    background: #ffffff !important;
+    border-right: 1px solid var(--tl-brand-line) !important;
+    box-shadow: 6px 0 18px rgba(39, 24, 61, .06) !important;
+}
+
+.tl-main-nav-adminlte .logo-box {
+    border-bottom: 1px solid var(--tl-brand-line) !important;
+    padding: .82rem .78rem .62rem !important;
+}
+
+.tl-main-nav-adminlte .tl-brand-block {
+    background: #fff !important;
+    border: 0 !important;
+    gap: .52rem !important;
+    padding: .12rem 0 !important;
+}
+
+.tl-main-nav-adminlte .tl-brand-logo {
+    background: var(--tl-brand-cream) !important;
+    border: 1px solid var(--tl-brand-line) !important;
+    border-radius: 8px !important;
+    height: 28px !important;
+    width: 28px !important;
+}
+
+.tl-main-nav-adminlte .tl-brand-name {
+    color: var(--tl-brand-ink) !important;
+    font-size: .75rem !important;
+    font-weight: 560 !important;
+    letter-spacing: -.015em !important;
+}
+
+.tl-main-nav-adminlte .tl-brand-subtitle-nav {
+    color: var(--tl-brand-muted) !important;
+    font-size: .52rem !important;
+    font-weight: 520 !important;
+    letter-spacing: .07em !important;
+}
+
+.tl-main-nav-adminlte .tl-menu-search {
+    background: #fffaf4 !important;
+    border: 1px solid var(--tl-brand-line) !important;
+    border-radius: 8px !important;
+    color: var(--tl-brand-muted) !important;
+    margin-top: .52rem !important;
+    padding: .28rem .45rem !important;
+}
+
+.tl-main-nav-adminlte .tl-menu-search input {
+    color: var(--tl-brand-ink) !important;
+    font-size: .68rem !important;
+    font-weight: 380 !important;
+}
+
+.tl-main-nav-adminlte .tl-menu-search input::placeholder {
+    color: #9d93a3 !important;
+}
+
+.tl-main-nav-adminlte .navbar-nav {
+    padding: .18rem .48rem .7rem !important;
+}
+
+.tl-main-nav-adminlte .menu-title {
+    color: #9d93a3 !important;
+    font-size: .54rem !important;
+    font-weight: 560 !important;
+    letter-spacing: .08em !important;
+    margin: .68rem .42rem .22rem !important;
+}
+
+.tl-main-nav-adminlte .nav-item {
+    margin: 0 !important;
+}
+
+.tl-main-nav-adminlte .nav-link,
+.tl-main-nav-adminlte .sub-nav-link {
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    border-radius: 8px !important;
+    color: #5c5268 !important;
+    font-size: .72rem !important;
+    font-weight: 400 !important;
+    gap: .42rem !important;
+    line-height: 1.18 !important;
+    min-height: 31px !important;
+    padding: .28rem .38rem !important;
+}
+
+.tl-main-nav-adminlte .nav-icon {
+    background: transparent !important;
+    color: #7e7289 !important;
+    flex-basis: 21px !important;
+    height: 21px !important;
+    width: 21px !important;
+}
+
+.tl-main-nav-adminlte .nav-icon iconify-icon {
+    font-size: 14px !important;
+}
+
+.tl-main-nav-adminlte .nav-link:hover,
+.tl-main-nav-adminlte .sub-nav-link:hover {
+    background: #fff7ef !important;
+    border-color: #f1e8dc !important;
+    color: var(--tl-brand-purple) !important;
+}
+
+.tl-main-nav-adminlte .nav-link:hover .nav-icon,
+.tl-main-nav-adminlte .sub-nav-link:hover .nav-icon {
+    color: var(--tl-brand-purple) !important;
+}
+
+.tl-main-nav-adminlte .nav-link.active,
+.tl-main-nav-adminlte .sub-nav-link.active {
+    background: #fff1e5 !important;
+    border-color: #f0dfcd !important;
+    box-shadow: inset 2px 0 0 var(--tl-brand-orange) !important;
+    color: var(--tl-brand-purple) !important;
+    font-weight: 560 !important;
+}
+
+.tl-main-nav-adminlte .nav-link.active .nav-icon,
+.tl-main-nav-adminlte .sub-nav-link.active .nav-icon {
+    background: transparent !important;
+    color: var(--tl-brand-orange) !important;
+}
+
+.tl-main-nav-adminlte .tl-submenu-caret {
+    color: #9d93a3 !important;
+    font-size: .72rem !important;
+}
+
+.tl-main-nav-adminlte .tl-submenu-list {
+    border-left: 1px solid #f1e8dc !important;
+    margin: .10rem 0 .18rem .86rem !important;
+    padding-left: .36rem !important;
+}
+
+.tl-main-nav-adminlte .sub-nav-link {
+    font-size: .68rem !important;
+    min-height: 27px !important;
+    padding: .22rem .32rem !important;
+}
+
+.tl-main-nav-adminlte .sub-nav-link .nav-icon {
+    flex-basis: 16px !important;
+    height: 16px !important;
+    width: 16px !important;
+}
+
+.tl-main-nav-adminlte .tl-menu-divider {
+    border-top: 1px solid var(--tl-brand-line) !important;
+    margin-top: .52rem !important;
+    padding-top: .42rem !important;
+}
+
+.tl-main-nav-adminlte .nav-text {
+    color: inherit !important;
+    font-weight: inherit !important;
+}
+
+.tl-main-nav-adminlte iconify-icon {
+    color: inherit !important;
+}
