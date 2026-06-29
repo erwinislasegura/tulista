@@ -16,6 +16,7 @@ $hasBuiltCss = file_exists($assetRoot . '/css/vendor.min.css')
     <link href="assets/css/app.min.css" rel="stylesheet" type="text/css" />
 
     <link href="assets/source/css/dashboard.css" rel="stylesheet" type="text/css" />
+    <link href="assets/source/css/admin-menu.css" rel="stylesheet" type="text/css" />
 
     <!-- Theme Config js (Require in all Page) -->
     <script src="assets/js/config.min.js"></script>
@@ -38,6 +39,7 @@ $hasBuiltCss = file_exists($assetRoot . '/css/vendor.min.css')
     <!-- Local fallback theme for app-like layout -->
     <link href="assets/source/css/fallback-theme.css" rel="stylesheet" type="text/css" />
     <link href="assets/source/css/dashboard.css" rel="stylesheet" type="text/css" />
+    <link href="assets/source/css/admin-menu.css" rel="stylesheet" type="text/css" />
 
     <!-- Theme Config js (fallback path) -->
     <script src="assets/source/js/config.js"></script>

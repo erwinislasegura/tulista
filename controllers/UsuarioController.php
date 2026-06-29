@@ -55,7 +55,7 @@ class UsuarioController
 
         AuthService::loginUser($user);
         AuditService::log('login', 'usuarios', (int) $user['id'], 'Inicio de sesión exitoso');
-        header('Location: index.php');
+        header('Location: dashboard.php');
         exit;
     }
 
@@ -64,7 +64,7 @@ class UsuarioController
         $user = AuthService::user();
         AuditService::log('logout', 'usuarios', (int) ($user['id'] ?? 0), 'Cierre de sesión');
         AuthService::logoutUser();
-        header('Location: auth-signin.php');
+        header('Location: auth-login-usuarios.php');
         exit;
     }
 

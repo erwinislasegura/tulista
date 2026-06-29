@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS producto_imagenes (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    producto_id INT UNSIGNED NOT NULL,
+    ruta VARCHAR(255) NOT NULL,
+    es_principal TINYINT(1) NOT NULL DEFAULT 0,
+    posicion TINYINT UNSIGNED NOT NULL DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_producto_imagen_producto FOREIGN KEY (producto_id) REFERENCES productos(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+

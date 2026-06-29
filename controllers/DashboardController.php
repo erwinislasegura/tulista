@@ -10,7 +10,7 @@ class DashboardController
     {
         AuthService::startSession();
         if (!AuthService::user()) {
-            header('Location: auth-signin.php');
+            header('Location: auth-login-usuarios.php');
             exit;
         }
     }
