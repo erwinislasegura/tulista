@@ -8,7 +8,7 @@ let searchTerm = '';
 const money = new Intl.NumberFormat('es-CL', {style:'currency', currency:'CLP', maximumFractionDigits:0});
 
 function setActiveNav(){
-  const current = location.pathname.split('/').pop() || 'index.html';
+  const current = location.pathname.split('/').pop() || 'index.php';
   document.querySelectorAll('[data-nav]').forEach(a=>{
     if(a.getAttribute('href') === current) a.classList.add('active');
   });
@@ -224,7 +224,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   renderCart();
   setupForms();
   setupFAQ();
-  document.querySelectorAll('[data-cat-link]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault(); location.href = 'index.html#productos';}));
+  document.querySelectorAll('[data-cat-link]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault(); location.href = 'index.php#productos';}));
   document.querySelectorAll('[data-filter]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault(); setCategory(el.dataset.filter);}));
   document.getElementById('globalSearch')?.addEventListener('input',e=>{searchTerm=e.target.value; activeCategory='Todos'; renderTabs(); renderSideCategories(); renderProducts();});
   document.getElementById('sortSelect')?.addEventListener('change',renderProducts);
