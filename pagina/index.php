@@ -185,10 +185,10 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
   </section>
   <section id="mayoristas" class="section-bg" style="--section-bg:url('../assets/source/images/21.png')">
     <div class="container banner-grid">
-      <article class="banner big"><div class="banner-copy"><span class="kicker">Mayoristas</span><h3>Precios especiales para librerías, comercio, colegios y oficinas.</h3><p>Cotiza por volumen productos escolares, papelería, arte y oficina. Ideal para reposición, temporada escolar y compras institucionales.</p><a class="btn orange" href="cotizador-lista.php">Solicitar precio mayorista</a></div><img src="assets/images/hero-oficina.png" alt="Compra mayorista"></article>
+      <article class="banner big"><div class="banner-copy"><span class="kicker">Mayoristas</span><h3>Precios especiales para librerías, comercio, colegios y oficinas.</h3><p>Cotiza por volumen productos escolares, papelería, arte y oficina. Ideal para reposición, temporada escolar y compras institucionales.</p><a class="btn orange" href="cotizador-lista.php">Solicitar precio mayorista</a></div><img src="../assets/source/images/22.png" alt="Compra mayorista"></article>
       <div style="display:grid;gap:16px">
-        <article class="banner"><div class="banner-copy"><h3>Listas escolares</h3><p>Envíanos tu lista y te respondemos ordenado.</p><a class="btn ghost" href="cotizador-lista.php">Enviar lista</a></div><img src="assets/images/quote-list.png" alt="Lista escolar"></article>
-        <article class="banner"><div class="banner-copy"><h3>Arte y trabajos</h3><p>Pinturas, goma eva, papel y materiales creativos.</p><a class="btn ghost" href="#productos">Ver arte</a></div><img src="assets/images/hero-pinturas.png" alt="Arte escolar"></article>
+        <article class="banner"><div class="banner-copy"><h3>Listas escolares</h3><p>Envíanos tu lista y te respondemos ordenado.</p><a class="btn ghost" href="cotizador-lista.php">Enviar lista</a></div><img src="../assets/source/images/23.png" alt="Lista escolar"></article>
+        <article class="banner"><div class="banner-copy"><h3>Arte y trabajos</h3><p>Pinturas, goma eva, papel y materiales creativos.</p><a class="btn ghost" href="#productos">Ver arte</a></div><img src="../assets/source/images/28.png" alt="Arte escolar"></article>
       </div>
     </div>
   </section>
