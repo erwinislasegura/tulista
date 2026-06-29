@@ -10,6 +10,13 @@ class CategoryModel extends BaseModel
         return $stmt->fetchAll();
     }
 
+
+    public function publicCatalog(): array
+    {
+        $stmt = $this->db->query('SELECT c.id, c.nombre, COUNT(p.id) AS productos_total FROM categorias c LEFT JOIN productos p ON p.categoria_id = c.id GROUP BY c.id, c.nombre ORDER BY c.nombre ASC');
+        return $stmt->fetchAll();
+    }
+
     public function create(string $name): bool
     {
         $stmt = $this->db->prepare('INSERT INTO categorias (nombre) VALUES (:nombre)');
