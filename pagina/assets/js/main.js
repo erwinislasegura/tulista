@@ -230,6 +230,35 @@ function changeModalQty(delta){
   else el.value = normalizeQty(el.value, 1) + delta;
 }
 
+function setupHeroParallax(){
+  const hero = document.querySelector('.hero');
+  const bg = document.getElementById('heroParallax');
+  const slides = bg ? Array.from(bg.querySelectorAll('.hero-slide')) : [];
+  if(!hero || !bg || !slides.length) return;
+
+  let current = 0;
+  window.setInterval(()=>{
+    slides[current].classList.remove('is-active');
+    current = (current + 1) % slides.length;
+    slides[current].classList.add('is-active');
+  }, 4200);
+
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  hero.addEventListener('pointermove', event=>{
+    const rect = hero.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width - .5) * -24;
+    const y = ((event.clientY - rect.top) / rect.height - .5) * -18;
+    bg.style.setProperty('--hero-parallax-x', `${x.toFixed(2)}px`);
+    bg.style.setProperty('--hero-parallax-y', `${y.toFixed(2)}px`);
+  });
+
+  hero.addEventListener('pointerleave', ()=>{
+    bg.style.setProperty('--hero-parallax-x', '0px');
+    bg.style.setProperty('--hero-parallax-y', '0px');
+  });
+}
+
 function setupForms(){
   document.querySelectorAll('[data-whatsapp-form]').forEach(form=>{
     form.addEventListener('submit', e=>{
@@ -258,6 +287,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   renderCart();
   setupForms();
   setupFAQ();
+  setupHeroParallax();
   document.querySelectorAll('[data-cat-link]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault(); location.href = 'index.php#productos';}));
   document.querySelectorAll('[data-filter]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault(); setCategory(el.dataset.filter);}));
   document.getElementById('globalSearch')?.addEventListener('input',e=>{searchTerm=e.target.value; activeCategory='Todos'; renderTabs(); renderSideCategories(); renderProducts();});

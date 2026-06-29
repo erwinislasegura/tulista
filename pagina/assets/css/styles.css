@@ -57,13 +57,11 @@ button{cursor:pointer}
 .mega-col a:hover{color:var(--purple)}
 .mobile-toggle{display:none}
 .hero{position:relative;overflow:hidden;background:var(--cream);border-bottom:1px solid var(--line)}
-.hero-bg{position:absolute;inset:0;z-index:0;overflow:hidden}
-.hero-slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;animation:fadeHero 18s infinite;filter:saturate(1.24) contrast(1.02)}
-.hero-slide:nth-child(1){background-image:url('../images/hero-pinturas.png');animation-delay:0s}
-.hero-slide:nth-child(2){background-image:url('../images/hero-ninos.png');animation-delay:6s}
-.hero-slide:nth-child(3){background-image:url('../images/hero-oficina.png');animation-delay:12s}
-.hero::before{content:"";position:absolute;inset:0;background:rgba(255,247,239,.74);z-index:1}
-@keyframes fadeHero{0%{opacity:0}8%{opacity:1}34%{opacity:1}44%{opacity:0}100%{opacity:0}}
+.hero-bg{position:absolute;inset:-18px;z-index:0;overflow:hidden;transform:translate3d(var(--hero-parallax-x,0),var(--hero-parallax-y,0),0) scale(1.04);transition:transform .18s ease-out;will-change:transform}
+.hero-slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transform:scale(1.08);transition:opacity 1.1s ease,transform 7s ease;filter:saturate(1.18) contrast(1.04);will-change:opacity,transform}
+.hero-slide.is-active{opacity:1;transform:scale(1)}
+.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,247,239,.88) 0%,rgba(255,247,239,.77) 46%,rgba(255,247,239,.56) 100%);z-index:1}
+@media (prefers-reduced-motion: reduce){.hero-bg{transform:none;transition:none}.hero-slide{transition:none}}
 .hero .container{position:relative;z-index:2;min-height:335px;padding:34px 0;display:grid;grid-template-columns:1fr 356px;gap:28px;align-items:center}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid #eadfce;background:#fff;border-radius:999px;padding:7px 10px;color:#574d62;font-size:12px;font-weight:560}
 .eyebrow b{color:var(--purple)}
@@ -83,6 +81,11 @@ h1{margin:12px 0 10px;max-width:590px;font-size:clamp(28px,3.4vw,44px);line-heig
 .quick-card strong{display:block;font-size:13px;font-weight:700}
 .quick-card span span{display:block;color:var(--muted);font-size:11px;line-height:1.35}
 section{padding:58px 0}
+.section-bg,.page-hero-bg{position:relative;isolation:isolate;overflow:hidden}
+.section-bg::before,.page-hero-bg::before{content:"";position:absolute;inset:0;background-image:linear-gradient(120deg,rgba(255,255,255,.92),rgba(255,247,239,.82)),var(--section-bg);background-size:cover;background-position:center;opacity:1;z-index:0}
+.section-bg::after,.page-hero-bg::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 12% 18%,rgba(255,107,0,.14),transparent 28%),radial-gradient(circle at 88% 22%,rgba(91,25,214,.12),transparent 30%);z-index:0;pointer-events:none}
+.section-bg > .container,.page-hero-bg > .container{position:relative;z-index:1}
+.page-hero-bg::before{background-image:linear-gradient(90deg,rgba(255,247,239,.94),rgba(255,247,239,.78)),var(--section-bg)}
 .section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:20px}
 .kicker{display:block;color:var(--purple);font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
 .section-title{margin:0;font-size:clamp(24px,2.7vw,36px);line-height:1.08;font-weight:650;letter-spacing:-.04em}
@@ -137,9 +140,9 @@ section{padding:58px 0}
 .banner{border:1px solid var(--line);background:#fff;border-radius:14px;overflow:hidden;display:grid;grid-template-columns:1fr 190px;align-items:center;min-height:190px}
 .banner.big{grid-template-columns:1fr 350px;min-height:300px}
 .banner-copy{padding:26px}
-.banner-copy h3{font-size:clamp(23px,2.5vw,34px);line-height:1.08;margin:0 0 10px;font-weight:660;letter-spacing:-.035em}
-.banner-copy p{color:var(--muted);line-height:1.6;margin:0 0 18px}
-.banner img{width:100%;height:100%;object-fit:cover;background:var(--cream)}
+.banner-copy h3{font-size:clamp(20px,2vw,28px);line-height:1.12;margin:0 0 10px;font-weight:560;letter-spacing:-.025em}
+.banner-copy p{color:var(--muted);line-height:1.55;margin:0 0 16px;font-size:14px}
+.banner img{width:100%;height:100%;object-fit:cover;object-position:center;background:var(--cream);filter:saturate(1.08) contrast(1.02)}
 .page-hero{background:var(--cream);border-bottom:1px solid var(--line);padding:48px 0}
 .page-hero .container{display:grid;grid-template-columns:1fr 420px;gap:32px;align-items:center}
 .page-hero h1{font-size:clamp(30px,4vw,48px)}
