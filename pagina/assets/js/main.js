@@ -88,6 +88,15 @@ function setProductQty(id, value){
   return qty;
 }
 
+function handleQuantityInput(id, value){
+  const qty = parseInt(value, 10);
+  if(Number.isFinite(qty) && qty > 0) productQuantities.set(id, qty);
+}
+
+function commitProductQty(id, value){
+  return setProductQty(id, value);
+}
+
 function qtyValue(id){
   const el = document.getElementById('qty-'+id);
   return setProductQty(id, el?.value ?? getProductQty(id));
@@ -116,7 +125,7 @@ function renderProducts(){
         <p class="product-desc">${p.desc}</p>
         <div class="price-row"><span class="price">${money.format(p.price)}</span>${p.old ? `<span class="old-price">${money.format(p.old)}</span>` : ''}</div>
         <div class="card-actions">
-          <div class="qty-box"><button type="button" onclick="changeCardQty(${p.id},-1)">−</button><input id="qty-${p.id}" type="number" min="1" step="1" inputmode="numeric" value="${getProductQty(p.id)}" onchange="setProductQty(${p.id}, this.value)" oninput="setProductQty(${p.id}, this.value)"><button type="button" onclick="changeCardQty(${p.id},1)">+</button></div>
+          <div class="qty-box"><button type="button" onclick="changeCardQty(${p.id},-1)">−</button><input id="qty-${p.id}" type="number" min="1" step="1" inputmode="numeric" value="${getProductQty(p.id)}" onchange="commitProductQty(${p.id}, this.value)" onblur="commitProductQty(${p.id}, this.value)" oninput="handleQuantityInput(${p.id}, this.value)"><button type="button" onclick="changeCardQty(${p.id},1)">+</button></div>
           <button class="add-btn" onclick="addToCart(${p.id}, qtyValue(${p.id}))">Agregar</button>
         </div>
         <button class="whatsapp-card" onclick="consultProduct(${p.id})">Consultar por WhatsApp</button>
@@ -201,8 +210,8 @@ function openModal(id){
         <div class="modal-info"><strong>Ideal para</strong><span>Escolar, oficina, listas y mayoristas.</span></div>
       </div>
       <div class="card-actions">
-        <div class="qty-box"><button type="button" onclick="changeModalQty(-1)">−</button><input id="modalQty" type="number" min="1" step="1" inputmode="numeric" value="${getProductQty(p.id)}" data-product-id="${p.id}" onchange="setProductQty(${p.id}, this.value)" oninput="setProductQty(${p.id}, this.value)"><button type="button" onclick="changeModalQty(1)">+</button></div>
-        <button class="add-btn" onclick="addToCart(${p.id}, qtyValue(${p.id})); closeModal();">Agregar</button>
+        <div class="qty-box"><button type="button" onclick="changeModalQty(-1)">−</button><input id="modalQty" type="number" min="1" step="1" inputmode="numeric" value="${getProductQty(p.id)}" data-product-id="${p.id}" onchange="commitProductQty(${p.id}, this.value)" onblur="commitProductQty(${p.id}, this.value)" oninput="handleQuantityInput(${p.id}, this.value)"><button type="button" onclick="changeModalQty(1)">+</button></div>
+        <button class="add-btn" onclick="addToCart(${p.id}, commitProductQty(${p.id}, document.getElementById('modalQty')?.value)); closeModal();">Agregar</button>
       </div>
       <a class="btn ghost full" href="https://wa.me/${whatsappNumber}?text=Hola%20Tu%20Lista,%20quiero%20consultar%20por%20${encodeURIComponent(p.name)}" target="_blank">Consultar por WhatsApp</a>
     </div>`;
@@ -266,4 +275,4 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.addEventListener('keydown',e=>{ if(e.key==='Escape'){closeCart();closeModal();closeMega();} });
 });
 
-window.addToCart=addToCart; window.changeCardQty=changeCardQty; window.setProductQty=setProductQty; window.qtyValue=qtyValue; window.updateQty=updateQty; window.removeItem=removeItem; window.openModal=openModal; window.changeModalQty=changeModalQty; window.consultProduct=consultProduct;
+window.addToCart=addToCart; window.changeCardQty=changeCardQty; window.setProductQty=setProductQty; window.handleQuantityInput=handleQuantityInput; window.commitProductQty=commitProductQty; window.qtyValue=qtyValue; window.updateQty=updateQty; window.removeItem=removeItem; window.openModal=openModal; window.changeModalQty=changeModalQty; window.consultProduct=consultProduct;
