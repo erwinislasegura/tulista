@@ -47,13 +47,13 @@
   </header>
 
 <main>
-  <section class="page-hero">
+  <section class="page-hero page-hero-bg" style="--section-bg:url('../assets/source/images/6.png')">
     <div class="container">
       <div><div class="breadcrumb">Inicio / Cotizador de lista</div><span class="kicker">Cotizador</span><h1>Envía tu lista escolar o pedido de oficina.</h1><p>Completa los datos y cuéntanos qué productos necesitas. El formulario prepara un mensaje directo a WhatsApp para responder más rápido.</p></div>
       <img src="assets/images/quote-list.png" alt="Cotizador de lista">
     </div>
   </section>
-  <section>
+  <section class="section-bg" style="--section-bg:url('../assets/source/images/13.png')">
     <div class="container content-grid">
       <div class="card"><h3>Cómo funciona</h3><div class="feature-list"><div class="feature"><span class="check">1</span><div><strong>Envía tu lista o detalle</strong><p>Puedes escribir los productos, curso, colegio o tipo de compra.</p></div></div><div class="feature"><span class="check">2</span><div><strong>Revisamos disponibilidad</strong><p>Armamos una propuesta según stock, cantidades y productos equivalentes si corresponde.</p></div></div><div class="feature"><span class="check">3</span><div><strong>Confirmas por WhatsApp</strong><p>Finalizas el pedido con datos de despacho, retiro o forma de pago.</p></div></div></div></div>
       <div class="card"><h3>Formulario de cotización</h3><form class="form" data-whatsapp-form data-message="Hola Tu Lista, quiero cotizar una lista o pedido."><div class="field"><label>Nombre</label><input name="Nombre" required></div><div class="field"><label>WhatsApp</label><input name="WhatsApp" required></div><div class="field"><label>Tipo de compra</label><select name="Tipo"><option>Lista escolar</option><option>Compra por mayor</option><option>Oficina / empresa</option><option>Productos por unidad</option></select></div><div class="field"><label>Comuna / Ciudad</label><input name="Comuna"></div><div class="field full"><label>Colegio, curso o empresa</label><input name="Referencia" placeholder="Ej: 3º básico, oficina, librería..."></div><div class="field full"><label>Detalle de la lista</label><textarea name="Detalle" placeholder="Pega aquí la lista o describe los productos que necesitas..."></textarea></div><div class="field full"><button class="btn orange full" type="submit">Enviar cotización por WhatsApp</button></div></form></div>

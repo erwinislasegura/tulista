@@ -81,6 +81,11 @@ h1{margin:12px 0 10px;max-width:590px;font-size:clamp(28px,3.4vw,44px);line-heig
 .quick-card strong{display:block;font-size:13px;font-weight:700}
 .quick-card span span{display:block;color:var(--muted);font-size:11px;line-height:1.35}
 section{padding:58px 0}
+.section-bg,.page-hero-bg{position:relative;isolation:isolate;overflow:hidden}
+.section-bg::before,.page-hero-bg::before{content:"";position:absolute;inset:0;background-image:linear-gradient(120deg,rgba(255,255,255,.92),rgba(255,247,239,.82)),var(--section-bg);background-size:cover;background-position:center;opacity:1;z-index:0}
+.section-bg::after,.page-hero-bg::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 12% 18%,rgba(255,107,0,.14),transparent 28%),radial-gradient(circle at 88% 22%,rgba(91,25,214,.12),transparent 30%);z-index:0;pointer-events:none}
+.section-bg > .container,.page-hero-bg > .container{position:relative;z-index:1}
+.page-hero-bg::before{background-image:linear-gradient(90deg,rgba(255,247,239,.94),rgba(255,247,239,.78)),var(--section-bg)}
 .section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:20px}
 .kicker{display:block;color:var(--purple);font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
 .section-title{margin:0;font-size:clamp(24px,2.7vw,36px);line-height:1.08;font-weight:650;letter-spacing:-.04em}
