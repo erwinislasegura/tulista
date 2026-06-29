@@ -70,7 +70,7 @@
       <div><h4>Tienda</h4><a href="index.php#productos">Productos</a><a href="index.php#categorias">Categorías</a><a href="cotizador-lista.php">Cotizador de lista</a><a href="index.php#mayoristas">Mayoristas</a></div>
       <div><h4>Empresa</h4><a href="nosotros.php">Nosotros</a><a href="contacto.php">Contacto</a><a href="sabias-que.php">Sabías que</a><a href="condiciones-politicas.php">Condiciones</a></div>
       <div><h4>Categorías</h4><a href="index.php#productos">Escolar</a><a href="index.php#productos">Oficina</a><a href="index.php#productos">Arte</a><a href="index.php#productos">Papelería</a></div>
-      <div><h4>Atención</h4><a href="https://wa.me/569XXXXXXXX" target="_blank">WhatsApp</a><a href="mailto:contacto@tulista.cl">contacto@tulista.cl</a><a href="contacto.php">Formulario</a><a href="cotizador-lista.php">Subir lista</a></div>
+      <div><h4>Atención</h4><a href="https://wa.me/569XXXXXXXX" target="_blank">WhatsApp</a><a href="mailto:contacto@tulista.cl">contacto@tulista.cl</a><a href="contacto.php">Formulario</a><a href="cotizador-lista.php">Subir lista</a><a href="../dashboard.php">Panel administración</a></div>
     </div>
     <div class="container footer-bottom">
       <span>© 2026 Tu Lista. Todos los derechos reservados.</span>
