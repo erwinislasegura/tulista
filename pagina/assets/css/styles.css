@@ -239,6 +239,6 @@ input:focus,select:focus,textarea:focus{border-color:#c9b8e9;box-shadow:0 0 0 3p
   h1{font-size:28px}.hero p{font-size:14px}.hero-actions .btn{width:100%}
   .pills{display:none}.quick-grid{grid-template-columns:1fr 1fr}.quick-card{grid-template-columns:38px 1fr}.quick-card img{width:38px;height:38px}
   section{padding:44px 0}.section-head{display:block}.category-strip{grid-template-columns:1fr 1fr}
-  .product-grid{grid-template-columns:1fr}.toolbar{display:block}.tabs{margin-bottom:12px}.form{grid-template-columns:1fr}.field.full{grid-column:auto}
+  .product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.product-info{padding:10px}.product-title{font-size:13px;min-height:34px}.product-desc{display:none}.price{font-size:16px}.card-actions{grid-template-columns:1fr;gap:6px}.qty-box,.add-btn{height:34px}.toolbar{display:block}.tabs{margin-bottom:12px}.form{grid-template-columns:1fr}.field.full{grid-column:auto}
   .trust-grid,.footer-grid{grid-template-columns:1fr}.modal-img{min-height:260px}.modal-content{padding:22px}.modal-info-grid{grid-template-columns:1fr}
 }
