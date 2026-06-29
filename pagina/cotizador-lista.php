@@ -16,13 +16,13 @@
   </div>
   <header class="header">
     <div class="container header-main">
-      <a class="brand" href="index.html"><img src="assets/images/logo.png" alt="Tu Lista"></a>
-      <form class="searchbox" action="index.html#productos">
+      <a class="brand" href="index.php"><img src="assets/images/logo.png" alt="Tu Lista"></a>
+      <form class="searchbox" action="index.php#productos">
         <input id="globalSearch" type="search" placeholder="Buscar cuadernos, resmas, témperas, lápices...">
         <button type="submit">⌕</button>
       </form>
       <div class="header-actions">
-        <a class="btn ghost" href="cotizador-lista.html">Enviar lista</a>
+        <a class="btn ghost" href="cotizador-lista.php">Enviar lista</a>
         <button class="icon-btn" id="cartOpen" type="button">🛒 Carrito <span class="cart-count" id="cartCount">0</span></button>
         <button class="icon-btn mobile-toggle" id="mobileMenuToggle" type="button">☰</button>
       </div>
@@ -33,13 +33,13 @@
           <div class="mega-wrap">
             <button class="mega-trigger" id="megaTrigger" type="button">☰ Categorías</button>
             <div class="mega-menu" id="megaMenu">
-              <div class="mega-col"><h4>Escolar</h4><a href="index.html#productos">Cuadernos</a><a href="index.html#productos">Reglas y geometría</a><a href="index.html#productos">Mochilas y estuches</a><a href="cotizador-lista.html">Cotizar lista escolar</a></div>
-              <div class="mega-col"><h4>Arte y manualidades</h4><a href="index.html#productos">Témperas y pinturas</a><a href="index.html#productos">Goma eva</a><a href="index.html#productos">Cartulinas</a><a href="index.html#productos">Material creativo</a></div>
-              <div class="mega-col"><h4>Oficina</h4><a href="index.html#productos">Resmas</a><a href="index.html#productos">Carpetas y archivadores</a><a href="index.html#productos">Papelería</a><a href="index.html#productos">Escritorio</a></div>
-              <div class="mega-col"><h4>Compra rápida</h4><a href="cotizador-lista.html">Enviar una lista</a><a href="contacto.html">Hablar por WhatsApp</a><a href="index.html#mayoristas">Precios mayoristas</a><a href="sabias-que.html">Preguntas frecuentes</a></div>
+              <div class="mega-col"><h4>Escolar</h4><a href="index.php#productos">Cuadernos</a><a href="index.php#productos">Reglas y geometría</a><a href="index.php#productos">Mochilas y estuches</a><a href="cotizador-lista.php">Cotizar lista escolar</a></div>
+              <div class="mega-col"><h4>Arte y manualidades</h4><a href="index.php#productos">Témperas y pinturas</a><a href="index.php#productos">Goma eva</a><a href="index.php#productos">Cartulinas</a><a href="index.php#productos">Material creativo</a></div>
+              <div class="mega-col"><h4>Oficina</h4><a href="index.php#productos">Resmas</a><a href="index.php#productos">Carpetas y archivadores</a><a href="index.php#productos">Papelería</a><a href="index.php#productos">Escritorio</a></div>
+              <div class="mega-col"><h4>Compra rápida</h4><a href="cotizador-lista.php">Enviar una lista</a><a href="contacto.php">Hablar por WhatsApp</a><a href="index.php#mayoristas">Precios mayoristas</a><a href="sabias-que.php">Preguntas frecuentes</a></div>
             </div>
           </div>
-          <a href="index.html" data-nav class="">Inicio</a><a href="nosotros.html" data-nav class="">Nosotros</a><a href="cotizador-lista.html" data-nav class="active">Cotizador de lista</a><a href="sabias-que.html" data-nav class="">Sabías que</a><a href="contacto.html" data-nav class="">Contacto</a>
+          <a href="index.php" data-nav class="">Inicio</a><a href="nosotros.php" data-nav class="">Nosotros</a><a href="cotizador-lista.php" data-nav class="active">Cotizador de lista</a><a href="sabias-que.php" data-nav class="">Sabías que</a><a href="contacto.php" data-nav class="">Contacto</a>
         </div>
         <div class="nav-note">Compra por unidad, por lista o por volumen</div>
       </div>
@@ -67,10 +67,10 @@
         <img src="assets/images/logo.png" alt="Tu Lista">
         <p>Ecommerce enfocado en útiles escolares, materiales de oficina, papelería, arte, listas escolares y atención a mayoristas.</p>
       </div>
-      <div><h4>Tienda</h4><a href="index.html#productos">Productos</a><a href="index.html#categorias">Categorías</a><a href="cotizador-lista.html">Cotizador de lista</a><a href="index.html#mayoristas">Mayoristas</a></div>
-      <div><h4>Empresa</h4><a href="nosotros.html">Nosotros</a><a href="contacto.html">Contacto</a><a href="sabias-que.html">Sabías que</a><a href="condiciones-politicas.html">Condiciones</a></div>
-      <div><h4>Categorías</h4><a href="index.html#productos">Escolar</a><a href="index.html#productos">Oficina</a><a href="index.html#productos">Arte</a><a href="index.html#productos">Papelería</a></div>
-      <div><h4>Atención</h4><a href="https://wa.me/569XXXXXXXX" target="_blank">WhatsApp</a><a href="mailto:contacto@tulista.cl">contacto@tulista.cl</a><a href="contacto.html">Formulario</a><a href="cotizador-lista.html">Subir lista</a></div>
+      <div><h4>Tienda</h4><a href="index.php#productos">Productos</a><a href="index.php#categorias">Categorías</a><a href="cotizador-lista.php">Cotizador de lista</a><a href="index.php#mayoristas">Mayoristas</a></div>
+      <div><h4>Empresa</h4><a href="nosotros.php">Nosotros</a><a href="contacto.php">Contacto</a><a href="sabias-que.php">Sabías que</a><a href="condiciones-politicas.php">Condiciones</a></div>
+      <div><h4>Categorías</h4><a href="index.php#productos">Escolar</a><a href="index.php#productos">Oficina</a><a href="index.php#productos">Arte</a><a href="index.php#productos">Papelería</a></div>
+      <div><h4>Atención</h4><a href="https://wa.me/569XXXXXXXX" target="_blank">WhatsApp</a><a href="mailto:contacto@tulista.cl">contacto@tulista.cl</a><a href="contacto.php">Formulario</a><a href="cotizador-lista.php">Subir lista</a></div>
     </div>
     <div class="container footer-bottom">
       <span>© 2026 Tu Lista. Todos los derechos reservados.</span>
