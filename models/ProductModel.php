@@ -18,6 +18,22 @@ class ProductModel extends BaseModel
         return $this->db->query($sql)->fetchAll();
     }
 
+    public function publicCatalog(int $limit = 120): array
+    {
+        $limit = max(1, min(240, $limit));
+        $sql = 'SELECT p.id, p.nombre, p.sku, p.precio_venta_total, p.existencia,
+                       c.nombre AS categoria, m.nombre AS marca,
+                       CONCAT(u.descripcion, " (", u.abreviatura, ")") AS unidad
+                FROM productos p
+                INNER JOIN categorias c ON c.id = p.categoria_id
+                LEFT JOIN marcas m ON m.id = p.marca_id
+                LEFT JOIN unidades_medida u ON u.id = p.unidad_id
+                ORDER BY p.nombre ASC
+                LIMIT ' . $limit;
+
+        return $this->db->query($sql)->fetchAll();
+    }
+
 
 
     public function catalog(): array
