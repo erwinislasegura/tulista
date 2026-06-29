@@ -121,7 +121,11 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
 
 <main>
   <section class="hero">
-    <div class="hero-bg"><div class="hero-slide"></div><div class="hero-slide"></div><div class="hero-slide"></div></div>
+    <div class="hero-bg" id="heroParallax" aria-hidden="true">
+      <?php for ($i = 1; $i <= 31; $i++): ?>
+        <div class="hero-slide<?= $i === 1 ? ' is-active' : '' ?>" style="background-image:url('../assets/source/images/<?= $i ?>.png')"></div>
+      <?php endfor; ?>
+    </div>
     <div class="container">
       <div>
         <span class="eyebrow"><b>Compra simple</b> útiles escolares, arte y oficina</span>
