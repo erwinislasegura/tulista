@@ -1,4 +1,12 @@
-<form method="post" class="tl-minimal-form">
+<style>
+.tl-product-form { background: #fff; border-color: #eadfce; }
+.tl-product-media { background: #fffaf4; border: 1px solid #eadfce; border-radius: 14px; padding: 14px; }
+.tl-upload-slot { background: #fff; border: 1px dashed #dccbb8; border-radius: 12px; cursor: pointer; display: block; min-height: 138px; padding: 12px; transition: .18s ease; }
+.tl-upload-slot:hover { border-color: #ff6b00; box-shadow: 0 8px 22px rgba(39,24,61,.08); transform: translateY(-1px); }
+.tl-upload-icon { align-items: center; background: #fff1e5; border-radius: 10px; color: #ff6b00; display: inline-flex; height: 34px; justify-content: center; margin-bottom: 8px; width: 34px; }
+.tl-upload-title { color: #27183d; display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+</style>
+<form method="post" class="tl-minimal-form tl-product-form" enctype="multipart/form-data">
     <input type="hidden" name="action" value="add_product">
     <input type="hidden" name="return_url" value="apps-productos.php">
 
@@ -78,11 +86,33 @@
             </div>
             <div class="col-md-6 col-xl-4"><label class="form-label">Stock mínimo</label><input class="form-control tl-compact-input" name="stock_minimo" type="number" step="1"></div>
             <div class="col-md-6 col-xl-4"><label class="form-label">Comisión vendedor</label><input class="form-control tl-compact-input" name="comision_vendedor" type="number" step="0.01"></div>
+        </div>
 
-            <div class="col-12">
-                <div class="tl-form-actions d-flex justify-content-end mt-2">
-                    <button class="btn btn-primary px-4" type="submit">Guardar producto</button>
+        <div class="tl-product-media mt-3">
+            <div class="d-flex flex-wrap justify-content-between gap-2 align-items-start mb-2">
+                <div>
+                    <h6 class="tl-form-card-title mb-1">Fotos del producto</h6>
+                    <p class="text-muted small mb-0">Sube hasta 3 imágenes y marca cuál será la principal para el catálogo.</p>
                 </div>
+                <span class="badge bg-primary-subtle text-primary">Máximo 3 fotos</span>
+            </div>
+            <div class="row g-2">
+                <?php for ($i = 0; $i < 3; $i++): ?>
+                    <div class="col-md-4">
+                        <label class="tl-upload-slot">
+                            <span class="tl-upload-icon"><i class="bx bx-image-add"></i></span>
+                            <span class="tl-upload-title">Foto <?= $i + 1 ?></span>
+                            <input class="form-control tl-compact-input" name="product_images[]" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
+                            <span class="form-check mt-2"><input class="form-check-input" type="radio" name="principal_image_index" value="<?= $i ?>" <?= $i === 0 ? 'checked' : '' ?>> <span class="form-check-label">Principal</span></span>
+                        </label>
+                    </div>
+                <?php endfor; ?>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="tl-form-actions d-flex justify-content-end mt-3">
+                <button class="btn btn-primary px-4" type="submit"><i class="bx bx-save me-1"></i>Guardar producto</button>
             </div>
         </div>
     </div>

@@ -1,12 +1,12 @@
 Tu Lista - sitio multipágina con imágenes locales
 
 Páginas incluidas:
-- index.html (Inicio)
-- nosotros.html
-- contacto.html
-- condiciones-politicas.html
-- cotizador-lista.html
-- sabias-que.html
+- index.php (Inicio)
+- nosotros.php
+- contacto.php
+- condiciones-politicas.php
+- cotizador-lista.php
+- sabias-que.php
 
 Estructura:
 - assets/css/styles.css
