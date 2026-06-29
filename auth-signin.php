@@ -1,3 +1,3 @@
 <?php
-header('Location: cliente-login.php');
+header('Location: auth-login-usuarios.php');
 exit;
