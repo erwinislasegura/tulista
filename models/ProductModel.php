@@ -36,7 +36,8 @@ class ProductModel extends BaseModel
                 INNER JOIN categorias c ON c.id = p.categoria_id
                 LEFT JOIN marcas m ON m.id = p.marca_id
                 LEFT JOIN unidades_medida u ON u.id = p.unidad_id
-                LEFT JOIN producto_imagenes img ON img.producto_id = p.id AND img.es_principal = 1
+                INNER JOIN producto_imagenes img ON img.producto_id = p.id AND img.es_principal = 1
+                WHERE p.existencia > 0
                 ORDER BY p.nombre ASC
                 LIMIT ' . $limit;
 
