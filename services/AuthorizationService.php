@@ -102,7 +102,7 @@ class AuthorizationService
     public static function requirePermission(string $permission): void
     {
         if (!AuthService::user()) {
-            header('Location: auth-signin.php');
+            header('Location: auth-login-usuarios.php');
             exit;
         }
 
@@ -122,7 +122,7 @@ class AuthorizationService
     public static function firstAccessiblePage(): ?string
     {
         $map = [
-            'dashboard.view' => 'index.php',
+            'dashboard.view' => 'dashboard.php',
             'cotizaciones.manage' => 'apps-cotizaciones.php',
             'pedidos.view' => 'apps-pedidos.php',
             'clientes.manage' => 'apps-clientes.php',

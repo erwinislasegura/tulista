@@ -11,23 +11,23 @@ $isClientePortal = $cliente !== null && $user === null;
 
 $menu = [
     'Principal' => [
-        ['page' => 'index.php', 'text' => 'Dashboard', 'icon' => 'solar:widget-2-broken', 'perm' => 'dashboard.view'],
+        ['page' => 'dashboard.php', 'text' => 'Inicio', 'icon' => 'solar:widget-2-broken', 'perm' => 'dashboard.view', 'pages' => ['dashboard.php']],
     ],
     'Flujo comercial' => [
         [
             'page' => 'apps-cotizaciones.php',
-            'text' => '1. Cotizaciones clientes',
+            'text' => 'Cotizaciones',
             'icon' => 'solar:bill-list-broken',
             'perm' => 'cotizaciones.manage',
             'pages' => ['apps-cotizaciones.php', 'apps-cotizaciones-registradas.php', 'apps-bodega.php'],
             'children' => [
-                ['page' => 'apps-cotizaciones.php', 'text' => 'Crear cotización', 'icon' => 'solar:add-circle-broken', 'perm' => 'cotizaciones.manage'],
-                ['page' => 'apps-cotizaciones-registradas.php', 'text' => 'Bandeja y detalle', 'icon' => 'solar:bill-list-broken', 'perm' => 'cotizaciones.manage'],
-                ['page' => 'apps-bodega.php', 'url' => 'apps-bodega.php?menu=revision', 'text' => 'Faltantes y reemplazos', 'icon' => 'solar:box-minimalistic-broken', 'perm' => 'bodega.view'],
+                ['page' => 'apps-cotizaciones.php', 'text' => 'Nueva cotización', 'icon' => 'solar:add-circle-broken', 'perm' => 'cotizaciones.manage'],
+                ['page' => 'apps-cotizaciones-registradas.php', 'text' => 'Registradas', 'icon' => 'solar:bill-list-broken', 'perm' => 'cotizaciones.manage'],
+                ['page' => 'apps-bodega.php', 'url' => 'apps-bodega.php?menu=revision', 'text' => 'Faltantes', 'icon' => 'solar:box-minimalistic-broken', 'perm' => 'bodega.view'],
             ],
         ],
-        ['page' => 'apps-pedidos.php', 'text' => '2. Pedidos', 'icon' => 'solar:cart-large-broken', 'perm' => 'pedidos.view'],
-        ['page' => 'apps-clientes.php', 'text' => '3. Clientes', 'icon' => 'solar:users-group-rounded-broken', 'perm' => 'clientes.manage'],
+        ['page' => 'apps-pedidos.php', 'text' => 'Pedidos', 'icon' => 'solar:cart-large-broken', 'perm' => 'pedidos.view'],
+        ['page' => 'apps-clientes.php', 'text' => 'Clientes', 'icon' => 'solar:users-group-rounded-broken', 'perm' => 'clientes.manage'],
     ],
     'Operación' => [
         [
@@ -71,10 +71,13 @@ $menu = [
 ?>
 <div class="main-nav <?= $isClientePortal ? "tl-main-nav-cliente" : "tl-main-nav-adminlte" ?>">
      <div class="logo-box py-3 px-3">
-          <a href="<?= $isClientePortal ? 'cliente-portal.php' : 'index.php' ?>" class="logo-dark d-flex align-items-center gap-2 text-decoration-none tl-brand-block">
+          <a href="<?= $isClientePortal ? 'cliente-portal.php' : 'dashboard.php' ?>" class="logo-dark d-flex align-items-center gap-2 text-decoration-none tl-brand-block">
                <img src="<?= htmlspecialchars($logoPath) ?>" class="logo-sm tl-brand-logo" alt="logo" style="height:34px; width:34px;">
-               <span class="fw-semibold tl-brand-name text-white"><?= htmlspecialchars($companyConfig['nombre']) ?></span>
+               <span class="tl-brand-copy min-w-0"><span class="fw-semibold tl-brand-name text-white text-truncate"><?= htmlspecialchars($companyConfig['nombre']) ?></span><small class="tl-brand-subtitle-nav"><?= $isClientePortal ? 'Portal cliente' : 'Panel admin' ?></small></span>
           </a>
+          <?php if (!$isClientePortal): ?>
+               <div class="tl-menu-search"><i class="bx bx-search"></i><input id="admin-menu-search" type="search" placeholder="Buscar módulo" autocomplete="off"></div>
+          <?php endif; ?>
      </div>
      <button type="button" class="button-sm-hover" aria-label="Show Full Sidebar">
           <iconify-icon icon="solar:hamburger-menu-broken" class="button-sm-hover-icon"></iconify-icon>
@@ -147,7 +150,8 @@ $menu = [
                               </li>
                          <?php endforeach; ?>
                     <?php endforeach; ?>
-                    <li class="nav-item mt-2"><a class="nav-link" href="logout-usuarios.php"><span class="nav-icon"><iconify-icon icon="solar:logout-2-broken"></iconify-icon></span><span class="nav-text">Cerrar sesión</span></a></li>
+                    <li class="nav-item mt-2 tl-menu-divider"><a class="nav-link" href="pagina/index.php"><span class="nav-icon"><iconify-icon icon="solar:shop-broken"></iconify-icon></span><span class="nav-text">Ver tienda</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="logout-usuarios.php"><span class="nav-icon"><iconify-icon icon="solar:logout-2-broken"></iconify-icon></span><span class="nav-text">Cerrar sesión</span></a></li>
                <?php endif; ?>
           </ul>
      </div>
