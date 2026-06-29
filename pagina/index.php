@@ -153,23 +153,6 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
       <div class="trust-item"><div class="trust-icon">🎒</div><div><strong>Listas escolares</strong><span>Envíala y cotiza.</span></div></div>
     </div>
   </div>
-  <section id="categorias" class="section-bg" style="--section-bg:url('../assets/source/images/8.png')">
-    <div class="container">
-      <div class="section-head"><div><span class="kicker">Categorías</span><h2 class="section-title">Compra por tipo de producto.</h2><p class="section-copy">Organizado para apoderados, oficinas, colegios y negocios que necesitan encontrar rápido lo básico.</p></div><a class="btn ghost" href="#productos">Ver catálogo</a></div>
-      <div class="category-strip">
-        <?php if ($publicCatalogLoaded && !empty($publicCategories)): ?>
-          <?php foreach ($publicCategories as $category): ?>
-            <?php $categoryName = (string) $category['nombre']; ?>
-            <button class="cat-tile" data-filter="<?= htmlspecialchars($categoryName, ENT_QUOTES, 'UTF-8') ?>"><img src="<?= htmlspecialchars(paginaCategoryImage($categoryName), ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($categoryName, ENT_QUOTES, 'UTF-8') ?>"><strong><?= htmlspecialchars($categoryName, ENT_QUOTES, 'UTF-8') ?></strong><span><?= (int) $category['productos_total'] ?> producto<?= ((int) $category['productos_total']) === 1 ? '' : 's' ?></span></button>
-          <?php endforeach; ?>
-        <?php elseif (!$publicCatalogLoaded): ?>
-          <button class="cat-tile" data-filter="Escolar"><img src="assets/images/prod-kit.png" alt="Escolar"><strong>Escolar</strong><span>Cuadernos, reglas, kits</span></button><button class="cat-tile" data-filter="Oficina"><img src="assets/images/prod-oficina.png" alt="Oficina"><strong>Oficina</strong><span>Resmas, carpetas, archivo</span></button><button class="cat-tile" data-filter="Arte"><img src="assets/images/prod-pinturas.png" alt="Arte"><strong>Arte</strong><span>Pinturas, goma eva, pinceles</span></button><button class="cat-tile" data-filter="Papelería"><img src="assets/images/prod-etiquetas.png" alt="Papelería"><strong>Papelería</strong><span>Papeles, cartulinas, etiquetas</span></button><button class="cat-tile" data-filter="Escritura"><img src="assets/images/prod-lapices.png" alt="Escritura"><strong>Escritura</strong><span>Lápices, marcadores, destacadores</span></button><button class="cat-tile" data-filter="Librería"><img src="assets/images/prod-libros.png" alt="Librería"><strong>Librería</strong><span>Libros, textos y lectura</span></button>
-        <?php else: ?>
-          <p class="result-note">Aún no hay categorías creadas en el panel de administración.</p>
-        <?php endif; ?>
-      </div>
-    </div>
-  </section>
   <section id="productos" class="section-bg" style="--section-bg:url('../assets/source/images/14.png')">
     <div class="container">
       <div class="section-head"><div><span class="kicker">Más pedidos</span><h2 class="section-title">Productos listos para agregar al pedido.</h2><p class="section-copy">Selecciona la cantidad antes de agregar al carrito. Después finalizas por WhatsApp.</p></div><button class="btn ghost" id="clearFilters" type="button">Limpiar filtros</button></div>
@@ -200,7 +183,7 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
         <img src="assets/images/logo.png" alt="Tu Lista">
         <p>Ecommerce enfocado en útiles escolares, materiales de oficina, papelería, arte, listas escolares y atención a mayoristas.</p>
       </div>
-      <div><h4>Tienda</h4><a href="index.php#productos">Productos</a><a href="index.php#categorias">Categorías</a><a href="cotizador-lista.php">Cotizador de lista</a><a href="index.php#mayoristas">Mayoristas</a></div>
+      <div><h4>Tienda</h4><a href="index.php#productos">Productos</a><a href="cotizador-lista.php">Cotizador de lista</a><a href="index.php#mayoristas">Mayoristas</a></div>
       <div><h4>Empresa</h4><a href="nosotros.php">Nosotros</a><a href="contacto.php">Contacto</a><a href="sabias-que.php">Sabías que</a><a href="condiciones-politicas.php">Condiciones</a></div>
       <div><h4>Categorías</h4><a href="index.php#productos">Escolar</a><a href="index.php#productos">Oficina</a><a href="index.php#productos">Arte</a><a href="index.php#productos">Papelería</a></div>
       <div><h4>Atención</h4><a href="https://wa.me/569XXXXXXXX" target="_blank">WhatsApp</a><a href="mailto:contacto@tulista.cl">contacto@tulista.cl</a><a href="contacto.php">Formulario</a><a href="cotizador-lista.php">Subir lista</a><a href="../dashboard.php">Panel administración</a></div>
