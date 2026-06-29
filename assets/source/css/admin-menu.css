@@ -1,0 +1,203 @@
+/* Admin menu final skin: professional, readable and aligned with the public storefront */
+:root {
+    --tl-menu-purple: #2b1745;
+    --tl-menu-purple-2: #3c0f96;
+    --tl-menu-orange: #ff6b00;
+    --tl-menu-cream: #fff7ef;
+    --tl-menu-cream-2: #fff1e5;
+    --tl-menu-ink: #27183d;
+    --tl-menu-muted: #6d6277;
+    --tl-menu-line: #eadfce;
+}
+
+.main-nav.tl-main-nav-adminlte {
+    background: linear-gradient(180deg, var(--tl-menu-purple-2) 0%, var(--tl-menu-purple) 100%) !important;
+    border-right: 0 !important;
+    box-shadow: 8px 0 26px rgba(39, 24, 61, .18) !important;
+}
+
+.main-nav.tl-main-nav-adminlte .logo-box {
+    border-bottom: 1px solid rgba(255, 247, 239, .16) !important;
+    margin-bottom: .34rem !important;
+    padding: .92rem .82rem .72rem !important;
+}
+
+.main-nav.tl-main-nav-adminlte .tl-brand-block {
+    background: rgba(255, 255, 255, .07) !important;
+    border: 1px solid rgba(255, 247, 239, .13) !important;
+    border-radius: 12px !important;
+    gap: .56rem !important;
+    padding: .42rem .48rem !important;
+}
+
+.main-nav.tl-main-nav-adminlte .tl-brand-logo {
+    background: #fff !important;
+    border: 0 !important;
+    border-radius: 9px !important;
+    box-shadow: none !important;
+    height: 30px !important;
+    width: 30px !important;
+}
+
+.main-nav.tl-main-nav-adminlte .tl-brand-name,
+.main-nav.tl-main-nav-adminlte .tl-brand-name.text-white {
+    color: #ffffff !important;
+    display: block !important;
+    font-size: .78rem !important;
+    font-weight: 620 !important;
+    letter-spacing: -.012em !important;
+    line-height: 1.05 !important;
+}
+
+.main-nav.tl-main-nav-adminlte .tl-brand-subtitle-nav {
+    color: rgba(255, 247, 239, .68) !important;
+    display: block !important;
+    font-size: .55rem !important;
+    font-weight: 560 !important;
+    letter-spacing: .08em !important;
+    line-height: 1.1 !important;
+    margin-top: .16rem !important;
+    text-transform: uppercase !important;
+}
+
+.main-nav.tl-main-nav-adminlte .tl-menu-search {
+    align-items: center !important;
+    background: rgba(255, 247, 239, .10) !important;
+    border: 1px solid rgba(255, 247, 239, .16) !important;
+    border-radius: 10px !important;
+    color: rgba(255, 255, 255, .74) !important;
+    display: flex !important;
+    gap: .42rem !important;
+    margin-top: .62rem !important;
+    padding: .34rem .52rem !important;
+}
+
+.main-nav.tl-main-nav-adminlte .tl-menu-search input {
+    background: transparent !important;
+    border: 0 !important;
+    color: #ffffff !important;
+    font-size: .70rem !important;
+    font-weight: 400 !important;
+    outline: 0 !important;
+}
+
+.main-nav.tl-main-nav-adminlte .tl-menu-search input::placeholder {
+    color: rgba(255, 255, 255, .54) !important;
+}
+
+.main-nav.tl-main-nav-adminlte .navbar-nav {
+    padding: .08rem .58rem .8rem !important;
+}
+
+.main-nav.tl-main-nav-adminlte .menu-title {
+    color: rgba(255, 247, 239, .52) !important;
+    font-size: .56rem !important;
+    font-weight: 650 !important;
+    letter-spacing: .085em !important;
+    margin: .78rem .46rem .26rem !important;
+    padding: 0 !important;
+    text-transform: uppercase !important;
+}
+
+.main-nav.tl-main-nav-adminlte .nav-item {
+    margin: 1px 0 !important;
+}
+
+.main-nav.tl-main-nav-adminlte .nav-link,
+.main-nav.tl-main-nav-adminlte .sub-nav-link {
+    align-items: center !important;
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    border-radius: 9px !important;
+    color: rgba(255, 255, 255, .82) !important;
+    display: flex !important;
+    font-size: .74rem !important;
+    font-weight: 430 !important;
+    gap: .46rem !important;
+    letter-spacing: 0 !important;
+    line-height: 1.18 !important;
+    min-height: 32px !important;
+    padding: .30rem .44rem !important;
+    text-decoration: none !important;
+    transform: none !important;
+}
+
+.main-nav.tl-main-nav-adminlte .nav-link .nav-text,
+.main-nav.tl-main-nav-adminlte .sub-nav-link .nav-text,
+.main-nav.tl-main-nav-adminlte .nav-text {
+    color: inherit !important;
+    font: inherit !important;
+    min-width: 0 !important;
+}
+
+.main-nav.tl-main-nav-adminlte .nav-icon {
+    align-items: center !important;
+    background: transparent !important;
+    color: rgba(255, 247, 239, .74) !important;
+    display: inline-flex !important;
+    flex: 0 0 22px !important;
+    height: 22px !important;
+    justify-content: center !important;
+    width: 22px !important;
+}
+
+.main-nav.tl-main-nav-adminlte .nav-icon iconify-icon,
+.main-nav.tl-main-nav-adminlte iconify-icon {
+    color: inherit !important;
+    font-size: 14px !important;
+}
+
+.main-nav.tl-main-nav-adminlte .nav-link:hover,
+.main-nav.tl-main-nav-adminlte .sub-nav-link:hover {
+    background: rgba(255, 247, 239, .12) !important;
+    border-color: rgba(255, 247, 239, .12) !important;
+    color: #ffffff !important;
+}
+
+.main-nav.tl-main-nav-adminlte .nav-link:hover .nav-icon,
+.main-nav.tl-main-nav-adminlte .sub-nav-link:hover .nav-icon {
+    color: #ffffff !important;
+}
+
+.main-nav.tl-main-nav-adminlte .nav-link.active,
+.main-nav.tl-main-nav-adminlte .sub-nav-link.active {
+    background: var(--tl-menu-cream-2) !important;
+    border-color: rgba(255, 255, 255, .18) !important;
+    box-shadow: inset 3px 0 0 var(--tl-menu-orange) !important;
+    color: var(--tl-menu-purple-2) !important;
+    font-weight: 620 !important;
+}
+
+.main-nav.tl-main-nav-adminlte .nav-link.active .nav-icon,
+.main-nav.tl-main-nav-adminlte .sub-nav-link.active .nav-icon {
+    color: var(--tl-menu-orange) !important;
+}
+
+.main-nav.tl-main-nav-adminlte .tl-submenu-caret {
+    color: rgba(255, 247, 239, .62) !important;
+    font-size: .74rem !important;
+}
+
+.main-nav.tl-main-nav-adminlte .tl-submenu-list {
+    border-left: 1px solid rgba(255, 247, 239, .16) !important;
+    margin: .12rem 0 .24rem .98rem !important;
+    padding-left: .42rem !important;
+}
+
+.main-nav.tl-main-nav-adminlte .sub-nav-link {
+    font-size: .69rem !important;
+    min-height: 27px !important;
+    padding: .22rem .34rem !important;
+}
+
+.main-nav.tl-main-nav-adminlte .sub-nav-link .nav-icon {
+    flex-basis: 16px !important;
+    height: 16px !important;
+    width: 16px !important;
+}
+
+.main-nav.tl-main-nav-adminlte .tl-menu-divider {
+    border-top: 1px solid rgba(255, 247, 239, .16) !important;
+    margin-top: .58rem !important;
+    padding-top: .44rem !important;
+}
