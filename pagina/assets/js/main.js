@@ -7,6 +7,7 @@ const categories = ['Todos', ...new Set((Array.isArray(window.TULISTA_CATEGORIES
 let cart = [];
 let activeCategory = 'Todos';
 let searchTerm = '';
+const productQuantities = new Map();
 
 const money = new Intl.NumberFormat('es-CL', {style:'currency', currency:'CLP', maximumFractionDigits:0});
 
@@ -68,14 +69,32 @@ function filteredProducts(){
   return list;
 }
 
+function normalizeQty(value, fallback = 1){
+  const qty = parseInt(value, 10);
+  return Number.isFinite(qty) && qty > 0 ? qty : fallback;
+}
+
+function getProductQty(id){
+  return normalizeQty(productQuantities.get(id), 1);
+}
+
+function setProductQty(id, value){
+  const qty = normalizeQty(value, 1);
+  productQuantities.set(id, qty);
+  const el = document.getElementById('qty-'+id);
+  if(el) el.value = qty;
+  const modalQty = document.getElementById('modalQty');
+  if(modalQty && Number(modalQty.dataset.productId) === Number(id)) modalQty.value = qty;
+  return qty;
+}
+
 function qtyValue(id){
   const el = document.getElementById('qty-'+id);
-  return Math.max(1, parseInt(el?.value || '1', 10));
+  return setProductQty(id, el?.value ?? getProductQty(id));
 }
 
 function changeCardQty(id, delta){
-  const el = document.getElementById('qty-'+id);
-  if(el) el.value = Math.max(1, parseInt(el.value || '1',10) + delta);
+  setProductQty(id, getProductQty(id) + delta);
 }
 
 function renderProducts(){
@@ -97,7 +116,7 @@ function renderProducts(){
         <p class="product-desc">${p.desc}</p>
         <div class="price-row"><span class="price">${money.format(p.price)}</span>${p.old ? `<span class="old-price">${money.format(p.old)}</span>` : ''}</div>
         <div class="card-actions">
-          <div class="qty-box"><button onclick="changeCardQty(${p.id},-1)">−</button><input id="qty-${p.id}" type="number" min="1" value="1"><button onclick="changeCardQty(${p.id},1)">+</button></div>
+          <div class="qty-box"><button type="button" onclick="changeCardQty(${p.id},-1)">−</button><input id="qty-${p.id}" type="number" min="1" step="1" inputmode="numeric" value="${getProductQty(p.id)}" onchange="setProductQty(${p.id}, this.value)" oninput="setProductQty(${p.id}, this.value)"><button type="button" onclick="changeCardQty(${p.id},1)">+</button></div>
           <button class="add-btn" onclick="addToCart(${p.id}, qtyValue(${p.id}))">Agregar</button>
         </div>
         <button class="whatsapp-card" onclick="consultProduct(${p.id})">Consultar por WhatsApp</button>
@@ -107,6 +126,8 @@ function renderProducts(){
 
 function addToCart(id, qty=1){
   const p = products.find(x=>x.id===id);
+  if(!p) return;
+  qty = normalizeQty(qty, 1);
   const existing = cart.find(i=>i.id===id);
   if(existing) existing.qty += qty;
   else cart.push({...p, qty});
@@ -180,8 +201,8 @@ function openModal(id){
         <div class="modal-info"><strong>Ideal para</strong><span>Escolar, oficina, listas y mayoristas.</span></div>
       </div>
       <div class="card-actions">
-        <div class="qty-box"><button onclick="changeModalQty(-1)">−</button><input id="modalQty" type="number" min="1" value="1"><button onclick="changeModalQty(1)">+</button></div>
-        <button class="add-btn" onclick="addToCart(${p.id}, Math.max(1,parseInt(document.getElementById('modalQty').value||'1'))); closeModal();">Agregar</button>
+        <div class="qty-box"><button type="button" onclick="changeModalQty(-1)">−</button><input id="modalQty" type="number" min="1" step="1" inputmode="numeric" value="${getProductQty(p.id)}" data-product-id="${p.id}" onchange="setProductQty(${p.id}, this.value)" oninput="setProductQty(${p.id}, this.value)"><button type="button" onclick="changeModalQty(1)">+</button></div>
+        <button class="add-btn" onclick="addToCart(${p.id}, qtyValue(${p.id})); closeModal();">Agregar</button>
       </div>
       <a class="btn ghost full" href="https://wa.me/${whatsappNumber}?text=Hola%20Tu%20Lista,%20quiero%20consultar%20por%20${encodeURIComponent(p.name)}" target="_blank">Consultar por WhatsApp</a>
     </div>`;
@@ -194,7 +215,10 @@ function closeModal(){
 }
 function changeModalQty(delta){
   const el = document.getElementById('modalQty');
-  if(el) el.value = Math.max(1, parseInt(el.value||'1') + delta);
+  if(!el) return;
+  const id = Number(el.dataset.productId);
+  if(id) setProductQty(id, normalizeQty(el.value, 1) + delta);
+  else el.value = normalizeQty(el.value, 1) + delta;
 }
 
 function setupForms(){
@@ -242,4 +266,4 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.addEventListener('keydown',e=>{ if(e.key==='Escape'){closeCart();closeModal();closeMega();} });
 });
 
-window.addToCart=addToCart; window.changeCardQty=changeCardQty; window.qtyValue=qtyValue; window.updateQty=updateQty; window.removeItem=removeItem; window.openModal=openModal; window.changeModalQty=changeModalQty; window.consultProduct=consultProduct;
+window.addToCart=addToCart; window.changeCardQty=changeCardQty; window.setProductQty=setProductQty; window.qtyValue=qtyValue; window.updateQty=updateQty; window.removeItem=removeItem; window.openModal=openModal; window.changeModalQty=changeModalQty; window.consultProduct=consultProduct;
