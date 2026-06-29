@@ -12,10 +12,10 @@ class Database
 
         $host = getenv('DB_HOST') ?: getenv('MYSQL_HOST') ?: 'localhost';
         $port = getenv('DB_PORT') ?: getenv('MYSQL_PORT') ?: '3306';
-        $dbName = getenv('DB_NAME') ?: getenv('MYSQL_DATABASE') ?: 'tulista_app';
+        $dbName = getenv('DB_NAME') ?: getenv('MYSQL_DATABASE') ?: 'tulista';
 
         $credentials = [[
-            'user' => getenv('DB_USER') ?: getenv('DB_USERNAME') ?: getenv('MYSQL_USER') ?: $dbName,
+            'user' => getenv('DB_USER') ?: getenv('DB_USERNAME') ?: getenv('MYSQL_USER') ?: 'root',
             'pass' => getenv('DB_PASS') ?: getenv('DB_PASSWORD') ?: getenv('MYSQL_PASSWORD') ?: '',
             'source' => 'env/default',
         ]];
