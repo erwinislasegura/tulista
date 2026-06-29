@@ -318,10 +318,17 @@ class ProductosController
         $files = $_FILES['product_images'];
         $images = [];
         $maxFiles = 3;
+        $maxBytes = 8 * 1024 * 1024;
         $uploadDir = __DIR__ . '/../uploads/productos';
 
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0775, true);
+        if (!is_dir($uploadDir) && !mkdir($uploadDir, 0775, true) && !is_dir($uploadDir)) {
+            $this->flash('danger', 'No fue posible crear la carpeta de imágenes de productos. Revisa permisos de uploads/productos.');
+            return [];
+        }
+
+        if (!is_writable($uploadDir)) {
+            $this->flash('danger', 'La carpeta uploads/productos no tiene permisos de escritura.');
+            return [];
         }
 
         foreach ($files['name'] as $index => $originalName) {
@@ -330,41 +337,53 @@ class ProductosController
                 break;
             }
 
+            $originalName = (string) $originalName;
             $error = (int) ($files['error'][$index] ?? UPLOAD_ERR_NO_FILE);
             if ($error === UPLOAD_ERR_NO_FILE) {
                 continue;
             }
 
             if ($error !== UPLOAD_ERR_OK) {
-                $this->flash('warning', 'Una imagen no pudo subirse correctamente.');
+                $this->flash('warning', $this->uploadErrorMessage($error, $originalName));
                 continue;
             }
 
             $tmpName = (string) ($files['tmp_name'][$index] ?? '');
             if ($tmpName === '' || !is_uploaded_file($tmpName)) {
+                $this->flash('warning', 'No se pudo validar la carga temporal de ' . ($originalName ?: 'una imagen') . '. Intenta nuevamente.');
                 continue;
             }
 
-            $mime = (string) (mime_content_type($tmpName) ?: '');
+            $size = (int) ($files['size'][$index] ?? 0);
+            if ($size <= 0 || $size > $maxBytes) {
+                $this->flash('warning', 'La imagen ' . ($originalName ?: '') . ' supera el máximo permitido de 8 MB.');
+                continue;
+            }
+
+            $imageInfo = @getimagesize($tmpName);
+            $mime = (string) ($imageInfo['mime'] ?? mime_content_type($tmpName) ?: '');
             $extensions = [
                 'image/jpeg' => 'jpg',
+                'image/pjpeg' => 'jpg',
                 'image/png' => 'png',
+                'image/x-png' => 'png',
                 'image/webp' => 'webp',
                 'image/gif' => 'gif',
             ];
 
             if (!isset($extensions[$mime])) {
-                $this->flash('warning', 'Solo se aceptan imágenes JPG, PNG, WEBP o GIF.');
+                $this->flash('warning', 'La imagen ' . ($originalName ?: '') . ' no tiene un formato válido. Usa JPG, PNG, WEBP o GIF.');
                 continue;
             }
 
             $filename = bin2hex(random_bytes(10)) . '.' . $extensions[$mime];
             $target = $uploadDir . '/' . $filename;
             if (!move_uploaded_file($tmpName, $target)) {
-                $this->flash('warning', 'No fue posible guardar una imagen del producto.');
+                $this->flash('warning', 'No fue posible guardar ' . ($originalName ?: 'una imagen') . ' en uploads/productos. Revisa permisos de escritura.');
                 continue;
             }
 
+            @chmod($target, 0664);
             $images[] = [
                 'ruta' => 'uploads/productos/' . $filename,
                 'es_principal' => $index === $principalIndex,
@@ -376,6 +395,19 @@ class ProductosController
         }
 
         return $images;
+    }
+
+    private function uploadErrorMessage(int $error, string $filename): string
+    {
+        $name = $filename !== '' ? '"' . $filename . '"' : 'la imagen';
+        return match ($error) {
+            UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE => 'No se cargó ' . $name . ' porque supera el tamaño permitido por el servidor. Máximo recomendado: 8 MB.',
+            UPLOAD_ERR_PARTIAL => 'La carga de ' . $name . ' quedó incompleta. Intenta subirla nuevamente.',
+            UPLOAD_ERR_NO_TMP_DIR => 'No se cargó ' . $name . ' porque el servidor no tiene carpeta temporal configurada.',
+            UPLOAD_ERR_CANT_WRITE => 'No se cargó ' . $name . ' porque el servidor no pudo escribir el archivo temporal.',
+            UPLOAD_ERR_EXTENSION => 'No se cargó ' . $name . ' porque una extensión de PHP bloqueó la carga.',
+            default => 'No se cargó ' . $name . '. Código de error de carga: ' . $error . '.',
+        };
     }
 
     private function deleteStoredFiles(array $paths): void
