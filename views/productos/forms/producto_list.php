@@ -2,6 +2,19 @@
 $products = $data['products'] ?? [];
 $productImages = $data['product_images'] ?? [];
 $money = static fn ($value): string => '$' . number_format((float) $value, 0, ',', '.');
+$editCatalog = [
+    'categories' => array_map(static fn ($item): array => ['id' => (int) $item['id'], 'label' => (string) $item['nombre']], $data['categories'] ?? []),
+    'brands' => array_map(static fn ($item): array => ['id' => (int) $item['id'], 'label' => (string) $item['nombre']], $data['brands'] ?? []),
+    'units' => array_map(static fn ($item): array => ['id' => (int) $item['id'], 'label' => (string) $item['descripcion'] . ' (' . (string) $item['abreviatura'] . ')'], $data['units'] ?? []),
+];
+$productsPayload = [];
+foreach ($products as $product) {
+    $productId = (int) $product['id'];
+    $productsPayload[$productId] = $product;
+    $productsPayload[$productId]['id'] = $productId;
+    $productsPayload[$productId]['images'] = $productImages[$productId] ?? [];
+}
+$jsonOptions = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT;
 ?>
 
 <style>
@@ -47,7 +60,7 @@ $money = static fn ($value): string => '$' . number_format((float) $value, 0, ',
             <tr>
                 <td>
                     <div class="d-flex align-items-center gap-2">
-                        <span class="tl-product-thumb"><?php if ($principal): ?><img src="<?= htmlspecialchars($principal) ?>" alt="<?= htmlspecialchars($product['nombre']) ?>"><?php else: ?><i class="bx bx-image"></i><?php endif; ?></span>
+                        <span class="tl-product-thumb"><?php if ($principal): ?><img loading="lazy" src="<?= htmlspecialchars($principal) ?>" alt="<?= htmlspecialchars($product['nombre']) ?>"><?php else: ?><i class="bx bx-image"></i><?php endif; ?></span>
                         <span><span class="tl-product-name"><?= htmlspecialchars($product['nombre']) ?></span><span class="tl-product-meta">SKU: <?= htmlspecialchars($product['sku'] ?: '-') ?> · <?= htmlspecialchars($product['modelo'] ?: 'Sin modelo') ?></span></span>
                     </div>
                 </td>
@@ -59,8 +72,8 @@ $money = static fn ($value): string => '$' . number_format((float) $value, 0, ',
                     <div class="dropdown">
                         <button class="btn btn-sm btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">Acciones</button>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#viewProduct<?= $productId ?>"><i class="bx bx-show me-2"></i>Ver</button></li>
-                            <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#editProduct<?= $productId ?>"><i class="bx bx-edit me-2"></i>Editar</button></li>
+                            <li><button class="dropdown-item js-view-product" type="button" data-product-id="<?= $productId ?>"><i class="bx bx-show me-2"></i>Ver</button></li>
+                            <li><button class="dropdown-item js-edit-product" type="button" data-product-id="<?= $productId ?>"><i class="bx bx-edit me-2"></i>Editar</button></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form method="post" onsubmit="return confirm('¿Eliminar este producto? Esta acción no se puede deshacer.');">
@@ -79,87 +92,70 @@ $money = static fn ($value): string => '$' . number_format((float) $value, 0, ',
     </table>
 </div>
 
-<?php foreach ($products as $product): ?>
-    <?php
-    $productId = (int) $product['id'];
-    $images = $productImages[$productId] ?? [];
-    ?>
-    <div class="modal fade" id="viewProduct<?= $productId ?>" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content">
-            <div class="modal-header"><div><h5 class="modal-title mb-0"><?= htmlspecialchars($product['nombre']) ?></h5><small class="text-muted">SKU <?= htmlspecialchars($product['sku'] ?: '-') ?></small></div><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
-            <div class="modal-body">
-                <div class="row g-3">
-                    <div class="col-md-5">
-                        <?php if (!empty($images)): ?><div class="tl-product-gallery"><?php foreach ($images as $image): ?><img src="<?= htmlspecialchars($image['ruta']) ?>" alt="<?= htmlspecialchars($product['nombre']) ?>"><?php endforeach; ?></div><?php else: ?><div class="text-muted border rounded-3 p-4 text-center">Sin fotos registradas</div><?php endif; ?>
-                    </div>
-                    <div class="col-md-7">
-                        <dl class="row mb-0 small">
-                            <dt class="col-5">Categoría</dt><dd class="col-7"><?= htmlspecialchars($product['categoria']) ?></dd>
-                            <dt class="col-5">Marca</dt><dd class="col-7"><?= htmlspecialchars($product['marca'] ?: '-') ?></dd>
-                            <dt class="col-5">Unidad</dt><dd class="col-7"><?= htmlspecialchars($product['unidad'] ?: '-') ?></dd>
-                            <dt class="col-5">Código barras</dt><dd class="col-7"><?= htmlspecialchars($product['codigo_barras'] ?: '-') ?></dd>
-                            <dt class="col-5">Costo neto</dt><dd class="col-7"><?= $money($product['costo_neto']) ?></dd>
-                            <dt class="col-5">Venta total</dt><dd class="col-7"><strong><?= $money($product['precio_venta_total']) ?></strong></dd>
-                            <dt class="col-5">Stock mínimo</dt><dd class="col-7"><?= (int) $product['stock_minimo'] ?></dd>
-                            <dt class="col-5">Existencia</dt><dd class="col-7"><?= (int) $product['existencia'] ?></dd>
-                        </dl>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer"><button class="btn btn-light" type="button" data-bs-dismiss="modal">Cerrar</button></div>
-        </div></div>
-    </div>
+<div class="modal fade" id="viewProductModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content">
+        <div class="modal-header"><div><h5 class="modal-title mb-0" id="viewProductTitle"></h5><small class="text-muted" id="viewProductSku"></small></div><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+        <div class="modal-body" id="viewProductBody"></div>
+        <div class="modal-footer"><button class="btn btn-light" type="button" data-bs-dismiss="modal">Cerrar</button></div>
+    </div></div>
+</div>
 
-    <div class="modal fade" id="editProduct<?= $productId ?>" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered"><div class="modal-content">
-            <div class="modal-header"><div><h5 class="modal-title mb-0">Editar producto</h5><small class="text-muted"><?= htmlspecialchars($product['nombre']) ?></small></div><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
-            <form method="post" enctype="multipart/form-data">
-                <input type="hidden" name="action" value="update_product"><input type="hidden" name="return_url" value="apps-productos.php"><input type="hidden" name="id" value="<?= $productId ?>">
-                <div class="modal-body">
-                    <div class="row g-2">
-                        <div class="col-md-4"><label class="form-label">Categoría</label><select class="form-select tl-compact-input" name="categoria_id" required><?php foreach ($data['categories'] as $item): ?><option value="<?= (int) $item['id'] ?>" <?= (int) $product['categoria_id'] === (int) $item['id'] ? 'selected' : '' ?>><?= htmlspecialchars($item['nombre']) ?></option><?php endforeach; ?></select></div>
-                        <div class="col-md-4"><label class="form-label">Nombre</label><input class="form-control tl-compact-input" name="nombre" value="<?= htmlspecialchars($product['nombre']) ?>" required></div>
-                        <div class="col-md-4"><label class="form-label">SKU</label><input class="form-control tl-compact-input" name="sku" value="<?= htmlspecialchars($product['sku']) ?>"></div>
-                        <div class="col-md-4"><label class="form-label">Marca</label><select class="form-select tl-compact-input" name="marca_id"><option value="">Seleccionar</option><?php foreach ($data['brands'] as $item): ?><option value="<?= (int) $item['id'] ?>" <?= (int) ($product['marca_id'] ?? 0) === (int) $item['id'] ? 'selected' : '' ?>><?= htmlspecialchars($item['nombre']) ?></option><?php endforeach; ?></select></div>
-                        <div class="col-md-4"><label class="form-label">Modelo</label><input class="form-control tl-compact-input" name="modelo" value="<?= htmlspecialchars($product['modelo'] ?? '') ?>"></div>
-                        <div class="col-md-4"><label class="form-label">Unidad</label><select class="form-select tl-compact-input" name="unidad_id"><option value="">Seleccionar</option><?php foreach ($data['units'] as $item): ?><option value="<?= (int) $item['id'] ?>" <?= (int) ($product['unidad_id'] ?? 0) === (int) $item['id'] ? 'selected' : '' ?>><?= htmlspecialchars($item['descripcion'] . ' (' . $item['abreviatura'] . ')') ?></option><?php endforeach; ?></select></div>
-                        <div class="col-md-3"><label class="form-label">Código barras</label><input class="form-control tl-compact-input" name="codigo_barras" value="<?= htmlspecialchars($product['codigo_barras'] ?? '') ?>"></div>
-                        <div class="col-md-3"><label class="form-label">Tipo item</label><input class="form-control tl-compact-input" name="tipo_item" value="<?= htmlspecialchars($product['tipo_item'] ?? '') ?>"></div>
-                        <div class="col-md-2"><label class="form-label">Costo neto</label><input class="form-control tl-compact-input" name="costo_neto" type="number" step="0.01" value="<?= htmlspecialchars($product['costo_neto']) ?>"></div>
-                        <div class="col-md-2"><label class="form-label">Venta neto</label><input class="form-control tl-compact-input" name="precio_venta_neto" type="number" step="0.01" value="<?= htmlspecialchars($product['precio_venta_neto']) ?>"></div>
-                        <div class="col-md-2"><label class="form-label">Venta total</label><input class="form-control tl-compact-input" name="precio_venta_total" type="number" step="0.01" value="<?= htmlspecialchars($product['precio_venta_total']) ?>"></div>
-                        <div class="col-md-2"><label class="form-label">Stock mínimo</label><input class="form-control tl-compact-input" name="stock_minimo" type="number" value="<?= (int) $product['stock_minimo'] ?>"></div>
-                        <div class="col-md-2"><label class="form-label">Comisión</label><input class="form-control tl-compact-input" name="comision_vendedor" type="number" step="0.01" value="<?= htmlspecialchars($product['comision_vendedor']) ?>"></div>
-                        <div class="col-md-2"><label class="form-label">Existencia</label><input class="form-control tl-compact-input" name="existencia" type="number" value="<?= (int) $product['existencia'] ?>"></div>
-                    </div>
-                    <hr>
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label">Foto principal actual</label>
-                            <?php if (!empty($images)): ?><div class="tl-edit-gallery"><?php foreach ($images as $image): ?><label><img src="<?= htmlspecialchars($image['ruta']) ?>" alt=""><span class="form-check mt-2"><input class="form-check-input" type="radio" name="principal_image_id" value="<?= (int) $image['id'] ?>" <?= (int) $image['es_principal'] === 1 ? 'checked' : '' ?>> <span class="form-check-label">Principal</span></span></label><?php endforeach; ?></div><?php else: ?><p class="text-muted small">Sin fotos actuales.</p><?php endif; ?>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Reemplazar fotos (máximo 3)</label>
-                            <input class="form-control mb-2" name="product_images[]" type="file" accept="image/jpeg,image/png,image/webp,image/gif"><div class="form-check mb-2"><input class="form-check-input" type="radio" name="principal_image_index" value="0" checked><label class="form-check-label">Foto 1 principal</label></div>
-                            <input class="form-control mb-2" name="product_images[]" type="file" accept="image/jpeg,image/png,image/webp,image/gif"><div class="form-check mb-2"><input class="form-check-input" type="radio" name="principal_image_index" value="1"><label class="form-check-label">Foto 2 principal</label></div>
-                            <input class="form-control mb-2" name="product_images[]" type="file" accept="image/jpeg,image/png,image/webp,image/gif"><div class="form-check"><input class="form-check-input" type="radio" name="principal_image_index" value="2"><label class="form-check-label">Foto 3 principal</label></div>
-                            <p class="text-muted small mt-2 mb-0">Si subes fotos nuevas, reemplazarán las actuales.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer"><button class="btn btn-light" type="button" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary" type="submit">Guardar cambios</button></div>
-            </form>
-        </div></div>
-    </div>
-<?php endforeach; ?>
+<div class="modal fade" id="editProductModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered"><div class="modal-content">
+        <div class="modal-header"><div><h5 class="modal-title mb-0">Editar producto</h5><small class="text-muted" id="editProductSubtitle"></small></div><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+        <form method="post" enctype="multipart/form-data" id="editProductForm">
+            <input type="hidden" name="action" value="update_product"><input type="hidden" name="return_url" value="apps-productos.php"><input type="hidden" name="id" id="editProductId">
+            <div class="modal-body" id="editProductBody"></div>
+            <div class="modal-footer"><button class="btn btn-light" type="button" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary" type="submit">Guardar cambios</button></div>
+        </form>
+    </div></div>
+</div>
 
+<script type="application/json" id="productosPayload"><?= json_encode($productsPayload, $jsonOptions) ?></script>
+<script type="application/json" id="productosCatalogPayload"><?= json_encode($editCatalog, $jsonOptions) ?></script>
 <script>
 (() => {
   const search = document.getElementById('productosSearch');
   const rows = Array.from(document.querySelectorAll('#productosTable tbody tr'));
+  const products = JSON.parse(document.getElementById('productosPayload')?.textContent || '{}');
+  const catalog = JSON.parse(document.getElementById('productosCatalogPayload')?.textContent || '{}');
+  const money = value => '$' + Number(value || 0).toLocaleString('es-CL', {maximumFractionDigits: 0});
+  const escapeHtml = value => String(value ?? '').replace(/[&<>'"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#039;','"':'&quot;'}[char]));
+  const modal = id => window.bootstrap?.Modal.getOrCreateInstance(document.getElementById(id));
+  const optionList = (items, selected, placeholder = 'Seleccionar') => [`<option value="">${placeholder}</option>`].concat((items || []).map(item => `<option value="${item.id}" ${Number(selected || 0) === Number(item.id) ? 'selected' : ''}>${escapeHtml(item.label)}</option>`)).join('');
+
   search?.addEventListener('input', () => {
     const term = search.value.toLowerCase().trim();
     rows.forEach(row => row.style.display = row.textContent.toLowerCase().includes(term) ? '' : 'none');
   });
+
+  document.addEventListener('click', event => {
+    const viewButton = event.target.closest('.js-view-product');
+    const editButton = event.target.closest('.js-edit-product');
+    if (viewButton) showView(products[viewButton.dataset.productId]);
+    if (editButton) showEdit(products[editButton.dataset.productId]);
+  });
+
+  function showView(product) {
+    if (!product) return;
+    const images = product.images || [];
+    document.getElementById('viewProductTitle').textContent = product.nombre || '';
+    document.getElementById('viewProductSku').textContent = `SKU ${product.sku || '-'}`;
+    document.getElementById('viewProductBody').innerHTML = `<div class="row g-3"><div class="col-md-5">${images.length ? `<div class="tl-product-gallery">${images.map(image => `<img loading="lazy" src="${escapeHtml(image.ruta)}" alt="${escapeHtml(product.nombre)}">`).join('')}</div>` : '<div class="text-muted border rounded-3 p-4 text-center">Sin fotos registradas</div>'}</div><div class="col-md-7"><dl class="row mb-0 small"><dt class="col-5">Categoría</dt><dd class="col-7">${escapeHtml(product.categoria)}</dd><dt class="col-5">Marca</dt><dd class="col-7">${escapeHtml(product.marca || '-')}</dd><dt class="col-5">Unidad</dt><dd class="col-7">${escapeHtml(product.unidad || '-')}</dd><dt class="col-5">Código barras</dt><dd class="col-7">${escapeHtml(product.codigo_barras || '-')}</dd><dt class="col-5">Costo neto</dt><dd class="col-7">${money(product.costo_neto)}</dd><dt class="col-5">Venta total</dt><dd class="col-7"><strong>${money(product.precio_venta_total)}</strong></dd><dt class="col-5">Stock mínimo</dt><dd class="col-7">${Number(product.stock_minimo || 0)}</dd><dt class="col-5">Existencia</dt><dd class="col-7">${Number(product.existencia || 0)}</dd></dl></div></div>`;
+    modal('viewProductModal')?.show();
+  }
+
+  function showEdit(product) {
+    if (!product) return;
+    const images = product.images || [];
+    document.getElementById('editProductId').value = product.id;
+    document.getElementById('editProductSubtitle').textContent = product.nombre || '';
+    document.getElementById('editProductBody').innerHTML = `<div class="row g-2"><div class="col-md-4"><label class="form-label">Categoría</label><select class="form-select tl-compact-input" name="categoria_id" required>${optionList(catalog.categories, product.categoria_id, 'Seleccionar')}</select></div><div class="col-md-4"><label class="form-label">Nombre</label><input class="form-control tl-compact-input" name="nombre" value="${escapeHtml(product.nombre)}" required></div><div class="col-md-4"><label class="form-label">SKU</label><input class="form-control tl-compact-input" name="sku" value="${escapeHtml(product.sku)}"></div><div class="col-md-4"><label class="form-label">Marca</label><select class="form-select tl-compact-input" name="marca_id">${optionList(catalog.brands, product.marca_id, 'Seleccionar')}</select></div><div class="col-md-4"><label class="form-label">Modelo</label><input class="form-control tl-compact-input" name="modelo" value="${escapeHtml(product.modelo || '')}"></div><div class="col-md-4"><label class="form-label">Unidad</label><select class="form-select tl-compact-input" name="unidad_id">${optionList(catalog.units, product.unidad_id, 'Seleccionar')}</select></div><div class="col-md-3"><label class="form-label">Código barras</label><input class="form-control tl-compact-input" name="codigo_barras" value="${escapeHtml(product.codigo_barras || '')}"></div><div class="col-md-3"><label class="form-label">Tipo item</label><input class="form-control tl-compact-input" name="tipo_item" value="${escapeHtml(product.tipo_item || '')}"></div>${numberInput('Costo neto','costo_neto',product.costo_neto,2)}${numberInput('Venta neto','precio_venta_neto',product.precio_venta_neto,2)}${numberInput('Venta total','precio_venta_total',product.precio_venta_total,2)}${numberInput('Stock mínimo','stock_minimo',product.stock_minimo,0)}${numberInput('Comisión','comision_vendedor',product.comision_vendedor,2)}${numberInput('Existencia','existencia',product.existencia,0)}</div><hr><div class="row g-3"><div class="col-md-6"><label class="form-label">Foto principal actual</label>${images.length ? `<div class="tl-edit-gallery">${images.map(image => `<label><img loading="lazy" src="${escapeHtml(image.ruta)}" alt=""><span class="form-check mt-2"><input class="form-check-input" type="radio" name="principal_image_id" value="${Number(image.id)}" ${Number(image.es_principal) === 1 ? 'checked' : ''}> <span class="form-check-label">Principal</span></span></label>`).join('')}</div>` : '<p class="text-muted small">Sin fotos actuales.</p>'}</div><div class="col-md-6"><label class="form-label">Reemplazar fotos (máximo 3)</label>${[0,1,2].map(i => `<input class="form-control mb-2" name="product_images[]" type="file" accept="image/jpeg,image/png,image/webp,image/gif"><div class="form-check ${i < 2 ? 'mb-2' : ''}"><input class="form-check-input" type="radio" name="principal_image_index" value="${i}" ${i === 0 ? 'checked' : ''}><label class="form-check-label">Foto ${i + 1} principal</label></div>`).join('')}<p class="text-muted small mt-2 mb-0">Si subes fotos nuevas, reemplazarán las actuales.</p></div></div>`;
+    modal('editProductModal')?.show();
+  }
+
+  function numberInput(label, name, value, decimals) {
+    return `<div class="col-md-2"><label class="form-label">${label}</label><input class="form-control tl-compact-input" name="${name}" type="number" step="${decimals ? '0.01' : '1'}" value="${escapeHtml(value ?? 0)}"></div>`;
+  }
 })();
 </script>
