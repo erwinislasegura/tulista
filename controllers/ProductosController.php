@@ -49,6 +49,8 @@ class ProductosController
                     $this->deleteProduct();
                 } elseif ($action === 'bulk_delete_products') {
                     $this->bulkDeleteProducts();
+                } elseif ($action === 'bulk_update_product_category') {
+                    $this->bulkUpdateProductCategory();
                 } elseif ($action === 'import_products') {
                     $this->importProducts();
                 }
@@ -227,6 +229,40 @@ class ProductosController
         $paths = $this->products->deleteMany(array_column($matches, 'id'));
         $this->deleteStoredFiles($paths);
         $this->flash('success', 'Eliminación por lote completada. Productos eliminados: ' . count($matches) . '.');
+    }
+
+
+    private function bulkUpdateProductCategory(): void
+    {
+        $newCategoryId = (int) ($_POST['bulk_new_categoria_id'] ?? 0);
+        $criteria = [
+            'categoria_id' => (int) ($_POST['bulk_filter_categoria_id'] ?? 0),
+            'marca_id' => (int) ($_POST['bulk_filter_marca_id'] ?? 0),
+            'modelo' => trim((string) ($_POST['bulk_filter_modelo'] ?? '')),
+            'nombre' => trim((string) ($_POST['bulk_filter_nombre'] ?? '')),
+            'sku' => trim((string) ($_POST['bulk_filter_sku'] ?? '')),
+            'codigo_barras' => trim((string) ($_POST['bulk_filter_codigo_barras'] ?? '')),
+        ];
+        $hasCriteria = array_filter($criteria, static fn ($value): bool => is_string($value) ? $value !== '' : (int) $value > 0);
+
+        if ($newCategoryId <= 0) {
+            $this->flash('warning', 'Selecciona la categoría que quieres asignar a los productos por lote.');
+            return;
+        }
+
+        if (empty($hasCriteria)) {
+            $this->flash('warning', 'Indica al menos un criterio para seleccionar los productos que serán categorizados por lote.');
+            return;
+        }
+
+        $matches = $this->products->findForBulkCategoryUpdate($criteria, $newCategoryId);
+        if (empty($matches)) {
+            $this->flash('info', 'No se encontraron productos pendientes de cambiar a la categoría seleccionada con los criterios indicados.');
+            return;
+        }
+
+        $updated = $this->products->updateCategoryMany(array_column($matches, 'id'), $newCategoryId);
+        $this->flash('success', 'Categoría asociada por lote. Productos actualizados: ' . $updated . '.');
     }
 
     private function importProducts(): void

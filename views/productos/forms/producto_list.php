@@ -43,6 +43,36 @@ $jsonOptions = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | 
     <input type="search" id="productosSearch" class="form-control form-control-sm" placeholder="Buscar por producto, SKU, código de barras, categoría o marca">
 </div>
 
+<div class="alert alert-info d-flex flex-column flex-lg-row gap-3 align-items-lg-end justify-content-between" role="region" aria-label="Asociar categorías por lote">
+    <div>
+        <h6 class="mb-1">Asociar categorías por lote</h6>
+        <p class="small mb-0">Selecciona una categoría destino y filtra los productos por categoría actual, marca, modelo, nombre, SKU o código de barras.</p>
+    </div>
+    <button class="btn btn-outline-primary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#bulkCategoryProducts" aria-expanded="false" aria-controls="bulkCategoryProducts">
+        <i class="bx bx-purchase-tag-alt me-1"></i>Asignar categoría por criterios
+    </button>
+</div>
+
+<div class="collapse mb-3" id="bulkCategoryProducts">
+    <div class="card border-primary">
+        <div class="card-body">
+            <form method="post" class="row g-3" onsubmit="return confirm('¿Asignar la categoría seleccionada a todos los productos que coincidan con estos criterios?');">
+                <input type="hidden" name="action" value="bulk_update_product_category">
+                <input type="hidden" name="return_url" value="apps-productos.php">
+                <div class="col-md-3"><label class="form-label">Categoría destino</label><select class="form-select form-select-sm" name="bulk_new_categoria_id" required><option value="">Seleccionar categoría</option><?php foreach (($data['categories'] ?? []) as $item): ?><option value="<?= (int) $item['id'] ?>"><?= htmlspecialchars($item['nombre']) ?></option><?php endforeach; ?></select></div>
+                <div class="col-md-3"><label class="form-label">Categoría actual</label><select class="form-select form-select-sm" name="bulk_filter_categoria_id"><option value="">Cualquier categoría actual</option><?php foreach (($data['categories'] ?? []) as $item): ?><option value="<?= (int) $item['id'] ?>"><?= htmlspecialchars($item['nombre']) ?></option><?php endforeach; ?></select></div>
+                <div class="col-md-3"><label class="form-label">Marca</label><select class="form-select form-select-sm" name="bulk_filter_marca_id"><option value="">Cualquier marca</option><?php foreach (($data['brands'] ?? []) as $item): ?><option value="<?= (int) $item['id'] ?>"><?= htmlspecialchars($item['nombre']) ?></option><?php endforeach; ?></select></div>
+                <div class="col-md-3"><label class="form-label">Modelo contiene</label><input class="form-control form-control-sm" name="bulk_filter_modelo" placeholder="Modelo"></div>
+                <div class="col-md-3"><label class="form-label">Nombre contiene</label><input class="form-control form-control-sm" name="bulk_filter_nombre" placeholder="Producto"></div>
+                <div class="col-md-3"><label class="form-label">SKU contiene</label><input class="form-control form-control-sm" name="bulk_filter_sku" placeholder="SKU"></div>
+                <div class="col-md-3"><label class="form-label">Código barras contiene</label><input class="form-control form-control-sm" name="bulk_filter_codigo_barras" placeholder="Código de barras"></div>
+                <div class="col-md-3 d-flex align-items-end"><button class="btn btn-primary btn-sm w-100" type="submit">Asociar categoría</button></div>
+                <div class="col-12"><p class="text-muted small mb-0"><strong>Nota:</strong> todos los criterios se combinan y se omiten productos que ya pertenecen a la categoría destino.</p></div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <div class="alert alert-warning d-flex flex-column flex-lg-row gap-3 align-items-lg-end justify-content-between" role="region" aria-label="Acciones por lote">
     <div>
         <h6 class="mb-1">Acciones por lote</h6>
