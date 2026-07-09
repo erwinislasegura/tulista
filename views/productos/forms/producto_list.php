@@ -40,17 +40,17 @@ $jsonOptions = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | 
         <h6 class="tl-section-title mb-1">Catálogo de productos</h6>
         <p class="text-muted small mb-0">Gestiona imágenes, precios, stock y acciones desde un listado compacto.</p>
     </div>
-    <input type="search" id="productosSearch" class="form-control form-control-sm" placeholder="Buscar producto, SKU, categoría o marca">
+    <input type="search" id="productosSearch" class="form-control form-control-sm" placeholder="Buscar por producto, SKU, código de barras, categoría o marca">
 </div>
 
 <div class="table-responsive">
     <table class="table table-hover align-middle tl-products-table" id="productosTable">
         <thead>
-            <tr><th>Producto</th><th>Categoría</th><th>Marca</th><th>Venta total</th><th>Stock</th><th class="text-end">Acciones</th></tr>
+            <tr><th>Producto</th><th>SKU</th><th>Código de barras</th><th>Categoría</th><th>Marca</th><th>Venta total</th><th>Stock</th><th class="text-end">Acciones</th></tr>
         </thead>
         <tbody>
         <?php if (empty($products)): ?>
-            <tr><td colspan="6" class="text-muted text-center py-4">Sin productos registrados</td></tr>
+            <tr><td colspan="8" class="text-muted text-center py-4">Sin productos registrados</td></tr>
         <?php else: foreach ($products as $product): ?>
             <?php
             $productId = (int) $product['id'];
@@ -61,9 +61,11 @@ $jsonOptions = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | 
                 <td>
                     <div class="d-flex align-items-center gap-2">
                         <span class="tl-product-thumb"><?php if ($principal): ?><img loading="lazy" src="<?= htmlspecialchars($principal) ?>" alt="<?= htmlspecialchars($product['nombre']) ?>"><?php else: ?><i class="bx bx-image"></i><?php endif; ?></span>
-                        <span><span class="tl-product-name"><?= htmlspecialchars($product['nombre']) ?></span><span class="tl-product-meta">SKU: <?= htmlspecialchars($product['sku'] ?: '-') ?> · <?= htmlspecialchars($product['modelo'] ?: 'Sin modelo') ?></span></span>
+                        <span><span class="tl-product-name"><?= htmlspecialchars($product['nombre']) ?></span><span class="tl-product-meta"><?= htmlspecialchars($product['modelo'] ?: 'Sin modelo') ?></span></span>
                     </div>
                 </td>
+                <td><code><?= htmlspecialchars($product['sku'] ?: '-') ?></code></td>
+                <td><?= htmlspecialchars($product['codigo_barras'] ?: '-') ?></td>
                 <td><?= htmlspecialchars($product['categoria']) ?></td>
                 <td><?= htmlspecialchars($product['marca'] ?: '-') ?></td>
                 <td><strong><?= $money($product['precio_venta_total']) ?></strong></td>
