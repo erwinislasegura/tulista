@@ -47,6 +47,8 @@ class ProductosController
                     $this->updateProduct();
                 } elseif ($action === 'delete_product') {
                     $this->deleteProduct();
+                } elseif ($action === 'bulk_delete_products') {
+                    $this->bulkDeleteProducts();
                 } elseif ($action === 'import_products') {
                     $this->importProducts();
                 }
@@ -191,6 +193,40 @@ class ProductosController
         $this->products->delete($id);
         $this->deleteStoredFiles($paths);
         $this->flash('success', 'Producto eliminado correctamente.');
+    }
+
+
+    private function bulkDeleteProducts(): void
+    {
+        $criteria = [
+            'categoria_id' => (int) ($_POST['bulk_categoria_id'] ?? 0),
+            'marca_id' => (int) ($_POST['bulk_marca_id'] ?? 0),
+            'modelo' => trim((string) ($_POST['bulk_modelo'] ?? '')),
+            'nombre' => trim((string) ($_POST['bulk_nombre'] ?? '')),
+            'sku' => trim((string) ($_POST['bulk_sku'] ?? '')),
+            'codigo_barras' => trim((string) ($_POST['bulk_codigo_barras'] ?? '')),
+        ];
+        $hasCriteria = array_filter($criteria, static fn ($value): bool => is_string($value) ? $value !== '' : (int) $value > 0);
+
+        if (empty($hasCriteria)) {
+            $this->flash('warning', 'Indica al menos un criterio para eliminar productos por lote.');
+            return;
+        }
+
+        if (trim((string) ($_POST['bulk_confirm'] ?? '')) !== 'ELIMINAR') {
+            $this->flash('warning', 'Para confirmar la eliminación por lote debes escribir ELIMINAR.');
+            return;
+        }
+
+        $matches = $this->products->findForBulkDelete($criteria);
+        if (empty($matches)) {
+            $this->flash('info', 'No se encontraron productos que coincidan con los criterios indicados.');
+            return;
+        }
+
+        $paths = $this->products->deleteMany(array_column($matches, 'id'));
+        $this->deleteStoredFiles($paths);
+        $this->flash('success', 'Eliminación por lote completada. Productos eliminados: ' . count($matches) . '.');
     }
 
     private function importProducts(): void

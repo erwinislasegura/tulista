@@ -179,6 +179,74 @@ class ProductModel extends BaseModel
         }
     }
 
+
+    public function findForBulkDelete(array $criteria): array
+    {
+        $this->ensureImagesTable();
+        [$where, $params] = $this->buildBulkDeleteWhere($criteria);
+        if ($where === '') {
+            return [];
+        }
+
+        $stmt = $this->db->prepare('SELECT id, nombre, sku FROM productos WHERE ' . $where . ' ORDER BY nombre ASC');
+        $stmt->execute($params);
+        return $stmt->fetchAll();
+    }
+
+    public function deleteMany(array $ids): array
+    {
+        $this->ensureImagesTable();
+        $ids = array_values(array_unique(array_filter(array_map('intval', $ids), static fn (int $id): bool => $id > 0)));
+        if (empty($ids)) {
+            return [];
+        }
+
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        $pathsStmt = $this->db->prepare("SELECT ruta FROM producto_imagenes WHERE producto_id IN ($placeholders)");
+        $pathsStmt->execute($ids);
+        $paths = array_column($pathsStmt->fetchAll(), 'ruta');
+
+        $this->db->beginTransaction();
+        try {
+            $deleteImages = $this->db->prepare("DELETE FROM producto_imagenes WHERE producto_id IN ($placeholders)");
+            $deleteImages->execute($ids);
+            $deleteProducts = $this->db->prepare("DELETE FROM productos WHERE id IN ($placeholders)");
+            $deleteProducts->execute($ids);
+            $this->db->commit();
+            return $paths;
+        } catch (Throwable $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
+    }
+
+    private function buildBulkDeleteWhere(array $criteria): array
+    {
+        $conditions = [];
+        $params = [];
+
+        if (!empty($criteria['categoria_id'])) {
+            $conditions[] = 'categoria_id = :categoria_id';
+            $params['categoria_id'] = (int) $criteria['categoria_id'];
+        }
+
+        if (!empty($criteria['marca_id'])) {
+            $conditions[] = 'marca_id = :marca_id';
+            $params['marca_id'] = (int) $criteria['marca_id'];
+        }
+
+        foreach (['modelo', 'nombre', 'sku', 'codigo_barras'] as $field) {
+            $value = trim((string) ($criteria[$field] ?? ''));
+            if ($value === '') {
+                continue;
+            }
+            $conditions[] = $field . ' LIKE :' . $field;
+            $params[$field] = '%' . $value . '%';
+        }
+
+        return [implode(' AND ', $conditions), $params];
+    }
+
     public function replaceImages(int $productId, array $images): void
     {
         $this->ensureImagesTable();
