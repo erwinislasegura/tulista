@@ -180,10 +180,38 @@ class ProductModel extends BaseModel
     }
 
 
+
+    public function findForBulkCategoryUpdate(array $criteria, int $newCategoryId): array
+    {
+        [$where, $params] = $this->buildBulkCriteriaWhere($criteria);
+        if ($where === '' || $newCategoryId <= 0) {
+            return [];
+        }
+
+        $where = '(' . $where . ') AND categoria_id <> :new_categoria_id';
+        $params['new_categoria_id'] = $newCategoryId;
+        $stmt = $this->db->prepare('SELECT id, nombre, sku FROM productos WHERE ' . $where . ' ORDER BY nombre ASC');
+        $stmt->execute($params);
+        return $stmt->fetchAll();
+    }
+
+    public function updateCategoryMany(array $ids, int $categoryId): int
+    {
+        $ids = array_values(array_unique(array_filter(array_map('intval', $ids), static fn (int $id): bool => $id > 0)));
+        if (empty($ids) || $categoryId <= 0) {
+            return 0;
+        }
+
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        $stmt = $this->db->prepare("UPDATE productos SET categoria_id = ? WHERE id IN ($placeholders)");
+        $stmt->execute(array_merge([$categoryId], $ids));
+        return $stmt->rowCount();
+    }
+
     public function findForBulkDelete(array $criteria): array
     {
         $this->ensureImagesTable();
-        [$where, $params] = $this->buildBulkDeleteWhere($criteria);
+        [$where, $params] = $this->buildBulkCriteriaWhere($criteria);
         if ($where === '') {
             return [];
         }
@@ -220,7 +248,7 @@ class ProductModel extends BaseModel
         }
     }
 
-    private function buildBulkDeleteWhere(array $criteria): array
+    private function buildBulkCriteriaWhere(array $criteria): array
     {
         $conditions = [];
         $params = [];
