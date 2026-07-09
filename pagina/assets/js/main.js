@@ -288,7 +288,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   setupForms();
   setupFAQ();
   setupHeroParallax();
-  document.querySelectorAll('[data-cat-link]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault(); location.href = 'index.php#productos';}));
+  document.querySelectorAll('[data-cat-link]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault(); location.href = '/#productos';}));
   document.querySelectorAll('[data-filter]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault(); setCategory(el.dataset.filter);}));
   document.getElementById('globalSearch')?.addEventListener('input',e=>{searchTerm=e.target.value; activeCategory='Todos'; renderTabs(); renderSideCategories(); renderProducts();});
   document.getElementById('sortSelect')?.addEventListener('change',renderProducts);

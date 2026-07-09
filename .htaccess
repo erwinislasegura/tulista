@@ -11,6 +11,11 @@
     RewriteCond %{THE_REQUEST} \s/+pagina/([A-Za-z0-9_-]+)\.php[?\s] [NC]
     RewriteRule ^pagina/([A-Za-z0-9_-]+)\.php$ /%1 [R=301,L]
 
+    # Canonicalize clean page requests that accidentally include .php at the root.
+    RewriteCond %{DOCUMENT_ROOT}/pagina/$1.php -f
+    RewriteCond %{THE_REQUEST} \s/+([A-Za-z0-9_-]+)\.php[?\s] [NC]
+    RewriteRule ^([A-Za-z0-9_-]+)\.php$ /$1 [R=301,L]
+
     # Serve the root from the storefront without exposing /pagina/index.php.
     RewriteRule ^$ pagina/index.php [L]
 
