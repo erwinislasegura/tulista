@@ -136,13 +136,6 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
           <span>✓ Atención por WhatsApp</span><span>✓ Compra por unidad o volumen</span><span>✓ Catálogo filtrable</span>
         </div>
       </div>
-      <aside class="showcase-card" aria-label="Resumen de tienda">
-        <div class="showcase-top"><span>Pedido estimado</span><strong>Carrito + cotización</strong></div>
-        <div class="showcase-product main"><img src="/pagina/assets/images/prod-kit.png" alt="Kit escolar"><div><b>Kit escolar completo</b><small>Listas y temporada escolar</small></div><span>Popular</span></div>
-        <div class="showcase-product"><img src="/pagina/assets/images/prod-oficina.png" alt="Oficina"><div><b>Pack oficina</b><small>Reposición mensual</small></div><span>Empresa</span></div>
-        <div class="showcase-product"><img src="/pagina/assets/images/prod-pinturas.png" alt="Arte"><div><b>Arte y manualidades</b><small>Talleres y colegios</small></div><span>Stock</span></div>
-        <div class="showcase-total"><div><small>Canales disponibles</small><strong>Retail · Listas · Mayorista</strong></div><a class="btn orange" href="/cotizador-lista">Cotizar</a></div>
-      </aside>
     </div>
   </section>
 
@@ -162,19 +155,6 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
         <article class="journey-card primary"><span>01</span><h3>Compra productos</h3><p>Explora el catálogo, filtra departamentos y agrega cantidades al carrito.</p><a href="#productos">Ver catálogo</a></article>
         <article class="journey-card"><span>02</span><h3>Envía una lista</h3><p>Ideal para apoderados, colegios o pedidos con muchos ítems.</p><a href="/cotizador-lista">Cotizar lista</a></article>
         <article class="journey-card"><span>03</span><h3>Solicita volumen</h3><p>Atención comercial para oficinas, comercios e instituciones.</p><a href="#mayoristas">Canal mayorista</a></article>
-      </div>
-    </div>
-  </section>
-
-  <section class="departments-section section-bg" style="--section-bg:url('../assets/source/images/14.png')">
-    <div class="container">
-      <div class="section-head"><div><span class="kicker">Departamentos principales</span><h2 class="section-title">Categorías claras para una compra más rápida.</h2><p class="section-copy">Accesos visuales para escolares, oficina, arte, papelería y pedidos completos.</p></div><a class="btn ghost" href="#productos">Ver todos</a></div>
-      <div class="department-grid">
-        <button class="department-card large" data-filter="Escolar"><img src="/pagina/assets/images/prod-kit.png" alt="Escolar"><span>Escolar</span><strong>Listas, cuadernos y kits</strong></button>
-        <button class="department-card" data-filter="Oficina"><img src="/pagina/assets/images/prod-oficina.png" alt="Oficina"><span>Oficina</span><strong>Resmas, archivo e insumos</strong></button>
-        <button class="department-card" data-filter="Arte"><img src="/pagina/assets/images/prod-pinturas.png" alt="Arte"><span>Arte</span><strong>Pinturas y manualidades</strong></button>
-        <button class="department-card" data-filter="Papelería"><img src="/pagina/assets/images/prod-etiquetas.png" alt="Papelería"><span>Papelería</span><strong>Papel, etiquetas y organización</strong></button>
-        <button class="department-card quote" onclick="location.href='/cotizador-lista'"><img src="/pagina/assets/images/quote-list.png" alt="Cotizar lista"><span>Cotizador</span><strong>Sube tu lista completa</strong></button>
       </div>
     </div>
   </section>
