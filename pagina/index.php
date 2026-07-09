@@ -76,8 +76,8 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tu Lista | Útiles escolares, oficina y listas escolares</title>
-  <meta name="description" content="Ecommerce de útiles escolares, materiales de oficina, papelería, arte y cotización de listas escolares.">
+  <title>Tu Lista | Tienda escolar y oficina para familias, colegios y empresas</title>
+  <meta name="description" content="Tienda formal de útiles escolares, oficina, papelería y arte. Compra por unidad, listas escolares, volumen para empresas y cotizaciones por WhatsApp.">
   <link rel="stylesheet" href="/pagina/assets/css/styles.css">
 </head>
 <body>
@@ -120,42 +120,54 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
   </header>
 
 <main>
-  <section class="hero">
+  <section class="hero hero-storefront">
     <div class="hero-bg" id="heroParallax" aria-hidden="true">
       <?php for ($i = 1; $i <= 31; $i++): ?>
         <div class="hero-slide<?= $i === 1 ? ' is-active' : '' ?>" style="background-image:url('../assets/source/images/<?= $i ?>.png')"></div>
       <?php endfor; ?>
     </div>
     <div class="container">
-      <div>
-        <span class="eyebrow"><b>Compra simple</b> útiles escolares, arte y oficina</span>
-        <h1>Útiles escolares, arte y oficina en un solo lugar.</h1>
-        <p>Encuentra cuadernos, pinturas, lápices, papelería y productos de oficina. Compra por unidad, por lista escolar o por volumen.</p>
-        <div class="hero-actions"><a class="btn orange" href="#productos">Ver productos</a><a class="btn ghost" href="/cotizador-lista">Enviar mi lista</a><a class="btn primary" href="#mayoristas">Comprar por mayor</a></div>
-        <div class="pills"><span><i></i> Listas escolares</span><span><i></i> Oficina y empresas</span><span><i></i> Mayoristas</span><span><i></i> WhatsApp directo</span></div>
+      <div class="hero-copy">
+        <span class="eyebrow"><b>Tienda especializada</b> escolar, oficina, arte y papelería</span>
+        <h1>Abastece tus listas, oficina o negocio con una tienda seria y preparada.</h1>
+        <p>Catálogo organizado, cotización asistida y atención por WhatsApp para familias, colegios, empresas, librerías y compras por volumen.</p>
+        <div class="hero-actions"><a class="btn orange" href="#productos">Explorar catálogo</a><a class="btn primary" href="/cotizador-lista">Cotizar una lista</a><a class="btn ghost" href="#mayoristas">Soluciones empresas</a></div>
+        <div class="hero-metrics" aria-label="Beneficios de compra">
+          <div><strong>+8</strong><span>departamentos</span></div>
+          <div><strong>24/7</strong><span>pedido online</span></div>
+          <div><strong>CLP</strong><span>precios claros</span></div>
+        </div>
       </div>
-      <aside class="hero-panel">
-        <div class="panel-head"><h2>Compra rápida</h2><p>Accede por tipo de necesidad y arma tu pedido sin perder tiempo.</p></div>
+      <aside class="hero-panel enterprise-card">
+        <div class="panel-head"><span class="panel-label">Compra guiada</span><h2>Elige cómo quieres comprar</h2><p>Flujos pensados para una tienda grande: catálogo, listas, empresas y mayoristas.</p></div>
         <div class="quick-grid">
-          <button class="quick-card" data-filter="Escolar"><img src="/pagina/assets/images/prod-kit.png" alt="Escolar"><span><strong>Escolar</strong><span>Cuadernos y kits</span></span></button>
-          <button class="quick-card" data-filter="Oficina"><img src="/pagina/assets/images/prod-oficina.png" alt="Oficina"><span><strong>Oficina</strong><span>Resmas y archivo</span></span></button>
-          <button class="quick-card" data-filter="Arte"><img src="/pagina/assets/images/prod-pinturas.png" alt="Arte"><span><strong>Arte</strong><span>Pinturas y trabajos</span></span></button>
-          <button class="quick-card" onclick="location.href='/cotizador-lista'"><img src="/pagina/assets/images/quote-list.png" alt="Cotizar"><span><strong>Cotizar lista</strong><span>Envíanos el pedido</span></span></button>
+          <button class="quick-card" data-filter="Escolar"><img src="/pagina/assets/images/prod-kit.png" alt="Escolar"><span><strong>Familias y alumnos</strong><span>Útiles y kits escolares</span></span></button>
+          <button class="quick-card" data-filter="Oficina"><img src="/pagina/assets/images/prod-oficina.png" alt="Oficina"><span><strong>Empresas</strong><span>Resmas, archivo e insumos</span></span></button>
+          <button class="quick-card" data-filter="Arte"><img src="/pagina/assets/images/prod-pinturas.png" alt="Arte"><span><strong>Arte y talleres</strong><span>Material creativo</span></span></button>
+          <button class="quick-card" onclick="location.href='/cotizador-lista'"><img src="/pagina/assets/images/quote-list.png" alt="Cotizar"><span><strong>Listas completas</strong><span>Envíala y cotiza rápido</span></span></button>
         </div>
       </aside>
     </div>
   </section>
   <div class="trust section-bg" style="--section-bg:url('../assets/source/images/4.png')">
     <div class="container trust-grid">
-      <div class="trust-item"><div class="trust-icon">✓</div><div><strong>Fácil de comprar</strong><span>Cantidad por producto.</span></div></div>
-      <div class="trust-item"><div class="trust-icon">💬</div><div><strong>WhatsApp directo</strong><span>Pedido o cotización.</span></div></div>
-      <div class="trust-item"><div class="trust-icon">📦</div><div><strong>Mayoristas</strong><span>Librerías y comercio.</span></div></div>
-      <div class="trust-item"><div class="trust-icon">🎒</div><div><strong>Listas escolares</strong><span>Envíala y cotiza.</span></div></div>
+      <div class="trust-item"><div class="trust-icon">✓</div><div><strong>Compra formal</strong><span>Catálogo ordenado y precios visibles.</span></div></div>
+      <div class="trust-item"><div class="trust-icon">💬</div><div><strong>Asesoría comercial</strong><span>WhatsApp para pedidos y cotizaciones.</span></div></div>
+      <div class="trust-item"><div class="trust-icon">📦</div><div><strong>Volumen y empresas</strong><span>Reposición para oficinas y comercios.</span></div></div>
+      <div class="trust-item"><div class="trust-icon">🎒</div><div><strong>Listas escolares</strong><span>Proceso rápido para temporadas altas.</span></div></div>
     </div>
   </div>
+  <section class="store-services">
+    <div class="container service-grid">
+      <article class="service-card featured"><span class="kicker">Tienda integral</span><h2>Una experiencia más confiable para comprar útiles y abastecer equipos.</h2><p>Diseñamos la página para transmitir una operación de mayor escala: navegación por departamentos, compra rápida, carrito, cotización y atención comercial.</p></article>
+      <article class="service-card"><strong>01</strong><h3>Compra minorista</h3><p>Productos por unidad con cantidades ajustables y consulta directa.</p></article>
+      <article class="service-card"><strong>02</strong><h3>Cotización asistida</h3><p>Envío de listas escolares o pedidos institucionales para respuesta ordenada.</p></article>
+      <article class="service-card"><strong>03</strong><h3>Venta por volumen</h3><p>Soluciones para colegios, oficinas, librerías y comercios.</p></article>
+    </div>
+  </section>
   <section id="productos" class="section-bg" style="--section-bg:url('../assets/source/images/14.png')">
     <div class="container">
-      <div class="section-head"><div><span class="kicker">Más pedidos</span><h2 class="section-title">Productos listos para agregar al pedido.</h2><p class="section-copy">Selecciona la cantidad antes de agregar al carrito. Después finalizas por WhatsApp.</p></div><button class="btn ghost" id="clearFilters" type="button">Limpiar filtros</button></div>
+      <div class="section-head"><div><span class="kicker">Catálogo comercial</span><h2 class="section-title">Productos destacados para familias, colegios y empresas.</h2><p class="section-copy">Filtra por departamento, ajusta cantidades y arma un pedido con presentación de tienda formal. Finaliza por WhatsApp para confirmar disponibilidad.</p></div><button class="btn ghost" id="clearFilters" type="button">Limpiar filtros</button></div>
       <div class="shop-layout">
         <aside class="filters"><h3>Departamentos</h3><div id="sideCategories"></div><hr style="border:0;border-top:1px solid var(--line);margin:14px 0"><a class="filter-btn" href="/cotizador-lista">Cotizar lista <span>rápido</span></a><a class="filter-btn" href="#mayoristas">Mayoristas <span>especial</span></a></aside>
         <div>
@@ -168,7 +180,7 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
   </section>
   <section id="mayoristas" class="section-bg" style="--section-bg:url('../assets/source/images/21.png')">
     <div class="container banner-grid">
-      <article class="banner big"><div class="banner-copy"><span class="kicker">Mayoristas</span><h3>Precios especiales para librerías, comercio, colegios y oficinas.</h3><p>Cotiza por volumen productos escolares, papelería, arte y oficina. Ideal para reposición, temporada escolar y compras institucionales.</p><a class="btn orange" href="/cotizador-lista">Solicitar precio mayorista</a></div><img src="../assets/source/images/22.png" alt="Compra mayorista"></article>
+      <article class="banner big"><div class="banner-copy"><span class="kicker">Canal mayorista e institucional</span><h3>Abastecimiento serio para librerías, comercio, colegios y oficinas.</h3><p>Cotiza por volumen productos escolares, papelería, arte y oficina. Ideal para reposición, temporada escolar y compras institucionales con atención comercial.</p><a class="btn orange" href="/cotizador-lista">Solicitar precio mayorista</a></div><img src="../assets/source/images/22.png" alt="Compra mayorista"></article>
       <div style="display:grid;gap:16px">
         <article class="banner"><div class="banner-copy"><h3>Listas escolares</h3><p>Envíanos tu lista y te respondemos ordenado.</p><a class="btn ghost" href="/cotizador-lista">Enviar lista</a></div><img src="../assets/source/images/23.png" alt="Lista escolar"></article>
         <article class="banner"><div class="banner-copy"><h3>Arte y trabajos</h3><p>Pinturas, goma eva, papel y materiales creativos.</p><a class="btn ghost" href="#productos">Ver arte</a></div><img src="../assets/source/images/28.png" alt="Arte escolar"></article>
