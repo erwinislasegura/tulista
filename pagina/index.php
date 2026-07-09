@@ -131,7 +131,7 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
         <span class="eyebrow"><b>Tu Lista Pro</b> tienda escolar, oficina y compras institucionales</span>
         <h1>Una tienda completa para resolver listas escolares, oficinas y compras por volumen.</h1>
         <p>Diseño de compra moderno con catálogo, carrito, cotización asistida y atención comercial. Todo preparado para transmitir confianza, orden y escala profesional.</p>
-        <div class="hero-actions"><a class="btn orange" href="#productos">Comprar catálogo</a><a class="btn primary" href="/cotizador-lista">Subir lista o pedido</a><a class="btn ghost" href="#experiencia">Ver experiencia</a></div>
+        <div class="hero-actions"><a class="btn orange" href="#productos">Comprar catálogo</a><a class="btn primary" href="/cotizador-lista">Subir lista o pedido</a><a class="btn ghost" href="#mayoristas">Canal mayorista</a></div>
         <div class="hero-assurance" aria-label="Garantías comerciales">
           <span>✓ Atención por WhatsApp</span><span>✓ Compra por unidad o volumen</span><span>✓ Catálogo filtrable</span>
         </div>
@@ -145,17 +145,6 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
       <div><strong>Cotización guiada</strong><span>Para listas escolares y pedidos grandes.</span></div>
       <div><strong>Canal empresas</strong><span>Reposición de oficina e instituciones.</span></div>
       <div><strong>Mayoristas</strong><span>Librerías, comercio y compras recurrentes.</span></div>
-    </div>
-  </section>
-
-  <section id="experiencia" class="experience-section">
-    <div class="container">
-      <div class="section-head centered"><div><span class="kicker">Experiencia de tienda grande</span><h2 class="section-title">Todo el recorrido de compra en una sola página.</h2><p class="section-copy">Separamos los principales perfiles de cliente para que cada visitante encuentre rápido el camino correcto: comprar productos, cotizar listas o solicitar volumen.</p></div></div>
-      <div class="journey-grid">
-        <article class="journey-card primary"><span>01</span><h3>Compra productos</h3><p>Explora el catálogo, filtra departamentos y agrega cantidades al carrito.</p><a href="#productos">Ver catálogo</a></article>
-        <article class="journey-card"><span>02</span><h3>Envía una lista</h3><p>Ideal para apoderados, colegios o pedidos con muchos ítems.</p><a href="/cotizador-lista">Cotizar lista</a></article>
-        <article class="journey-card"><span>03</span><h3>Solicita volumen</h3><p>Atención comercial para oficinas, comercios e instituciones.</p><a href="#mayoristas">Canal mayorista</a></article>
-      </div>
     </div>
   </section>
 
