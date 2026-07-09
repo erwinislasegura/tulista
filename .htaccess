@@ -1,0 +1,20 @@
+# Public storefront routing.
+# Keep the browser on https://tulista.cl/ while serving the storefront from /pagina/.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Canonicalize old storefront entry links back to the domain root.
+    RewriteCond %{THE_REQUEST} \s/+pagina/index\.php[?\s] [NC]
+    RewriteRule ^pagina/index\.php$ / [R=301,L]
+
+    # Canonicalize old internal page links, e.g. /pagina/nosotros.php -> /nosotros.
+    RewriteCond %{THE_REQUEST} \s/+pagina/([A-Za-z0-9_-]+)\.php[?\s] [NC]
+    RewriteRule ^pagina/([A-Za-z0-9_-]+)\.php$ /%1 [R=301,L]
+
+    # Serve the root from the storefront without exposing /pagina/index.php.
+    RewriteRule ^$ pagina/index.php [L]
+
+    # Serve clean storefront URLs from matching PHP files inside /pagina/.
+    RewriteCond %{DOCUMENT_ROOT}/pagina/$1.php -f
+    RewriteRule ^([A-Za-z0-9_-]+)/?$ pagina/$1.php [L,QSA]
+</IfModule>

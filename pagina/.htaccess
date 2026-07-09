@@ -1,0 +1,12 @@
+# Fallback canonical redirects for hostings that evaluate rules from /pagina/.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Redirect direct requests for /pagina/index.php to the public root.
+    RewriteCond %{THE_REQUEST} \s/+pagina/index\.php[?\s] [NC]
+    RewriteRule ^index\.php$ / [R=301,L]
+
+    # Redirect direct requests such as /pagina/nosotros.php to clean URLs.
+    RewriteCond %{THE_REQUEST} \s/+pagina/([A-Za-z0-9_-]+)\.php[?\s] [NC]
+    RewriteRule ^([A-Za-z0-9_-]+)\.php$ /%1 [R=301,L]
+</IfModule>
