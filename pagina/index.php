@@ -162,13 +162,6 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
     </div>
   </section>
 
-  <section class="operations-section">
-    <div class="container operations-grid">
-      <article class="operations-copy"><span class="kicker">Operación comercial</span><h2>Diseñado para vender como tienda establecida.</h2><p>La página ahora presenta una propuesta más completa: catálogo, rutas de compra, mensajes de confianza, canal mayorista y cierre rápido por WhatsApp.</p><ul><li>Catálogo filtrable por departamentos.</li><li>Compra por unidades con carrito.</li><li>Cotización de listas o pedidos extensos.</li><li>Comunicación orientada a empresas y colegios.</li></ul></article>
-      <div class="operations-panel"><div><strong>Retail</strong><span>Familias y alumnos</span></div><div><strong>B2B</strong><span>Oficinas e instituciones</span></div><div><strong>Mayorista</strong><span>Librerías y comercio</span></div><div><strong>Temporada</strong><span>Listas escolares</span></div></div>
-    </div>
-  </section>
-
   <section id="mayoristas" class="section-bg wholesale-section" style="--section-bg:url('../assets/source/images/21.png')">
     <div class="container banner-grid">
       <article class="banner big"><div class="banner-copy"><span class="kicker">Canal mayorista e institucional</span><h3>Abastecimiento serio para librerías, comercio, colegios y oficinas.</h3><p>Cotiza por volumen productos escolares, papelería, arte y oficina. Ideal para reposición, temporada escolar y compras institucionales con atención comercial.</p><a class="btn orange" href="/cotizador-lista">Solicitar precio mayorista</a></div><img src="../assets/source/images/22.png" alt="Compra mayorista"></article>
