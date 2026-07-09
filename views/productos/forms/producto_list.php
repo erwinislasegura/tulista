@@ -43,6 +43,36 @@ $jsonOptions = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | 
     <input type="search" id="productosSearch" class="form-control form-control-sm" placeholder="Buscar por producto, SKU, código de barras, categoría o marca">
 </div>
 
+<div class="alert alert-warning d-flex flex-column flex-lg-row gap-3 align-items-lg-end justify-content-between" role="region" aria-label="Acciones por lote">
+    <div>
+        <h6 class="mb-1">Acciones por lote</h6>
+        <p class="small mb-0">Elimina productos que coincidan con una marca, modelo, categoría u otro criterio. Esta acción no se puede deshacer.</p>
+    </div>
+    <button class="btn btn-outline-danger btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#bulkDeleteProducts" aria-expanded="false" aria-controls="bulkDeleteProducts">
+        <i class="bx bx-trash me-1"></i>Eliminar por criterios
+    </button>
+</div>
+
+<div class="collapse mb-3" id="bulkDeleteProducts">
+    <div class="card border-danger">
+        <div class="card-body">
+            <form method="post" class="row g-3" onsubmit="return confirm('¿Eliminar por lote todos los productos que coincidan con estos criterios? Esta acción no se puede deshacer.');">
+                <input type="hidden" name="action" value="bulk_delete_products">
+                <input type="hidden" name="return_url" value="apps-productos.php">
+                <div class="col-md-3"><label class="form-label">Categoría</label><select class="form-select form-select-sm" name="bulk_categoria_id"><option value="">Cualquier categoría</option><?php foreach (($data['categories'] ?? []) as $item): ?><option value="<?= (int) $item['id'] ?>"><?= htmlspecialchars($item['nombre']) ?></option><?php endforeach; ?></select></div>
+                <div class="col-md-3"><label class="form-label">Marca</label><select class="form-select form-select-sm" name="bulk_marca_id"><option value="">Cualquier marca</option><?php foreach (($data['brands'] ?? []) as $item): ?><option value="<?= (int) $item['id'] ?>"><?= htmlspecialchars($item['nombre']) ?></option><?php endforeach; ?></select></div>
+                <div class="col-md-2"><label class="form-label">Modelo contiene</label><input class="form-control form-control-sm" name="bulk_modelo" placeholder="Modelo"></div>
+                <div class="col-md-2"><label class="form-label">Nombre contiene</label><input class="form-control form-control-sm" name="bulk_nombre" placeholder="Producto"></div>
+                <div class="col-md-2"><label class="form-label">SKU contiene</label><input class="form-control form-control-sm" name="bulk_sku" placeholder="SKU"></div>
+                <div class="col-md-3"><label class="form-label">Código barras contiene</label><input class="form-control form-control-sm" name="bulk_codigo_barras" placeholder="Código de barras"></div>
+                <div class="col-md-3"><label class="form-label">Confirmación</label><input class="form-control form-control-sm" name="bulk_confirm" placeholder="Escribe ELIMINAR" required></div>
+                <div class="col-md-3 d-flex align-items-end"><button class="btn btn-danger btn-sm w-100" type="submit">Eliminar productos filtrados</button></div>
+                <div class="col-12"><p class="text-danger small mb-0"><strong>Importante:</strong> todos los criterios se combinan. Por ejemplo, marca + modelo elimina solo productos de esa marca cuyo modelo contenga el texto indicado.</p></div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <div class="table-responsive">
     <table class="table table-hover align-middle tl-products-table" id="productosTable">
         <thead>
