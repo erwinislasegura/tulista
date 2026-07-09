@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Condiciones y política de privacidad | Tu Lista</title>
   <meta name="description" content="Condiciones de compra y política de privacidad para ecommerce de útiles escolares y oficina.">
-  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="/pagina/assets/css/styles.css">
 </head>
 <body>
   <div class="topbar">
@@ -16,7 +16,7 @@
   </div>
   <header class="header">
     <div class="container header-main">
-      <a class="brand" href="index.php"><img src="assets/images/logo.png" alt="Tu Lista"></a>
+      <a class="brand" href="index.php"><img src="/pagina/assets/images/logo.png" alt="Tu Lista"></a>
       <form class="searchbox" action="index.php#productos">
         <input id="globalSearch" type="search" placeholder="Buscar cuadernos, resmas, témperas, lápices...">
         <button type="submit">⌕</button>
@@ -50,7 +50,7 @@
   <section class="page-hero page-hero-bg" style="--section-bg:url('../assets/source/images/27.png')">
     <div class="container">
       <div><div class="breadcrumb">Inicio / Condiciones y políticas</div><span class="kicker">Legal</span><h1>Condiciones de compra y política de privacidad.</h1><p>Texto base para ecommerce. Debe ser revisado y ajustado con los datos legales reales de la empresa antes de publicarse.</p></div>
-      <img src="assets/images/policy.png" alt="Condiciones y privacidad">
+      <img src="/pagina/assets/images/policy.png" alt="Condiciones y privacidad">
     </div>
   </section>
   <section class="section-bg" style="--section-bg:url('../assets/source/images/30.png')">
@@ -70,7 +70,7 @@
   <footer class="footer">
     <div class="container footer-grid">
       <div>
-        <img src="assets/images/logo.png" alt="Tu Lista">
+        <img src="/pagina/assets/images/logo.png" alt="Tu Lista">
         <p>Ecommerce enfocado en útiles escolares, materiales de oficina, papelería, arte, listas escolares y atención a mayoristas.</p>
       </div>
       <div><h4>Tienda</h4><a href="index.php#productos">Productos</a><a href="index.php#categorias">Categorías</a><a href="cotizador-lista.php">Cotizador de lista</a><a href="index.php#mayoristas">Mayoristas</a></div>
@@ -92,6 +92,6 @@
   </aside>
   <div class="modal-overlay" id="modalOverlay"></div>
   <article class="modal" id="productModal"><button class="modal-close" id="modalClose" type="button">×</button><div class="modal-grid" id="modalContent"></div></article>
-  <script src="assets/js/main.js"></script>
+  <script src="/pagina/assets/js/main.js"></script>
 </body>
 </html>

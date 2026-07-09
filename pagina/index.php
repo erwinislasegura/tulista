@@ -6,24 +6,24 @@ function paginaProductImage(string $category): string
 {
     $normalized = strtolower($category);
     if (str_contains($normalized, 'oficina')) {
-        return 'assets/images/prod-oficina.png';
+        return '/pagina/assets/images/prod-oficina.png';
     }
     if (str_contains($normalized, 'arte') || str_contains($normalized, 'manual')) {
-        return 'assets/images/prod-pinturas.png';
+        return '/pagina/assets/images/prod-pinturas.png';
     }
     if (str_contains($normalized, 'papel')) {
-        return 'assets/images/prod-etiquetas.png';
+        return '/pagina/assets/images/prod-etiquetas.png';
     }
     if (str_contains($normalized, 'escrit')) {
-        return 'assets/images/prod-lapices.png';
+        return '/pagina/assets/images/prod-lapices.png';
     }
     if (str_contains($normalized, 'libr')) {
-        return 'assets/images/prod-libros.png';
+        return '/pagina/assets/images/prod-libros.png';
     }
     if (str_contains($normalized, 'mochil')) {
-        return 'assets/images/prod-mochila.png';
+        return '/pagina/assets/images/prod-mochila.png';
     }
-    return 'assets/images/prod-kit.png';
+    return '/pagina/assets/images/prod-kit.png';
 }
 
 function paginaCategoryImage(string $category): string
@@ -78,7 +78,7 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tu Lista | Útiles escolares, oficina y listas escolares</title>
   <meta name="description" content="Ecommerce de útiles escolares, materiales de oficina, papelería, arte y cotización de listas escolares.">
-  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="/pagina/assets/css/styles.css">
 </head>
 <body>
   <div class="topbar">
@@ -89,7 +89,7 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
   </div>
   <header class="header">
     <div class="container header-main">
-      <a class="brand" href="index.php"><img src="assets/images/logo.png" alt="Tu Lista"></a>
+      <a class="brand" href="index.php"><img src="/pagina/assets/images/logo.png" alt="Tu Lista"></a>
       <form class="searchbox" action="index.php#productos">
         <input id="globalSearch" type="search" placeholder="Buscar cuadernos, resmas, témperas, lápices...">
         <button type="submit">⌕</button>
@@ -137,10 +137,10 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
       <aside class="hero-panel">
         <div class="panel-head"><h2>Compra rápida</h2><p>Accede por tipo de necesidad y arma tu pedido sin perder tiempo.</p></div>
         <div class="quick-grid">
-          <button class="quick-card" data-filter="Escolar"><img src="assets/images/prod-kit.png" alt="Escolar"><span><strong>Escolar</strong><span>Cuadernos y kits</span></span></button>
-          <button class="quick-card" data-filter="Oficina"><img src="assets/images/prod-oficina.png" alt="Oficina"><span><strong>Oficina</strong><span>Resmas y archivo</span></span></button>
-          <button class="quick-card" data-filter="Arte"><img src="assets/images/prod-pinturas.png" alt="Arte"><span><strong>Arte</strong><span>Pinturas y trabajos</span></span></button>
-          <button class="quick-card" onclick="location.href='cotizador-lista.php'"><img src="assets/images/quote-list.png" alt="Cotizar"><span><strong>Cotizar lista</strong><span>Envíanos el pedido</span></span></button>
+          <button class="quick-card" data-filter="Escolar"><img src="/pagina/assets/images/prod-kit.png" alt="Escolar"><span><strong>Escolar</strong><span>Cuadernos y kits</span></span></button>
+          <button class="quick-card" data-filter="Oficina"><img src="/pagina/assets/images/prod-oficina.png" alt="Oficina"><span><strong>Oficina</strong><span>Resmas y archivo</span></span></button>
+          <button class="quick-card" data-filter="Arte"><img src="/pagina/assets/images/prod-pinturas.png" alt="Arte"><span><strong>Arte</strong><span>Pinturas y trabajos</span></span></button>
+          <button class="quick-card" onclick="location.href='cotizador-lista.php'"><img src="/pagina/assets/images/quote-list.png" alt="Cotizar"><span><strong>Cotizar lista</strong><span>Envíanos el pedido</span></span></button>
         </div>
       </aside>
     </div>
@@ -180,7 +180,7 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
   <footer class="footer">
     <div class="container footer-grid">
       <div>
-        <img src="assets/images/logo.png" alt="Tu Lista">
+        <img src="/pagina/assets/images/logo.png" alt="Tu Lista">
         <p>Ecommerce enfocado en útiles escolares, materiales de oficina, papelería, arte, listas escolares y atención a mayoristas.</p>
       </div>
       <div><h4>Tienda</h4><a href="index.php#productos">Productos</a><a href="cotizador-lista.php">Cotizador de lista</a><a href="index.php#mayoristas">Mayoristas</a></div>
@@ -206,6 +206,6 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
     window.TULISTA_CATEGORIES = <?= $publicCatalogLoaded ? json_encode($publicCategoryNames, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : 'null' ?>;
     window.TULISTA_PRODUCTS = <?= $publicCatalogLoaded ? json_encode($publicProducts, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : 'null' ?>;
   </script>
-  <script src="assets/js/main.js"></script>
+  <script src="/pagina/assets/js/main.js"></script>
 </body>
 </html>
