@@ -37,6 +37,12 @@ class ProductosController
             try {
                 if ($action === 'add_category') {
                     $this->addCategory();
+                } elseif ($action === 'update_category') {
+                    $this->updateCategory();
+                } elseif ($action === 'delete_category') {
+                    $this->deleteCategory();
+                } elseif ($action === 'toggle_category') {
+                    $this->toggleCategory();
                 } elseif ($action === 'add_brand') {
                     $this->addBrand();
                 } elseif ($action === 'add_unit') {
@@ -97,6 +103,55 @@ class ProductosController
         $categoryId = $this->categories->create($name);
         $_SESSION['productos_last']['categoria_id'] = $categoryId;
         $this->flash('success', 'Categoría creada correctamente.');
+    }
+
+    private function updateCategory(): void
+    {
+        $id = (int) ($_POST['id'] ?? 0);
+        $name = trim($_POST['name'] ?? '');
+
+        if ($id <= 0) {
+            $this->flash('danger', 'Categoría inválida.');
+            return;
+        }
+
+        if ($name === '') {
+            $this->flash('warning', 'Debes indicar el nombre de la categoría.');
+            return;
+        }
+
+        if ($this->categories->findByNameExceptId($name, $id)) {
+            $this->flash('warning', 'Ya existe otra categoría con ese nombre.');
+            return;
+        }
+
+        $this->categories->update($id, $name);
+        $this->flash('success', 'Categoría actualizada correctamente.');
+    }
+
+    private function deleteCategory(): void
+    {
+        $id = (int) ($_POST['id'] ?? 0);
+        if ($id <= 0) {
+            $this->flash('danger', 'Categoría inválida.');
+            return;
+        }
+
+        $this->categories->delete($id);
+        $this->flash('success', 'Categoría eliminada correctamente.');
+    }
+
+    private function toggleCategory(): void
+    {
+        $id = (int) ($_POST['id'] ?? 0);
+        if ($id <= 0) {
+            $this->flash('danger', 'Categoría inválida.');
+            return;
+        }
+
+        $active = (int) ($_POST['activo'] ?? 0) === 1;
+        $this->categories->setActive($id, $active);
+        $this->flash('success', $active ? 'Categoría habilitada correctamente.' : 'Categoría deshabilitada correctamente.');
     }
 
     private function addBrand(): void
