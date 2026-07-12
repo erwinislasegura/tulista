@@ -5,14 +5,16 @@ require_once __DIR__ . '/BaseModel.php';
 class ProductModel extends BaseModel
 {
     private bool $imagesTableReady = false;
+    private bool $ivaColumnReady = false;
 
     public function all(): array
     {
         $this->ensureImagesTable();
+        $this->ensureIvaColumn();
         $sql = 'SELECT p.id, p.categoria_id, c.nombre AS categoria, p.nombre, p.sku, p.marca_id, m.nombre AS marca,
                        p.modelo, p.unidad_id, CONCAT(u.descripcion, " (", u.abreviatura, ")") AS unidad,
                        p.codigo_barras, p.tipo_item, p.costo_neto, p.precio_venta_neto,
-                       p.precio_venta_total, p.stock_minimo, p.comision_vendedor, p.existencia,
+                       p.precio_venta_total, p.afecto_iva, p.stock_minimo, p.comision_vendedor, p.existencia,
                        img.ruta AS imagen_principal
                 FROM productos p
                 INNER JOIN categorias c ON c.id = p.categoria_id
@@ -132,13 +134,14 @@ class ProductModel extends BaseModel
 
     public function create(array $data): int
     {
+        $this->ensureIvaColumn();
         $stmt = $this->db->prepare(
             'INSERT INTO productos (
                 categoria_id, nombre, sku, marca_id, modelo, unidad_id, codigo_barras, tipo_item,
-                costo_neto, precio_venta_neto, precio_venta_total, stock_minimo, comision_vendedor, existencia
+                costo_neto, precio_venta_neto, precio_venta_total, afecto_iva, stock_minimo, comision_vendedor, existencia
             ) VALUES (
                 :categoria_id, :nombre, :sku, :marca_id, :modelo, :unidad_id, :codigo_barras, :tipo_item,
-                :costo_neto, :precio_venta_neto, :precio_venta_total, :stock_minimo, :comision_vendedor, :existencia
+                :costo_neto, :precio_venta_neto, :precio_venta_total, :afecto_iva, :stock_minimo, :comision_vendedor, :existencia
             )'
         );
 
@@ -148,13 +151,14 @@ class ProductModel extends BaseModel
 
     public function update(int $id, array $data): bool
     {
+        $this->ensureIvaColumn();
         $data['id'] = $id;
         $stmt = $this->db->prepare(
             'UPDATE productos SET
                 categoria_id = :categoria_id, nombre = :nombre, sku = :sku, marca_id = :marca_id,
                 modelo = :modelo, unidad_id = :unidad_id, codigo_barras = :codigo_barras,
                 tipo_item = :tipo_item, costo_neto = :costo_neto, precio_venta_neto = :precio_venta_neto,
-                precio_venta_total = :precio_venta_total, stock_minimo = :stock_minimo,
+                precio_venta_total = :precio_venta_total, afecto_iva = :afecto_iva, stock_minimo = :stock_minimo,
                 comision_vendedor = :comision_vendedor, existencia = :existencia
              WHERE id = :id'
         );
@@ -323,6 +327,20 @@ class ProductModel extends BaseModel
         $stmt = $this->db->prepare('SELECT ruta FROM producto_imagenes WHERE producto_id = :producto_id');
         $stmt->execute(['producto_id' => $productId]);
         return array_column($stmt->fetchAll(), 'ruta');
+    }
+
+    private function ensureIvaColumn(): void
+    {
+        if ($this->ivaColumnReady) {
+            return;
+        }
+
+        $stmt = $this->db->query("SHOW COLUMNS FROM productos LIKE 'afecto_iva'");
+        if (!$stmt->fetch()) {
+            $this->db->exec('ALTER TABLE productos ADD COLUMN afecto_iva TINYINT(1) NOT NULL DEFAULT 1 AFTER precio_venta_total');
+        }
+
+        $this->ivaColumnReady = true;
     }
 
     private function ensureImagesTable(): void
