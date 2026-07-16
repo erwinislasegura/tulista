@@ -1,6 +1,7 @@
 <?php
 $products = $data['products'] ?? [];
 $productImages = $data['product_images'] ?? [];
+$productsWithImagesCount = count(array_filter($productImages, static fn ($images): bool => !empty($images)));
 $money = static fn ($value): string => '$' . number_format((float) $value, 0, ',', '.');
 $editCatalog = [
     'categories' => array_map(static fn ($item): array => ['id' => (int) $item['id'], 'label' => (string) $item['nombre']], $data['categories'] ?? []),
@@ -20,6 +21,8 @@ $jsonOptions = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | 
 <style>
 .tl-products-toolbar { align-items: center; display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; margin-bottom: 14px; }
 .tl-products-toolbar .form-control { max-width: 320px; }
+.tl-products-summary { align-items: center; display: flex; flex-wrap: wrap; gap: 10px; }
+.tl-products-image-count { background: #f6f0ff; border: 1px solid #e4d6ff; border-radius: 999px; color: #4d2f78; display: inline-flex; font-size: 12px; font-weight: 700; gap: 6px; line-height: 1; padding: 7px 10px; white-space: nowrap; }
 .tl-product-thumb { align-items: center; background: #fff7ef; border: 1px solid #eadfce; border-radius: 10px; display: inline-flex; height: 46px; justify-content: center; overflow: hidden; width: 46px; }
 .tl-product-thumb img { height: 100%; object-fit: cover; width: 100%; }
 .tl-product-thumb i { color: #9d93a3; font-size: 22px; }
@@ -37,7 +40,10 @@ $jsonOptions = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | 
 
 <div class="tl-products-toolbar">
     <div>
-        <h6 class="tl-section-title mb-1">Catálogo de productos</h6>
+        <div class="tl-products-summary mb-1">
+            <h6 class="tl-section-title mb-0">Catálogo de productos</h6>
+            <span class="tl-products-image-count"><i class="bx bx-image-alt"></i><?= $productsWithImagesCount ?> con imagen</span>
+        </div>
         <p class="text-muted small mb-0">Gestiona imágenes, precios, stock y acciones desde un listado compacto.</p>
     </div>
     <input type="search" id="productosSearch" class="form-control form-control-sm" placeholder="Buscar por producto, SKU, código de barras, categoría o marca">
