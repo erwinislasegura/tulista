@@ -7,6 +7,9 @@ const categories = ['Todos', ...new Set((Array.isArray(window.TULISTA_CATEGORIES
 let cart = [];
 let activeCategory = 'Todos';
 let searchTerm = '';
+let currentPage = 1;
+let pageSize = 12;
+let searchTimer = 0;
 const productQuantities = new Map();
 
 const money = new Intl.NumberFormat('es-CL', {style:'currency', currency:'CLP', maximumFractionDigits:0});
@@ -44,6 +47,7 @@ function renderSideCategories(){
 
 function setCategory(cat){
   activeCategory = cat;
+  currentPage = 1;
   searchTerm = '';
   const search = document.getElementById('globalSearch');
   if(search) search.value = '';
@@ -110,9 +114,13 @@ function renderProducts(){
   const grid = document.getElementById('productGrid');
   if(!grid) return;
   const list = filteredProducts();
+  const totalPages = Math.max(1, Math.ceil(list.length / pageSize));
+  currentPage = Math.min(currentPage, totalPages);
+  const start = (currentPage - 1) * pageSize;
+  const pageItems = list.slice(start, start + pageSize);
   const resultNote = document.getElementById('resultNote');
-  if(resultNote) resultNote.textContent = `Mostrando ${list.length} producto${list.length===1?'':'s'}${activeCategory!=='Todos'?' en '+activeCategory:''}.`;
-  grid.innerHTML = list.map(p=>`
+  if(resultNote) resultNote.textContent = list.length ? `Mostrando ${start + 1}–${Math.min(start + pageSize, list.length)} de ${list.length} productos${activeCategory!=='Todos'?' en '+activeCategory:''}.` : 'No encontramos coincidencias. Prueba otra búsqueda o envíanos tu lista.';
+  grid.innerHTML = pageItems.map(p=>`
     <article class="product-card">
       <div class="product-image" onclick="openModal(${p.id})">
         <span class="badge">${p.tag}</span>
@@ -131,6 +139,33 @@ function renderProducts(){
         <button class="whatsapp-card" onclick="consultProduct(${p.id})">Consultar por WhatsApp</button>
       </div>
     </article>`).join('');
+  renderPagination(totalPages);
+}
+
+function renderPagination(totalPages){
+  const nav = document.getElementById('catalogPagination');
+  if(!nav) return;
+  if(totalPages <= 1){ nav.innerHTML = ''; return; }
+  const from = Math.max(1, currentPage - 2);
+  const to = Math.min(totalPages, currentPage + 2);
+  let html = `<button ${currentPage===1?'disabled':''} data-page="${currentPage-1}">← Anterior</button>`;
+  for(let page=from; page<=to; page++) html += `<button class="${page===currentPage?'active':''}" data-page="${page}" aria-current="${page===currentPage?'page':'false'}">${page}</button>`;
+  html += `<button ${currentPage===totalPages?'disabled':''} data-page="${currentPage+1}">Siguiente →</button>`;
+  nav.innerHTML = html;
+  nav.querySelectorAll('[data-page]').forEach(button=>button.addEventListener('click',()=>{currentPage=Number(button.dataset.page);renderProducts();document.getElementById('productos')?.scrollIntoView({behavior:'smooth'});}));
+}
+
+function renderSearchSuggestions(value){
+  const panel = document.getElementById('searchSuggestions');
+  const input = document.getElementById('globalSearch');
+  if(!panel || !input) return;
+  const term = value.trim().toLowerCase();
+  if(term.length < 2){ panel.classList.remove('open'); panel.innerHTML=''; input.setAttribute('aria-expanded','false'); return; }
+  const matches = products.filter(p=>`${p.name} ${p.cat} ${p.desc}`.toLowerCase().includes(term)).slice(0,6);
+  panel.innerHTML = matches.length ? matches.map(p=>`<button type="button" role="option" data-product-search="${p.name.replace(/"/g,'&quot;')}"><img src="${p.img}" alt=""><span><strong>${p.name}</strong><small>${p.cat} · ${p.desc}</small></span><b>${money.format(p.price)}</b></button>`).join('') + `<button type="button" class="all-results" data-all-results>Ver todos los resultados para “${value}” →</button>` : `<div class="no-suggestions"><strong>Sin coincidencias directas</strong><span>Prueba otra palabra o envíanos tu lista para cotizar.</span></div>`;
+  panel.classList.add('open'); input.setAttribute('aria-expanded','true');
+  panel.querySelectorAll('[data-product-search]').forEach(button=>button.addEventListener('click',()=>{input.value=button.dataset.productSearch;searchTerm=button.dataset.productSearch;currentPage=1;panel.classList.remove('open');renderProducts();document.getElementById('productos')?.scrollIntoView({behavior:'smooth'});}));
+  panel.querySelector('[data-all-results]')?.addEventListener('click',()=>{searchTerm=value;currentPage=1;panel.classList.remove('open');renderProducts();document.getElementById('productos')?.scrollIntoView({behavior:'smooth'});});
 }
 
 function addToCart(id, qty=1){
@@ -309,7 +344,9 @@ document.addEventListener('DOMContentLoaded',()=>{
   setupImmersiveParallax();
   document.querySelectorAll('[data-cat-link]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault(); location.href = '#productos';}));
   document.querySelectorAll('[data-filter]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault(); setCategory(el.dataset.filter);}));
-  document.getElementById('globalSearch')?.addEventListener('input',e=>{searchTerm=e.target.value; activeCategory='Todos'; renderTabs(); renderSideCategories(); renderProducts();});
+  document.getElementById('globalSearch')?.addEventListener('input',e=>{clearTimeout(searchTimer);searchTimer=setTimeout(()=>{searchTerm=e.target.value;activeCategory='Todos';currentPage=1;renderTabs();renderSideCategories();renderProducts();renderSearchSuggestions(e.target.value);},280);});
+  document.getElementById('globalSearch')?.addEventListener('keydown',e=>{if(e.key==='Escape'){document.getElementById('searchSuggestions')?.classList.remove('open');e.currentTarget.setAttribute('aria-expanded','false');}});
+  document.getElementById('pageSizeSelect')?.addEventListener('change',e=>{pageSize=Number(e.target.value)||12;currentPage=1;renderProducts();});
   document.getElementById('sortSelect')?.addEventListener('change',renderProducts);
   document.getElementById('clearFilters')?.addEventListener('click',()=>{activeCategory='Todos';searchTerm='';const s=document.getElementById('globalSearch'); if(s) s.value=''; renderTabs(); renderSideCategories(); renderProducts();});
   document.getElementById('megaTrigger')?.addEventListener('click',toggleMega);

@@ -13,14 +13,14 @@ const categories = [
 ];
 
 const products = [
-  { id: 1, name: "Kit escolar esencial", cat: "Escolar", price: 15990, image: "/images/prod-kit.png", tag: "Más vendido" },
-  { id: 2, name: "Cuadernos universitarios", cat: "Escolar", price: 3490, image: "/images/prod-cuadernos.png", tag: "Nuevo" },
-  { id: 3, name: "Set de lápices de colores", cat: "Arte", price: 5290, image: "/images/prod-lapices.png", tag: "Oferta" },
-  { id: 4, name: "Resma carta 500 hojas", cat: "Oficina", price: 5990, image: "/images/prod-resma.png", tag: "Stock" },
-  { id: 5, name: "Pack carpetas organizadoras", cat: "Organización", price: 8490, image: "/images/prod-carpetas.png", tag: "Empresas" },
-  { id: 6, name: "Set de geometría", cat: "Escolar", price: 2990, image: "/images/prod-geometria.png", tag: "Stock" },
-  { id: 7, name: "Témperas 12 colores", cat: "Arte", price: 4490, image: "/images/prod-pinturas.png", tag: "Favorito" },
-  { id: 8, name: "Papel adhesivo A4", cat: "Papelería", price: 15320, image: "/images/prod-etiquetas.png", tag: "Oficina" },
+  { id: 1, name: "Kit escolar esencial", cat: "Escolar", price: 15990, image: "/images/prod-kit.png", tag: "Más vendido", sku: "KIT-ESC-01", brand: "Tu Lista" },
+  { id: 2, name: "Cuadernos universitarios", cat: "Escolar", price: 3490, image: "/images/prod-cuadernos.png", tag: "Nuevo", sku: "CUA-UNI-100", brand: "Escolar" },
+  { id: 3, name: "Set de lápices de colores", cat: "Arte", price: 5290, image: "/images/prod-lapices.png", tag: "Oferta", sku: "LAP-COL-12", brand: "Creativa" },
+  { id: 4, name: "Resma carta 500 hojas", cat: "Oficina", price: 5990, image: "/images/prod-resma.png", tag: "Stock", sku: "RES-CAR-500", brand: "Oficina" },
+  { id: 5, name: "Pack carpetas organizadoras", cat: "Organización", price: 8490, image: "/images/prod-carpetas.png", tag: "Empresas", sku: "CAR-ORG-05", brand: "Archivo" },
+  { id: 6, name: "Set de geometría", cat: "Escolar", price: 2990, image: "/images/prod-geometria.png", tag: "Stock", sku: "GEO-SET-04", brand: "Escolar" },
+  { id: 7, name: "Témperas 12 colores", cat: "Arte", price: 4490, image: "/images/prod-pinturas.png", tag: "Favorito", sku: "TEM-12-COL", brand: "Creativa" },
+  { id: 8, name: "Papel adhesivo A4", cat: "Papelería", price: 15320, image: "/images/prod-etiquetas.png", tag: "Oficina", sku: "PAP-ADH-A4", brand: "Papelería" },
 ];
 
 const money = new Intl.NumberFormat("es-CL", { style: "currency", currency: "CLP", maximumFractionDigits: 0 });
@@ -94,7 +94,7 @@ export default function Home() {
         <div className="section-heading"><div><span className="eyebrow">Productos destacados</span><h2>Resuelve tu lista en minutos</h2><p>Compra por unidad, arma tu pedido o solicita una cotización completa.</p></div><a href="#catalogo">Ver todo el catálogo →</a></div>
         <div className="filters"><button className={category === "Todos" ? "active" : ""} onClick={() => setCategory("Todos")}>Todos</button>{["Escolar", "Oficina", "Arte", "Organización"].map(item => <button className={category === item ? "active" : ""} key={item} onClick={() => setCategory(item)}>{item}</button>)}</div>
         <div className="product-grid">
-          {visible.map(product => <article className="product-card" key={product.id}><div className="product-image"><span>{product.tag}</span><Image unoptimized src={product.image} fill sizes="(max-width: 700px) 50vw, 25vw" alt={product.name} /></div><small>{product.cat}</small><h3>{product.name}</h3><div className="price-row"><strong>{money.format(product.price)}</strong><button onClick={() => add(product.id)} aria-label={`Agregar ${product.name}`}>+</button></div></article>)}
+          {visible.map(product => <article className="product-card" key={product.id}><div className="product-image"><span>{product.tag}</span><Image unoptimized src={product.image} fill sizes="(max-width: 700px) 50vw, 25vw" alt={product.name} /></div><div className="product-kicker"><small>{product.brand}</small><i>Disponible</i></div><h3>{product.name}</h3><p className="product-sku">SKU {product.sku}</p><div className="price-row"><strong>{money.format(product.price)}</strong></div><button className="product-add" onClick={() => add(product.id)}>Agregar al carrito <span>+</span></button></article>)}
         </div>
         {!visible.length && <p className="empty">No encontramos productos con esa búsqueda. Prueba con otra palabra.</p>}
       </section>

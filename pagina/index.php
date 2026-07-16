@@ -92,9 +92,10 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
   <header class="header">
     <div class="container header-main">
       <a class="brand" href=""><img src="pagina/assets/images/logo.png" alt="Tu Lista"></a>
-      <form class="searchbox" action="#productos">
-        <input id="globalSearch" type="search" placeholder="Buscar cuadernos, resmas, témperas, lápices...">
+      <form class="searchbox" action="#productos" autocomplete="off">
+        <input id="globalSearch" type="search" placeholder="Buscar por producto, SKU, marca o categoría..." aria-label="Buscar productos" aria-controls="searchSuggestions" aria-expanded="false">
         <button type="submit">⌕</button>
+        <div class="search-suggestions" id="searchSuggestions" role="listbox"></div>
       </form>
       <div class="header-actions">
         <a class="btn ghost" href="cotizador-lista">Enviar lista</a>
@@ -163,9 +164,10 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
       <div class="shop-layout elevated-shop">
         <aside class="filters"><h3>Departamentos</h3><div id="sideCategories"></div><hr style="border:0;border-top:1px solid var(--line);margin:14px 0"><a class="filter-btn" href="cotizador-lista">Cotizar lista <span>rápido</span></a><a class="filter-btn" href="#mayoristas">Mayoristas <span>especial</span></a></aside>
         <div>
-          <div class="toolbar"><div class="tabs" id="tabs"></div><select class="sort" id="sortSelect"><option value="featured">Destacados</option><option value="priceAsc">Menor precio</option><option value="priceDesc">Mayor precio</option><option value="name">Nombre A-Z</option></select></div>
+          <div class="toolbar"><div class="tabs" id="tabs"></div><div class="catalog-controls"><label>Mostrar <select class="sort" id="pageSizeSelect"><option value="12">12</option><option value="24">24</option><option value="48">48</option></select></label><select class="sort" id="sortSelect"><option value="featured">Destacados</option><option value="priceAsc">Menor precio</option><option value="priceDesc">Mayor precio</option><option value="name">Nombre A-Z</option></select></div></div>
           <p class="result-note" id="resultNote"></p>
           <div class="product-grid" id="productGrid"></div>
+          <nav class="catalog-pagination" id="catalogPagination" aria-label="Paginación del catálogo"></nav>
         </div>
       </div>
     </div>
