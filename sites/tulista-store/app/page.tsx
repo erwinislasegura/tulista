@@ -90,6 +90,15 @@ export default function Home() {
 
       <div className="color-ticker" aria-label="Categorías"><div><span>Cuadernos</span><i>✦</i><span>Arte y color</span><i>✦</i><span>Oficina</span><i>✦</i><span>Listas escolares</span><i>✦</i><span>Mayoristas</span></div></div>
 
+      <section className="catalog shell" id="catalogo">
+        <div className="section-heading"><div><span className="eyebrow">Productos destacados</span><h2>Resuelve tu lista en minutos</h2><p>Compra por unidad, arma tu pedido o solicita una cotización completa.</p></div><a href="#catalogo">Ver todo el catálogo →</a></div>
+        <div className="filters"><button className={category === "Todos" ? "active" : ""} onClick={() => setCategory("Todos")}>Todos</button>{["Escolar", "Oficina", "Arte", "Organización"].map(item => <button className={category === item ? "active" : ""} key={item} onClick={() => setCategory(item)}>{item}</button>)}</div>
+        <div className="product-grid">
+          {visible.map(product => <article className="product-card" key={product.id}><div className="product-image"><span>{product.tag}</span><Image unoptimized src={product.image} fill sizes="(max-width: 700px) 50vw, 25vw" alt={product.name} /></div><small>{product.cat}</small><h3>{product.name}</h3><div className="price-row"><strong>{money.format(product.price)}</strong><button onClick={() => add(product.id)} aria-label={`Agregar ${product.name}`}>+</button></div></article>)}
+        </div>
+        {!visible.length && <p className="empty">No encontramos productos con esa búsqueda. Prueba con otra palabra.</p>}
+      </section>
+
       <section className="category-strip shell" aria-label="Categorías destacadas">
         {categories.map((item) => <button key={item.name} className="category-card" onClick={() => item.name === "Mayorista" ? document.getElementById("mayorista")?.scrollIntoView({ behavior: "smooth" }) : scrollToCatalog(item.name)}><Image unoptimized src={item.image} width={180} height={120} alt="" /><span>{item.name}</span><b>›</b></button>)}
       </section>
@@ -99,15 +108,6 @@ export default function Home() {
       <section className="shop-worlds shell"><div className="section-heading"><div><span className="eyebrow">Compra según lo que necesitas</span><h2>Tres mundos, una sola tienda.</h2></div><p>Productos elegidos para estudiar, crear y trabajar mejor.</p></div><div className="world-grid"><article className="world-card school" data-parallax><div className="world-bg" /><div><span>01 / Escolar</span><h3>Todo para volver a clases</h3><p>Cuadernos, mochilas, geometría y kits listos.</p><button onClick={() => scrollToCatalog("Escolar")}>Ver escolares →</button></div></article><article className="world-card art" data-parallax><div className="world-bg" /><div><span>02 / Creatividad</span><h3>Color para grandes ideas</h3><p>Témperas, lápices, papeles y manualidades.</p><button onClick={() => scrollToCatalog("Arte")}>Explorar arte →</button></div></article><article className="world-card office" data-parallax><div className="world-bg" /><div><span>03 / Oficina</span><h3>Orden para hacer más</h3><p>Resmas, carpetas y esenciales de escritorio.</p><button onClick={() => scrollToCatalog("Oficina")}>Equipar oficina →</button></div></article></div></section>
 
       <section className="list-parallax" data-parallax><div className="list-parallax-bg" /><div className="shell"><div className="list-panel"><span className="eyebrow">Tu lista, resuelta</span><h2>Sube una foto. Nosotros ordenamos el resto.</h2><p>Recibimos tu lista escolar en PDF, Excel o fotografía. Revisamos productos y cantidades para entregarte una cotización clara.</p><div><button className="primary" onClick={() => setQuoteOpen(true)}>Enviar mi lista →</button><a href="#catalogo">Prefiero comprar yo</a></div></div><div className="list-stat"><strong>1 archivo</strong><span>es todo lo que necesitas para comenzar</span></div></div></section>
-
-      <section className="catalog shell" id="catalogo">
-        <div className="section-heading"><div><span className="eyebrow">Productos destacados</span><h2>Resuelve tu lista en minutos</h2><p>Compra por unidad, arma tu pedido o solicita una cotización completa.</p></div><a href="#catalogo">Ver todo el catálogo →</a></div>
-        <div className="filters"><button className={category === "Todos" ? "active" : ""} onClick={() => setCategory("Todos")}>Todos</button>{["Escolar", "Oficina", "Arte", "Organización"].map(item => <button className={category === item ? "active" : ""} key={item} onClick={() => setCategory(item)}>{item}</button>)}</div>
-        <div className="product-grid">
-          {visible.map(product => <article className="product-card" key={product.id}><div className="product-image"><span>{product.tag}</span><Image unoptimized src={product.image} fill sizes="(max-width: 700px) 50vw, 25vw" alt={product.name} /></div><small>{product.cat}</small><h3>{product.name}</h3><div className="price-row"><strong>{money.format(product.price)}</strong><button onClick={() => add(product.id)} aria-label={`Agregar ${product.name}`}>+</button></div></article>)}
-        </div>
-        {!visible.length && <p className="empty">No encontramos productos con esa búsqueda. Prueba con otra palabra.</p>}
-      </section>
 
       <section className="seo-section creative-editorial" data-parallax>
         <div className="shell seo-grid">
