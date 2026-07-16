@@ -2,6 +2,12 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
+    # Compatibility for previews/hostings whose public document root is /pagina.
+    # The storefront templates intentionally use /pagina/assets/... so they also
+    # work when the repository root is public. In a /pagina document root that
+    # path would otherwise resolve to /pagina/pagina/assets and return 404.
+    RewriteRule ^pagina/assets/(.*)$ assets/$1 [L]
+
     # Redirect direct requests for /pagina/index.php to the public root.
     RewriteCond %{THE_REQUEST} \s/+pagina/index\.php[?\s] [NC]
     RewriteRule ^index\.php$ / [R=301,L]

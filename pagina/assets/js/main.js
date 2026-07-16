@@ -1,12 +1,15 @@
 
 const whatsappNumber = '569XXXXXXXX';
-const defaultProducts = [{"id": 1, "name": "Resma carta 500 hojas", "cat": "Oficina", "price": 4790, "old": 5690, "img": "/pagina/assets/images/prod-resma.png", "tag": "Más vendido", "desc": "Papel para impresión diaria, colegio y oficina."}, {"id": 2, "name": "Cuaderno universitario 100 hojas", "cat": "Escolar", "price": 1890, "old": 0, "img": "/pagina/assets/images/prod-cuadernos.png", "tag": "Escolar", "desc": "Para clases, apuntes y uso diario."}, {"id": 3, "name": "Set lápices grafito x12", "cat": "Escritura", "price": 2490, "old": 2990, "img": "/pagina/assets/images/prod-lapices.png", "tag": "Pack", "desc": "Lápices básicos para colegio y escritorio."}, {"id": 4, "name": "Témpera escolar 12 colores", "cat": "Arte", "price": 3990, "old": 4990, "img": "/pagina/assets/images/prod-pinturas.png", "tag": "Arte", "desc": "Colores vivos para manualidades y trabajos escolares."}, {"id": 5, "name": "Carpeta oficio con acoclip", "cat": "Oficina", "price": 590, "old": 0, "img": "/pagina/assets/images/prod-carpetas.png", "tag": "Unidad", "desc": "Organización para tareas, trámites y documentos."}, {"id": 6, "name": "Goma eva colores surtidos", "cat": "Arte", "price": 1990, "old": 0, "img": "/pagina/assets/images/prod-gomaeva.png", "tag": "Manualidad", "desc": "Material flexible para proyectos creativos."}, {"id": 7, "name": "Mochila escolar resistente", "cat": "Mochilas", "price": 15990, "old": 18990, "img": "/pagina/assets/images/prod-mochila.png", "tag": "Nuevo", "desc": "Compartimentos cómodos para clases y útiles."}, {"id": 8, "name": "Pack oficina mensual", "cat": "Oficina", "price": 34990, "old": 39990, "img": "/pagina/assets/images/prod-oficina.png", "tag": "Empresa", "desc": "Insumos de alta rotación para oficina."}, {"id": 9, "name": "Libro lectura complementaria", "cat": "Librería", "price": 6990, "old": 0, "img": "/pagina/assets/images/prod-libros.png", "tag": "Lectura", "desc": "Selección para apoyo escolar y biblioteca."}, {"id": 10, "name": "Set geometría escolar", "cat": "Escolar", "price": 1990, "old": 2490, "img": "/pagina/assets/images/prod-geometria.png", "tag": "Kit", "desc": "Regla, escuadras y transportador."}, {"id": 11, "name": "Papel adhesivo A4 100 hojas", "cat": "Papelería", "price": 15320, "old": 0, "img": "/pagina/assets/images/prod-etiquetas.png", "tag": "Etiquetas", "desc": "Para rotulación, etiquetas y organización."}, {"id": 12, "name": "Kit escolar básico 1º ciclo", "cat": "Escolar", "price": 24990, "old": 29990, "img": "/pagina/assets/images/prod-kit.png", "tag": "Kit listo", "desc": "Pack referencial para resolver rápido la lista."}];
+const defaultProducts = [{"id": 1, "name": "Resma carta 500 hojas", "cat": "Oficina", "price": 4790, "old": 5690, "img": "pagina/assets/images/prod-resma.png", "tag": "Más vendido", "desc": "Papel para impresión diaria, colegio y oficina."}, {"id": 2, "name": "Cuaderno universitario 100 hojas", "cat": "Escolar", "price": 1890, "old": 0, "img": "pagina/assets/images/prod-cuadernos.png", "tag": "Escolar", "desc": "Para clases, apuntes y uso diario."}, {"id": 3, "name": "Set lápices grafito x12", "cat": "Escritura", "price": 2490, "old": 2990, "img": "pagina/assets/images/prod-lapices.png", "tag": "Pack", "desc": "Lápices básicos para colegio y escritorio."}, {"id": 4, "name": "Témpera escolar 12 colores", "cat": "Arte", "price": 3990, "old": 4990, "img": "pagina/assets/images/prod-pinturas.png", "tag": "Arte", "desc": "Colores vivos para manualidades y trabajos escolares."}, {"id": 5, "name": "Carpeta oficio con acoclip", "cat": "Oficina", "price": 590, "old": 0, "img": "pagina/assets/images/prod-carpetas.png", "tag": "Unidad", "desc": "Organización para tareas, trámites y documentos."}, {"id": 6, "name": "Goma eva colores surtidos", "cat": "Arte", "price": 1990, "old": 0, "img": "pagina/assets/images/prod-gomaeva.png", "tag": "Manualidad", "desc": "Material flexible para proyectos creativos."}, {"id": 7, "name": "Mochila escolar resistente", "cat": "Mochilas", "price": 15990, "old": 18990, "img": "pagina/assets/images/prod-mochila.png", "tag": "Nuevo", "desc": "Compartimentos cómodos para clases y útiles."}, {"id": 8, "name": "Pack oficina mensual", "cat": "Oficina", "price": 34990, "old": 39990, "img": "pagina/assets/images/prod-oficina.png", "tag": "Empresa", "desc": "Insumos de alta rotación para oficina."}, {"id": 9, "name": "Libro lectura complementaria", "cat": "Librería", "price": 6990, "old": 0, "img": "pagina/assets/images/prod-libros.png", "tag": "Lectura", "desc": "Selección para apoyo escolar y biblioteca."}, {"id": 10, "name": "Set geometría escolar", "cat": "Escolar", "price": 1990, "old": 2490, "img": "pagina/assets/images/prod-geometria.png", "tag": "Kit", "desc": "Regla, escuadras y transportador."}, {"id": 11, "name": "Papel adhesivo A4 100 hojas", "cat": "Papelería", "price": 15320, "old": 0, "img": "pagina/assets/images/prod-etiquetas.png", "tag": "Etiquetas", "desc": "Para rotulación, etiquetas y organización."}, {"id": 12, "name": "Kit escolar básico 1º ciclo", "cat": "Escolar", "price": 24990, "old": 29990, "img": "pagina/assets/images/prod-kit.png", "tag": "Kit listo", "desc": "Pack referencial para resolver rápido la lista."}];
 const defaultCategories = ['Todos','Escolar','Oficina','Arte','Papelería','Escritura','Librería','Mochilas'];
 const products = Array.isArray(window.TULISTA_PRODUCTS) ? window.TULISTA_PRODUCTS : defaultProducts;
 const categories = ['Todos', ...new Set((Array.isArray(window.TULISTA_CATEGORIES) ? window.TULISTA_CATEGORIES : defaultCategories.slice(1)).filter(Boolean))];
 let cart = [];
 let activeCategory = 'Todos';
 let searchTerm = '';
+let currentPage = 1;
+let pageSize = 12;
+let searchTimer = 0;
 const productQuantities = new Map();
 
 const money = new Intl.NumberFormat('es-CL', {style:'currency', currency:'CLP', maximumFractionDigits:0});
@@ -44,6 +47,7 @@ function renderSideCategories(){
 
 function setCategory(cat){
   activeCategory = cat;
+  currentPage = 1;
   searchTerm = '';
   const search = document.getElementById('globalSearch');
   if(search) search.value = '';
@@ -110,9 +114,13 @@ function renderProducts(){
   const grid = document.getElementById('productGrid');
   if(!grid) return;
   const list = filteredProducts();
+  const totalPages = Math.max(1, Math.ceil(list.length / pageSize));
+  currentPage = Math.min(currentPage, totalPages);
+  const start = (currentPage - 1) * pageSize;
+  const pageItems = list.slice(start, start + pageSize);
   const resultNote = document.getElementById('resultNote');
-  if(resultNote) resultNote.textContent = `Mostrando ${list.length} producto${list.length===1?'':'s'}${activeCategory!=='Todos'?' en '+activeCategory:''}.`;
-  grid.innerHTML = list.map(p=>`
+  if(resultNote) resultNote.textContent = list.length ? `Mostrando ${start + 1}–${Math.min(start + pageSize, list.length)} de ${list.length} productos${activeCategory!=='Todos'?' en '+activeCategory:''}.` : 'No encontramos coincidencias. Prueba otra búsqueda o envíanos tu lista.';
+  grid.innerHTML = pageItems.map(p=>`
     <article class="product-card">
       <div class="product-image" onclick="openModal(${p.id})">
         <span class="badge">${p.tag}</span>
@@ -131,6 +139,33 @@ function renderProducts(){
         <button class="whatsapp-card" onclick="consultProduct(${p.id})">Consultar por WhatsApp</button>
       </div>
     </article>`).join('');
+  renderPagination(totalPages);
+}
+
+function renderPagination(totalPages){
+  const nav = document.getElementById('catalogPagination');
+  if(!nav) return;
+  if(totalPages <= 1){ nav.innerHTML = ''; return; }
+  const from = Math.max(1, currentPage - 2);
+  const to = Math.min(totalPages, currentPage + 2);
+  let html = `<button ${currentPage===1?'disabled':''} data-page="${currentPage-1}">← Anterior</button>`;
+  for(let page=from; page<=to; page++) html += `<button class="${page===currentPage?'active':''}" data-page="${page}" aria-current="${page===currentPage?'page':'false'}">${page}</button>`;
+  html += `<button ${currentPage===totalPages?'disabled':''} data-page="${currentPage+1}">Siguiente →</button>`;
+  nav.innerHTML = html;
+  nav.querySelectorAll('[data-page]').forEach(button=>button.addEventListener('click',()=>{currentPage=Number(button.dataset.page);renderProducts();document.getElementById('productos')?.scrollIntoView({behavior:'smooth'});}));
+}
+
+function renderSearchSuggestions(value){
+  const panel = document.getElementById('searchSuggestions');
+  const input = document.getElementById('globalSearch');
+  if(!panel || !input) return;
+  const term = value.trim().toLowerCase();
+  if(term.length < 2){ panel.classList.remove('open'); panel.innerHTML=''; input.setAttribute('aria-expanded','false'); return; }
+  const matches = products.filter(p=>`${p.name} ${p.cat} ${p.desc}`.toLowerCase().includes(term)).slice(0,6);
+  panel.innerHTML = matches.length ? matches.map(p=>`<button type="button" role="option" data-product-search="${p.name.replace(/"/g,'&quot;')}"><img src="${p.img}" alt=""><span><strong>${p.name}</strong><small>${p.cat} · ${p.desc}</small></span><b>${money.format(p.price)}</b></button>`).join('') + `<button type="button" class="all-results" data-all-results>Ver todos los resultados para “${value}” →</button>` : `<div class="no-suggestions"><strong>Sin coincidencias directas</strong><span>Prueba otra palabra o envíanos tu lista para cotizar.</span></div>`;
+  panel.classList.add('open'); input.setAttribute('aria-expanded','true');
+  panel.querySelectorAll('[data-product-search]').forEach(button=>button.addEventListener('click',()=>{input.value=button.dataset.productSearch;searchTerm=button.dataset.productSearch;currentPage=1;panel.classList.remove('open');renderProducts();document.getElementById('productos')?.scrollIntoView({behavior:'smooth'});}));
+  panel.querySelector('[data-all-results]')?.addEventListener('click',()=>{searchTerm=value;currentPage=1;panel.classList.remove('open');renderProducts();document.getElementById('productos')?.scrollIntoView({behavior:'smooth'});});
 }
 
 function addToCart(id, qty=1){
@@ -279,6 +314,24 @@ function setupFAQ(){
   });
 }
 
+function setupImmersiveParallax(){
+  const sections = [...document.querySelectorAll('[data-parallax]')];
+  if(!sections.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let frame = 0;
+  const update = ()=>{
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(()=>{
+      sections.forEach(section=>{
+        const rect = section.getBoundingClientRect();
+        const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+        section.style.setProperty('--parallax', Math.max(0, Math.min(1, progress)).toFixed(3));
+      });
+    });
+  };
+  update();
+  window.addEventListener('scroll', update, {passive:true});
+}
+
 document.addEventListener('DOMContentLoaded',()=>{
   setActiveNav();
   renderTabs();
@@ -288,9 +341,12 @@ document.addEventListener('DOMContentLoaded',()=>{
   setupForms();
   setupFAQ();
   setupHeroParallax();
-  document.querySelectorAll('[data-cat-link]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault(); location.href = '/#productos';}));
+  setupImmersiveParallax();
+  document.querySelectorAll('[data-cat-link]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault(); location.href = '#productos';}));
   document.querySelectorAll('[data-filter]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault(); setCategory(el.dataset.filter);}));
-  document.getElementById('globalSearch')?.addEventListener('input',e=>{searchTerm=e.target.value; activeCategory='Todos'; renderTabs(); renderSideCategories(); renderProducts();});
+  document.getElementById('globalSearch')?.addEventListener('input',e=>{clearTimeout(searchTimer);searchTimer=setTimeout(()=>{searchTerm=e.target.value;activeCategory='Todos';currentPage=1;renderTabs();renderSideCategories();renderProducts();renderSearchSuggestions(e.target.value);},280);});
+  document.getElementById('globalSearch')?.addEventListener('keydown',e=>{if(e.key==='Escape'){document.getElementById('searchSuggestions')?.classList.remove('open');e.currentTarget.setAttribute('aria-expanded','false');}});
+  document.getElementById('pageSizeSelect')?.addEventListener('change',e=>{pageSize=Number(e.target.value)||12;currentPage=1;renderProducts();});
   document.getElementById('sortSelect')?.addEventListener('change',renderProducts);
   document.getElementById('clearFilters')?.addEventListener('click',()=>{activeCategory='Todos';searchTerm='';const s=document.getElementById('globalSearch'); if(s) s.value=''; renderTabs(); renderSideCategories(); renderProducts();});
   document.getElementById('megaTrigger')?.addEventListener('click',toggleMega);
