@@ -12,7 +12,11 @@ const categories = [
   { name: "Mayorista", image: "/images/prod-resma.png" },
 ];
 
-const heroBackdrops = ["/images/hero-products.jpg", "/images/prod-pinturas.png", "/images/prod-oficina.png"];
+const heroBackdrops = [
+  { image: "/images/hero-products.jpg", label: "Vuelta a clases" },
+  { image: "/images/prod-pinturas.png", label: "Arte que inspira" },
+  { image: "/images/prod-oficina.png", label: "Oficina en orden" },
+];
 
 const products = [
   { id: 1, name: "Kit escolar esencial", cat: "Escolar", price: 15990, image: "/images/prod-kit.png", tag: "Más vendido", sku: "KIT-ESC-01", brand: "Tu Lista" },
@@ -89,12 +93,13 @@ export default function Home() {
       </header>
 
       <section className="hero-v2" id="inicio" data-parallax>
-        <div className="hero-backdrops" aria-hidden="true">{heroBackdrops.map((image, index) => <div key={image} className={index === heroSlide ? "hero-backdrop active" : "hero-backdrop"} style={{ backgroundImage: `url(${image})` }} />)}</div>
+        <div className="hero-backdrops" aria-hidden="true">{heroBackdrops.map((slide, index) => <div key={slide.image} className={index === heroSlide ? "hero-backdrop active" : "hero-backdrop"} style={{ backgroundImage: `url(${slide.image})` }} />)}</div>
         <div className="hero-backdrop-overlay" />
         <div className="hero-orbit orbit-one" /><div className="hero-orbit orbit-two" />
         <div className="shell hero-v2-grid">
           <div className="hero-v2-copy"><span className="eyebrow">Escolar · arte · oficina</span><h1>Todo lo que tu día necesita, <em>en una sola lista.</em></h1><p>Desde el primer cuaderno hasta la oficina completa. Compra por producto, envíanos tu lista o cotiza por volumen.</p><div className="hero-buttons"><button className="primary" onClick={() => scrollToCatalog()}>Explorar productos <span>→</span></button><button className="secondary" onClick={() => setQuoteOpen(true)}>Cotizar mi lista</button></div><div className="hero-proof"><span>✓ Despacho coordinado</span><span>✓ Atención real</span><span>✓ Precios por volumen</span></div></div>
-          <div className="hero-collage" aria-label="Selección de productos Tu Lista"><div className="collage-back" /><Image className="collage-bag" unoptimized src="/images/prod-mochila.png" width={500} height={500} alt="Mochila escolar" priority /><Image className="collage-books" unoptimized src="/images/prod-cuadernos.png" width={320} height={280} alt="Cuadernos" priority /><Image className="collage-pencils" unoptimized src="/images/prod-lapices.png" width={280} height={250} alt="Lápices de colores" priority /><div className="collage-note"><b>Vuelta a clases</b><span>Todo listo, sin vueltas</span></div></div>
+          <div className="hero-collage" aria-label="Selección de productos Tu Lista"><div className="collage-back" /><Image className="collage-bag" unoptimized src="/images/prod-mochila.png" width={500} height={500} alt="Mochila escolar" priority /><Image className="collage-books" unoptimized src="/images/prod-cuadernos.png" width={320} height={280} alt="Cuadernos" priority /><Image className="collage-pencils" unoptimized src="/images/prod-lapices.png" width={280} height={250} alt="Lápices de colores" priority /><div className="collage-note"><b>{heroBackdrops[heroSlide].label}</b><span>Todo listo, sin vueltas</span></div></div>
+          <div className="hero-pagination" aria-label="Imágenes destacadas">{heroBackdrops.map((slide, index) => <button key={slide.image} className={index === heroSlide ? "active" : ""} onClick={() => setHeroSlide(index)} aria-label={`Ver ${slide.label}`}><span>{String(index + 1).padStart(2, "0")}</span></button>)}</div>
         </div>
       </section>
 
