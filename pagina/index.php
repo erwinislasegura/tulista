@@ -128,6 +128,7 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
         <div class="hero-slide<?= $i === 1 ? ' is-active' : '' ?>" style="background-image:url('assets/source/images/<?= $i ?>.png')"></div>
       <?php endfor; ?>
     </div>
+    <img class="hero-modern-image" src="sites/tulista-store/public/images/hero-products.jpg" alt="Mochila, cuadernos y útiles escolares y de oficina">
     <div class="container hero-premium-grid">
       <div class="hero-copy hero-premium-copy">
         <span class="eyebrow"><b>Tu compra escolar comienza aquí</b> útiles, arte y oficina</span>
@@ -138,6 +139,7 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
           <span>✓ Atención por WhatsApp</span><span>✓ Compra por unidad o volumen</span><span>✓ Catálogo filtrable</span>
         </div>
       </div>
+      <div class="hero-modern-badge"><strong>+500 productos</strong><span>para colegio y oficina</span></div>
     </div>
   </section>
 
