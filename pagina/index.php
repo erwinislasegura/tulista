@@ -130,15 +130,26 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
     </div>
     <div class="container hero-premium-grid">
       <div class="hero-copy hero-premium-copy">
-        <span class="eyebrow"><b>Tu Lista Pro</b> tienda escolar, oficina y compras institucionales</span>
-        <h1>Una tienda completa para resolver listas escolares, oficinas y compras por volumen.</h1>
-        <p>Diseño de compra moderno con catálogo, carrito, cotización asistida y atención comercial. Todo preparado para transmitir confianza, orden y escala profesional.</p>
-        <div class="hero-actions"><a class="btn orange" href="#productos">Comprar catálogo</a><a class="btn primary" href="cotizador-lista">Subir lista o pedido</a><a class="btn ghost" href="#mayoristas">Canal mayorista</a></div>
+        <span class="eyebrow"><b>Tu compra escolar comienza aquí</b> útiles, arte y oficina</span>
+        <h1>Tu lista completa, sin perder tiempo.</h1>
+        <p>Encuentra útiles escolares, arte, papelería y productos de oficina. Compra desde el catálogo o envíanos tu lista para recibir una cotización organizada.</p>
+        <div class="hero-actions"><a class="btn orange" href="#productos">Comprar productos →</a><a class="btn primary" href="cotizador-lista">Cotizar mi lista</a><a class="btn ghost" href="#mayoristas">Compras por volumen</a></div>
         <div class="hero-assurance" aria-label="Garantías comerciales">
           <span>✓ Atención por WhatsApp</span><span>✓ Compra por unidad o volumen</span><span>✓ Catálogo filtrable</span>
         </div>
       </div>
     </div>
+  </section>
+
+  <section class="seo-commerce-section">
+    <div class="container seo-commerce-grid">
+      <div class="seo-commerce-image"><img src="assets/source/images/24.png" alt="Útiles escolares, papelería y productos de oficina"></div>
+      <div><span class="kicker">Una compra, múltiples soluciones</span><h2>Útiles escolares y de oficina para cada etapa del año.</h2><p>En Tu Lista encuentras cuadernos, lápices, materiales de arte, resmas, carpetas, etiquetas y kits escolares. Reunimos productos esenciales para familias, colegios, empresas y librerías que necesitan comprar de forma simple y ordenada.</p><ul><li><strong>Temporada escolar:</strong> productos por unidad y listas completas.</li><li><strong>Oficinas y empresas:</strong> reposición frecuente y facturación.</li><li><strong>Mayoristas:</strong> atención comercial y precios por volumen.</li></ul><a class="btn orange" href="#productos">Descubrir el catálogo</a></div>
+    </div>
+  </section>
+
+  <section class="how-commerce-section">
+    <div class="container"><div class="section-head"><div><span class="kicker">Fácil de principio a fin</span><h2 class="section-title">Tu pedido en tres pasos.</h2></div></div><div class="how-commerce-grid"><article><b>1</b><h3>Elige o sube tu lista</h3><p>Compra desde el catálogo o envíanos el documento completo.</p></article><article><b>2</b><h3>Revisamos disponibilidad</h3><p>Confirmamos productos, cantidades, alternativas y despacho.</p></article><article><b>3</b><h3>Recibe tu pedido</h3><p>Coordinamos la entrega para que tengas todo a tiempo.</p></article></div></div>
   </section>
 
   <section class="store-band" aria-label="Beneficios de tienda">
@@ -173,6 +184,8 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
       </div>
     </div>
   </section>
+
+  <section class="final-commerce-cta"><div class="container"><div><span>¿Tienes una lista por resolver?</span><h2>Envíala hoy y te ayudamos a ordenar la compra.</h2></div><a class="btn orange" href="cotizador-lista">Cotizar mi lista →</a></div></section>
 </main>
 
   <footer class="footer">

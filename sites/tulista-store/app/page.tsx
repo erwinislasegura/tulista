@@ -19,6 +19,8 @@ const products = [
   { id: 4, name: "Resma carta 500 hojas", cat: "Oficina", price: 5990, image: "/images/prod-resma.png", tag: "Stock" },
   { id: 5, name: "Pack carpetas organizadoras", cat: "Organización", price: 8490, image: "/images/prod-carpetas.png", tag: "Empresas" },
   { id: 6, name: "Set de geometría", cat: "Escolar", price: 2990, image: "/images/prod-geometria.png", tag: "Stock" },
+  { id: 7, name: "Témperas 12 colores", cat: "Arte", price: 4490, image: "/images/prod-pinturas.png", tag: "Favorito" },
+  { id: 8, name: "Papel adhesivo A4", cat: "Papelería", price: 15320, image: "/images/prod-etiquetas.png", tag: "Oficina" },
 ];
 
 const money = new Intl.NumberFormat("es-CL", { style: "currency", currency: "CLP", maximumFractionDigits: 0 });
@@ -51,12 +53,12 @@ export default function Home() {
 
   return (
     <main>
-      <div className="utility"><span>▣ Envíos a todo Chile</span><span>Atención mayorista para empresas y colegios</span></div>
+      <div className="utility"><span>Envíos a todo Chile</span><span>Compra por unidad, lista o volumen</span><a href="#mayorista">Atención empresas y colegios →</a></div>
       <header>
         <div className="header-main shell">
           <a className="brand" href="#inicio" aria-label="Tu Lista, inicio"><Image unoptimized src="/images/logo.png" width={178} height={55} alt="Tu Lista" priority /></a>
           <label className="search"><span>⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} onFocus={() => scrollToCatalog()} placeholder="¿Qué producto buscas hoy?" aria-label="Buscar productos" /></label>
-          <div className="header-actions"><button className="account">Mi cuenta</button><button className="cart-button" onClick={() => setCartOpen(true)}>Carrito <b>{itemCount}</b></button><button className="hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="Abrir menú">☰</button></div>
+          <div className="header-actions"><button className="quote-header" onClick={() => setQuoteOpen(true)}>Cotizar lista</button><button className="cart-button" onClick={() => setCartOpen(true)}>Carrito <b>{itemCount}</b></button><button className="hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="Abrir menú">☰</button></div>
         </div>
         <nav className={menuOpen ? "open" : ""}><div className="shell"><a href="#inicio">Inicio</a>{["Escolar", "Oficina", "Arte", "Papelería", "Organización"].map((item) => <button key={item} onClick={() => scrollToCatalog(item)}>{item}</button>)}<a href="#mayorista">Mayorista</a></div></nav>
       </header>
@@ -64,7 +66,8 @@ export default function Home() {
       <section className="hero" id="inicio">
         <Image unoptimized className="hero-image" src="/images/hero-products.jpg" fill sizes="100vw" alt="Mochila, cuadernos y útiles escolares y de oficina" priority />
         <div className="shell hero-inner">
-          <div className="hero-copy"><span className="eyebrow">Escolar · oficina · empresas</span><h1>Todo lo que necesitas, <em>en una sola lista.</em></h1><p>Compra útil, rápido y sin vueltas. Para familias, colegios y empresas de todo Chile.</p><div className="hero-buttons"><button className="primary" onClick={() => scrollToCatalog()}>Ver productos</button><button className="secondary" onClick={() => setQuoteOpen(true)}>Cotizar mi lista</button></div><div className="hero-proof"><span>✓ Compra segura</span><span>✓ Atención personalizada</span></div></div>
+          <div className="hero-copy"><span className="eyebrow">Tu compra escolar comienza aquí</span><h1>Tu lista completa, <em>sin perder tiempo.</em></h1><p>Útiles escolares, arte y oficina con atención personalizada. Compra productos o envíanos tu lista y recibe una cotización organizada.</p><div className="hero-buttons"><button className="primary" onClick={() => scrollToCatalog()}>Comprar productos <span>→</span></button><button className="secondary" onClick={() => setQuoteOpen(true)}>Cotizar mi lista</button></div><div className="hero-proof"><span>✓ Precios claros</span><span>✓ Despacho coordinado</span><span>✓ Venta mayorista</span></div></div>
+          <div className="hero-float"><strong>+500 productos</strong><small>para colegio y oficina</small></div>
         </div>
       </section>
 
@@ -73,6 +76,11 @@ export default function Home() {
       </section>
 
       <section className="benefits shell"><div><b>▣</b><span><strong>Envíos a todo Chile</strong><small>Rápidos y seguros</small></span></div><div><b>%</b><span><strong>Precios mayoristas</strong><small>Descuentos por volumen</small></span></div><div><b>✓</b><span><strong>Compra confiable</strong><small>Asesoría antes de pagar</small></span></div><div><b>◎</b><span><strong>Atención personalizada</strong><small>Te ayudamos a elegir</small></span></div></section>
+
+      <section className="quick-paths shell" aria-label="Formas de comprar">
+        <article><span>01</span><div><small>Compra directa</small><h3>Elige desde el catálogo</h3><p>Encuentra productos escolares, arte, papelería y oficina con precios visibles.</p><button onClick={() => scrollToCatalog()}>Explorar productos →</button></div><Image unoptimized src="/images/prod-cuadernos.png" width={180} height={150} alt="Cuadernos escolares" /></article>
+        <article><span>02</span><div><small>Compra asistida</small><h3>Envíanos tu lista</h3><p>Sube una foto, PDF o Excel. Ordenamos los productos y preparamos tu cotización.</p><button onClick={() => setQuoteOpen(true)}>Cotizar mi lista →</button></div><Image unoptimized src="/images/prod-kit.png" width={180} height={150} alt="Kit de útiles escolares" /></article>
+      </section>
 
       <section className="catalog shell" id="catalogo">
         <div className="section-heading"><div><span className="eyebrow">Productos destacados</span><h2>Resuelve tu lista en minutos</h2><p>Compra por unidad, arma tu pedido o solicita una cotización completa.</p></div><a href="#catalogo">Ver todo el catálogo →</a></div>
@@ -83,7 +91,20 @@ export default function Home() {
         {!visible.length && <p className="empty">No encontramos productos con esa búsqueda. Prueba con otra palabra.</p>}
       </section>
 
+      <section className="seo-section">
+        <div className="shell seo-grid">
+          <div className="seo-image"><Image unoptimized src="/images/hero-products.png" fill sizes="(max-width: 800px) 100vw, 48vw" alt="Selección de útiles escolares, papelería y productos de oficina" /></div>
+          <div><span className="eyebrow">Una compra, múltiples soluciones</span><h2>Útiles escolares y de oficina para cada etapa del año.</h2><p>En Tu Lista encuentras cuadernos, lápices, materiales de arte, resmas, carpetas, etiquetas y kits escolares. Reunimos productos esenciales para familias, colegios, empresas y librerías que necesitan comprar de forma simple y ordenada.</p><ul><li><b>Temporada escolar:</b> productos por unidad y listas completas.</li><li><b>Oficinas y empresas:</b> reposición frecuente y facturación.</li><li><b>Mayoristas:</b> atención comercial y precios por volumen.</li></ul><button className="primary" onClick={() => scrollToCatalog()}>Descubrir el catálogo</button></div>
+        </div>
+      </section>
+
+      <section className="how shell"><div className="section-heading"><div><span className="eyebrow">Fácil de principio a fin</span><h2>Tu pedido en tres pasos</h2></div></div><div className="steps"><article><b>1</b><h3>Elige o sube tu lista</h3><p>Compra desde el catálogo o envíanos el documento completo.</p></article><article><b>2</b><h3>Revisamos disponibilidad</h3><p>Confirmamos productos, cantidades, alternativas y despacho.</p></article><article><b>3</b><h3>Recibe tu pedido</h3><p>Coordinamos la entrega para que tengas todo a tiempo.</p></article></div></section>
+
       <section className="wholesale" id="mayorista"><div className="shell wholesale-inner"><div><span className="eyebrow">Canal empresas y mayoristas</span><h2>Abastecimiento simple para compras grandes.</h2><p>Atendemos colegios, oficinas, instituciones y librerías con precios por volumen, respuesta rápida y pedidos organizados.</p><div className="wholesale-tags"><span>Facturación</span><span>Precios por volumen</span><span>Atención dedicada</span></div><button className="yellow" onClick={() => setQuoteOpen(true)}>Solicitar cotización</button></div><div className="wholesale-card"><strong>¿Tienes una lista?</strong><p>Envíala en PDF, fotografía o Excel. Nosotros ordenamos los productos y preparamos la cotización.</p><button onClick={() => setQuoteOpen(true)}>Subir mi lista →</button></div></div></section>
+
+      <section className="faq shell"><div><span className="eyebrow">Preguntas frecuentes</span><h2>Comprar informado también es comprar mejor.</h2><p>Resolvemos las dudas más comunes antes de que armes tu pedido.</p><button className="secondary" onClick={() => setQuoteOpen(true)}>Hablar con un asesor</button></div><div className="faq-list"><details open><summary>¿Puedo enviar una foto de mi lista escolar?<b>+</b></summary><p>Sí. Puedes subir una fotografía clara, PDF o Excel. Revisamos el contenido y te respondemos con disponibilidad y valores.</p></details><details><summary>¿Venden a empresas, colegios y librerías?<b>+</b></summary><p>Sí. Contamos con atención para compras institucionales, reposición y pedidos por volumen.</p></details><details><summary>¿Realizan despachos fuera de la ciudad?<b>+</b></summary><p>Coordinamos envíos según destino, tamaño del pedido y disponibilidad. Confirma cobertura al cotizar.</p></details></div></section>
+
+      <section className="final-cta"><div className="shell"><div><span>¿Tienes una lista por resolver?</span><h2>Envíala hoy y te ayudamos a ordenar la compra.</h2></div><button className="yellow" onClick={() => setQuoteOpen(true)}>Cotizar mi lista <span>→</span></button></div></section>
 
       <footer><div className="shell footer-grid"><div><Image src="/images/logo.png" width={150} height={46} alt="Tu Lista" /><p>Útiles escolares, oficina, arte y compras por volumen en un solo lugar.</p></div><div><strong>Tienda</strong><a href="#catalogo">Productos</a><button onClick={() => setQuoteOpen(true)}>Cotizar lista</button><a href="#mayorista">Mayoristas</a></div><div><strong>Ayuda</strong><a href="#inicio">Despachos</a><a href="#inicio">Preguntas frecuentes</a><a href="#inicio">Contacto</a></div><div><strong>Hablemos</strong><a href="mailto:contacto@tulista.cl">contacto@tulista.cl</a><p>Lunes a viernes<br />09:00 a 18:00</p></div></div><div className="shell copyright">© 2026 Tu Lista. Todos los derechos reservados.</div></footer>
 
