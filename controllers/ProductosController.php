@@ -405,7 +405,6 @@ class ProductosController
                 'costo_neto' => $row['Costo neto'] ?? 0,
                 'precio_venta_neto' => $row['Venta: Precio neto'] ?? 0,
                 'precio_venta_total' => $row['Venta: Precio total'] ?? 0,
-                'afecto_iva' => (int) ($row['Afecto IVA'] ?? 1),
                 'stock_minimo' => $row['Stock mínimo'] ?? 0,
                 'comision_vendedor' => $row['Comisión vendedor'] ?? 0,
                 'existencia' => $row['Existencia'] ?? 0,
@@ -550,10 +549,6 @@ class ProductosController
 
     private function mapProductData(array $source): array
     {
-        $precioVentaNeto = $this->toDecimal($source['precio_venta_neto'] ?? 0);
-        $afectoIva = (int) ($source['afecto_iva'] ?? 0) === 1;
-        $precioVentaTotal = $afectoIva ? round($precioVentaNeto * 1.19, 2) : $precioVentaNeto;
-
         return [
             'categoria_id' => (int) ($source['categoria_id'] ?? 0),
             'nombre' => trim((string) ($source['nombre'] ?? '')),
@@ -564,9 +559,8 @@ class ProductosController
             'codigo_barras' => trim((string) ($source['codigo_barras'] ?? '')),
             'tipo_item' => trim((string) ($source['tipo_item'] ?? '')),
             'costo_neto' => $this->toDecimal($source['costo_neto'] ?? 0),
-            'precio_venta_neto' => $precioVentaNeto,
-            'precio_venta_total' => $precioVentaTotal,
-            'afecto_iva' => $afectoIva ? 1 : 0,
+            'precio_venta_neto' => $this->toDecimal($source['precio_venta_neto'] ?? 0),
+            'precio_venta_total' => $this->toDecimal($source['precio_venta_total'] ?? 0),
             'stock_minimo' => (int) ($source['stock_minimo'] ?? 0),
             'comision_vendedor' => $this->toDecimal($source['comision_vendedor'] ?? 0),
             'existencia' => (int) ($source['existencia'] ?? 0),

@@ -34,7 +34,6 @@ CREATE TABLE IF NOT EXISTS productos (
     costo_neto DECIMAL(12,2) NOT NULL DEFAULT 0,
     precio_venta_neto DECIMAL(12,2) NOT NULL DEFAULT 0,
     precio_venta_total DECIMAL(12,2) NOT NULL DEFAULT 0,
-    afecto_iva TINYINT(1) NOT NULL DEFAULT 1,
     stock_minimo INT NOT NULL DEFAULT 0,
     comision_vendedor DECIMAL(8,2) NOT NULL DEFAULT 0,
     existencia INT NOT NULL DEFAULT 0,

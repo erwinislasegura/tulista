@@ -77,17 +77,12 @@
                 <div class="input-group input-group-sm"><span class="input-group-text">$</span><input class="form-control tl-compact-input" name="costo_neto" type="number" step="0.01"></div>
             </div>
             <div class="col-md-6 col-xl-4 tl-input-group">
-                <label class="form-label">Precio neto</label>
-                <div class="input-group input-group-sm"><span class="input-group-text">$</span><input class="form-control tl-compact-input js-net-price" name="precio_venta_neto" type="number" step="0.01" min="0"></div>
-            </div>
-            <div class="col-md-6 col-xl-4">
-                <label class="form-label">IVA</label>
-                <div class="form-check form-switch pt-1"><input class="form-check-input js-iva-check" name="afecto_iva" type="checkbox" value="1" checked><label class="form-check-label">Afecto a IVA chileno (19%)</label></div>
-                <small class="text-muted">Desmarca para productos exentos.</small>
+                <label class="form-label">Venta neto</label>
+                <div class="input-group input-group-sm"><span class="input-group-text">$</span><input class="form-control tl-compact-input" name="precio_venta_neto" type="number" step="0.01"></div>
             </div>
             <div class="col-md-6 col-xl-4 tl-input-group">
-                <label class="form-label">Precio con IVA / total</label>
-                <div class="input-group input-group-sm"><span class="input-group-text">$</span><input class="form-control tl-compact-input js-total-price" name="precio_venta_total" type="number" step="0.01" readonly></div>
+                <label class="form-label">Venta total</label>
+                <div class="input-group input-group-sm"><span class="input-group-text">$</span><input class="form-control tl-compact-input" name="precio_venta_total" type="number" step="0.01"></div>
             </div>
             <div class="col-md-6 col-xl-4"><label class="form-label">Stock mínimo</label><input class="form-control tl-compact-input" name="stock_minimo" type="number" step="1"></div>
             <div class="col-md-6 col-xl-4"><label class="form-label">Comisión vendedor</label><input class="form-control tl-compact-input" name="comision_vendedor" type="number" step="0.01"></div>
@@ -173,25 +168,3 @@
         </div>
     </div>
 </div>
-
-<script>
-(() => {
-  const IVA_CHILENO = 0.19;
-  document.querySelectorAll('form').forEach(form => {
-    const net = form.querySelector('.js-net-price');
-    const affected = form.querySelector('.js-iva-check');
-    const total = form.querySelector('.js-total-price');
-    if (!net || !affected || !total) return;
-
-    const calculate = () => {
-      const netValue = Number.parseFloat(net.value) || 0;
-      const totalValue = affected.checked ? netValue * (1 + IVA_CHILENO) : netValue;
-      total.value = totalValue ? totalValue.toFixed(2) : '';
-    };
-
-    net.addEventListener('input', calculate);
-    affected.addEventListener('change', calculate);
-    calculate();
-  });
-})();
-</script>
