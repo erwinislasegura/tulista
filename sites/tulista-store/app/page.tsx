@@ -12,6 +12,8 @@ const categories = [
   { name: "Mayorista", image: "/images/prod-resma.png" },
 ];
 
+const heroBackdrops = ["/images/hero-products.jpg", "/images/prod-pinturas.png", "/images/prod-oficina.png"];
+
 const products = [
   { id: 1, name: "Kit escolar esencial", cat: "Escolar", price: 15990, image: "/images/prod-kit.png", tag: "Más vendido", sku: "KIT-ESC-01", brand: "Tu Lista" },
   { id: 2, name: "Cuadernos universitarios", cat: "Escolar", price: 3490, image: "/images/prod-cuadernos.png", tag: "Nuevo", sku: "CUA-UNI-100", brand: "Escolar" },
@@ -32,6 +34,12 @@ export default function Home() {
   const [cartOpen, setCartOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [quoteOpen, setQuoteOpen] = useState(false);
+  const [heroSlide, setHeroSlide] = useState(0);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setHeroSlide((current) => (current + 1) % heroBackdrops.length), 5200);
+    return () => window.clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     let frame = 0;
@@ -81,6 +89,8 @@ export default function Home() {
       </header>
 
       <section className="hero-v2" id="inicio" data-parallax>
+        <div className="hero-backdrops" aria-hidden="true">{heroBackdrops.map((image, index) => <div key={image} className={index === heroSlide ? "hero-backdrop active" : "hero-backdrop"} style={{ backgroundImage: `url(${image})` }} />)}</div>
+        <div className="hero-backdrop-overlay" />
         <div className="hero-orbit orbit-one" /><div className="hero-orbit orbit-two" />
         <div className="shell hero-v2-grid">
           <div className="hero-v2-copy"><span className="eyebrow">Escolar · arte · oficina</span><h1>Todo lo que tu día necesita, <em>en una sola lista.</em></h1><p>Desde el primer cuaderno hasta la oficina completa. Compra por producto, envíanos tu lista o cotiza por volumen.</p><div className="hero-buttons"><button className="primary" onClick={() => scrollToCatalog()}>Explorar productos <span>→</span></button><button className="secondary" onClick={() => setQuoteOpen(true)}>Cotizar mi lista</button></div><div className="hero-proof"><span>✓ Despacho coordinado</span><span>✓ Atención real</span><span>✓ Precios por volumen</span></div></div>
@@ -104,10 +114,6 @@ export default function Home() {
       </section>
 
       <section className="benefits shell"><div><b>▣</b><span><strong>Envíos a todo Chile</strong><small>Rápidos y seguros</small></span></div><div><b>%</b><span><strong>Precios mayoristas</strong><small>Descuentos por volumen</small></span></div><div><b>✓</b><span><strong>Compra confiable</strong><small>Asesoría antes de pagar</small></span></div><div><b>◎</b><span><strong>Atención personalizada</strong><small>Te ayudamos a elegir</small></span></div></section>
-
-      <section className="shop-worlds shell"><div className="section-heading"><div><span className="eyebrow">Compra según lo que necesitas</span><h2>Tres mundos, una sola tienda.</h2></div><p>Productos elegidos para estudiar, crear y trabajar mejor.</p></div><div className="world-grid"><article className="world-card school" data-parallax><div className="world-bg" /><div><span>01 / Escolar</span><h3>Todo para volver a clases</h3><p>Cuadernos, mochilas, geometría y kits listos.</p><button onClick={() => scrollToCatalog("Escolar")}>Ver escolares →</button></div></article><article className="world-card art" data-parallax><div className="world-bg" /><div><span>02 / Creatividad</span><h3>Color para grandes ideas</h3><p>Témperas, lápices, papeles y manualidades.</p><button onClick={() => scrollToCatalog("Arte")}>Explorar arte →</button></div></article><article className="world-card office" data-parallax><div className="world-bg" /><div><span>03 / Oficina</span><h3>Orden para hacer más</h3><p>Resmas, carpetas y esenciales de escritorio.</p><button onClick={() => scrollToCatalog("Oficina")}>Equipar oficina →</button></div></article></div></section>
-
-      <section className="list-parallax" data-parallax><div className="list-parallax-bg" /><div className="shell"><div className="list-panel"><span className="eyebrow">Tu lista, resuelta</span><h2>Sube una foto. Nosotros ordenamos el resto.</h2><p>Recibimos tu lista escolar en PDF, Excel o fotografía. Revisamos productos y cantidades para entregarte una cotización clara.</p><div><button className="primary" onClick={() => setQuoteOpen(true)}>Enviar mi lista →</button><a href="#catalogo">Prefiero comprar yo</a></div></div><div className="list-stat"><strong>1 archivo</strong><span>es todo lo que necesitas para comenzar</span></div></div></section>
 
       <section className="seo-section creative-editorial" data-parallax>
         <div className="shell seo-grid">

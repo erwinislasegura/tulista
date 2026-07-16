@@ -170,6 +170,8 @@ footer { padding:65px 0 25px; background:#f5f8fc; }
 
 /* Compact first viewport: products enter sooner */
 .hero-v2{min-height:500px}.hero-v2-grid{min-height:500px}.hero-v2-copy{padding:40px 0}.hero-v2-copy h1{font-size:clamp(42px,4.5vw,62px)}.hero-v2-copy>p{font-size:16px;line-height:1.55}.hero-collage{height:430px}.collage-note{top:8%}.category-strip{padding:14px 0}.category-card img{height:68px}.benefits{margin-top:4px}.catalog{padding-top:58px;padding-bottom:78px}
+.hero-backdrops{position:absolute;inset:0;z-index:0}.hero-backdrop{position:absolute;inset:-30px;background-size:cover;background-position:center;opacity:0;transform:scale(1.08);transition:opacity 1.1s ease,transform 6s ease}.hero-backdrop:nth-child(2),.hero-backdrop:nth-child(3){background-size:70%;background-repeat:no-repeat;background-position:82% center;background-color:#eef5ff}.hero-backdrop.active{opacity:.28;transform:scale(1)}.hero-backdrop-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(247,250,255,.98) 0%,rgba(247,250,255,.9) 48%,rgba(247,250,255,.48) 100%)}
+@media(prefers-reduced-motion:reduce){.hero-backdrop{transition:none;transform:none}}
 @media(max-width:920px){.hero-v2-grid{min-height:700px}.hero-collage{height:350px;margin-top:-70px}}
 @media(max-width:640px){.hero-v2-grid{min-height:650px}.hero-v2-copy{padding-top:32px}.hero-v2-copy h1{font-size:39px}.hero-collage{height:285px;margin-top:-55px}.category-card img{height:58px}.catalog{padding-top:46px}}
 
