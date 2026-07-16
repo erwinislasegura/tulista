@@ -49,13 +49,13 @@
   </header>
 
 <main>
-  <section class="page-hero page-hero-bg" style="--section-bg:url('pagina/assets/images/contact-map.png')">
+  <section class="page-hero page-hero-bg" style="--section-bg:url('assets/source/images/19.png')">
     <div class="container">
       <div><div class="breadcrumb">Inicio / Contacto</div><span class="kicker">Contacto</span><h1>Conversemos y armemos tu pedido.</h1><p>Escríbenos para consultar productos, enviar una lista escolar, pedir precios por volumen o resolver una compra para oficina.</p></div>
-      <img src="pagina/assets/images/contact-map.png" alt="Contacto Tu Lista">
+      <img src="assets/source/images/19.png" alt="Útiles escolares Tu Lista">
     </div>
   </section>
-  <section class="section-bg" style="--section-bg:url('pagina/assets/images/hero-oficina.png')">
+  <section class="section-bg" style="--section-bg:url('assets/source/images/24.png')">
     <div class="container content-grid">
       <div class="card"><h3>Datos de contacto</h3><div class="table-like"><div class="table-row"><strong>WhatsApp</strong><span>+56 9 XXXXXXXX</span></div><div class="table-row"><strong>Email</strong><span>contacto@tulista.cl</span></div><div class="table-row"><strong>Atención</strong><span>Listas escolares, empresas, comercios y mayoristas.</span></div><div class="table-row"><strong>Despacho</strong><span>Según comuna, disponibilidad y tipo de pedido.</span></div></div><p class="notice" style="margin-top:16px">Cambia el número de WhatsApp y correo en el HTML/JS antes de publicar.</p></div>
       <div class="card"><h3>Enviar mensaje</h3><form class="form" data-whatsapp-form data-message="Hola Tu Lista, quiero hacer una consulta."><div class="field"><label>Nombre</label><input name="Nombre" required></div><div class="field"><label>WhatsApp</label><input name="WhatsApp" required></div><div class="field full"><label>Tipo de consulta</label><select name="Tipo"><option>Productos</option><option>Lista escolar</option><option>Compra por mayor</option><option>Oficina / empresa</option></select></div><div class="field full"><label>Mensaje</label><textarea name="Mensaje" placeholder="Cuéntanos qué necesitas cotizar..."></textarea></div><div class="field full"><button class="btn orange full" type="submit">Enviar por WhatsApp</button></div></form></div>

@@ -125,20 +125,20 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
 <main class="storefront-main">
   <section class="hero-v3" data-parallax>
     <div class="hero-bg hero-bg-v3" id="heroParallax" aria-hidden="true">
-      <?php foreach (['hero-ninos.png', 'hero-pinturas.png', 'hero-oficina.png'] as $position => $image): ?><div class="hero-slide<?= $position === 0 ? ' is-active' : '' ?>"><img src="pagina/assets/images/<?= $image ?>" alt=""></div><?php endforeach; ?>
+      <?php foreach ([1, 13, 28] as $position => $image): ?><div class="hero-slide<?= $position === 0 ? ' is-active' : '' ?>"><img src="assets/source/images/<?= $image ?>.png" alt=""></div><?php endforeach; ?>
     </div>
     <div class="hero-v3-overlay"></div>
     <div class="hero-v3-orbit orbit-a"></div><div class="hero-v3-orbit orbit-b"></div>
     <div class="container hero-v3-grid">
       <div class="hero-v3-copy"><span class="kicker">Escolar · arte · oficina</span><h1>Todo lo que tu día necesita, <em>en una sola lista.</em></h1><p>Desde el primer cuaderno hasta la oficina completa. Compra por producto, envíanos tu lista o cotiza por volumen.</p><div class="hero-actions"><a class="btn orange" href="#productos">Explorar productos →</a><a class="btn ghost" href="cotizador-lista">Cotizar mi lista</a></div><div class="hero-v3-proof"><span>✓ Despacho coordinado</span><span>✓ Atención real</span><span>✓ Precios por volumen</span></div></div>
-      <div class="hero-v3-collage"><div class="collage-shape"></div><img class="bag" src="pagina/assets/images/prod-mochila.png" alt="Mochila escolar"><img class="books" src="pagina/assets/images/prod-cuadernos.png" alt="Cuadernos"><img class="pencils" src="pagina/assets/images/prod-lapices.png" alt="Lápices de colores"><div class="collage-label"><strong>Vuelta a clases</strong><span>Todo listo, sin vueltas</span></div></div>
+      <div class="hero-v3-photo-note"><span>Escolar · oficina · arte</span><strong>Productos reales para cada lista.</strong></div>
     </div>
   </section>
   <div class="color-ribbon"><span>Cuadernos</span><i>✦</i><span>Arte y color</span><i>✦</i><span>Oficina</span><i>✦</i><span>Listas escolares</span><i>✦</i><span>Mayoristas</span></div>
 
   <section class="seo-commerce-section">
     <div class="container seo-commerce-grid">
-      <div class="seo-commerce-image"><img src="pagina/assets/images/hero-oficina.png" alt="Útiles escolares, papelería y productos de oficina"></div>
+      <div class="seo-commerce-image"><img src="assets/source/images/24.png" alt="Útiles escolares, papelería y productos de oficina"></div>
       <div><span class="kicker">Una compra, múltiples soluciones</span><h2>Útiles escolares y de oficina para cada etapa del año.</h2><p>En Tu Lista encuentras cuadernos, lápices, materiales de arte, resmas, carpetas, etiquetas y kits escolares. Reunimos productos esenciales para familias, colegios, empresas y librerías que necesitan comprar de forma simple y ordenada.</p><ul><li><strong>Temporada escolar:</strong> productos por unidad y listas completas.</li><li><strong>Oficinas y empresas:</strong> reposición frecuente y facturación.</li><li><strong>Mayoristas:</strong> atención comercial y precios por volumen.</li></ul><a class="btn orange" href="#productos">Descubrir el catálogo</a></div>
     </div>
   </section>
@@ -171,12 +171,12 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
     </div>
   </section>
 
-  <section id="mayoristas" class="section-bg wholesale-section" style="--section-bg:url('pagina/assets/images/hero-oficina.png')">
+  <section id="mayoristas" class="section-bg wholesale-section" style="--section-bg:url('assets/source/images/21.png')">
     <div class="container banner-grid">
-      <article class="banner big"><div class="banner-copy"><span class="kicker">Canal mayorista e institucional</span><h3>Abastecimiento serio para librerías, comercio, colegios y oficinas.</h3><p>Cotiza por volumen productos escolares, papelería, arte y oficina. Ideal para reposición, temporada escolar y compras institucionales con atención comercial.</p><a class="btn orange" href="cotizador-lista">Solicitar precio mayorista</a></div><img src="pagina/assets/images/prod-oficina.png" alt="Compra mayorista"></article>
+      <article class="banner big"><div class="banner-copy"><span class="kicker">Canal mayorista e institucional</span><h3>Abastecimiento serio para librerías, comercio, colegios y oficinas.</h3><p>Cotiza por volumen productos escolares, papelería, arte y oficina. Ideal para reposición, temporada escolar y compras institucionales con atención comercial.</p><a class="btn orange" href="cotizador-lista">Solicitar precio mayorista</a></div><img src="assets/source/images/22.png" alt="Compra mayorista"></article>
       <div style="display:grid;gap:16px">
-        <article class="banner"><div class="banner-copy"><h3>Listas escolares</h3><p>Envíanos tu lista y te respondemos ordenado.</p><a class="btn ghost" href="cotizador-lista">Enviar lista</a></div><img src="pagina/assets/images/quote-list.png" alt="Lista escolar"></article>
-        <article class="banner"><div class="banner-copy"><h3>Arte y trabajos</h3><p>Pinturas, goma eva, papel y materiales creativos.</p><a class="btn ghost" href="#productos">Ver arte</a></div><img src="pagina/assets/images/prod-pinturas.png" alt="Arte escolar"></article>
+        <article class="banner"><div class="banner-copy"><h3>Listas escolares</h3><p>Envíanos tu lista y te respondemos ordenado.</p><a class="btn ghost" href="cotizador-lista">Enviar lista</a></div><img src="assets/source/images/23.png" alt="Lista escolar"></article>
+        <article class="banner"><div class="banner-copy"><h3>Arte y trabajos</h3><p>Pinturas, goma eva, papel y materiales creativos.</p><a class="btn ghost" href="#productos">Ver arte</a></div><img src="assets/source/images/28.png" alt="Arte escolar"></article>
       </div>
     </div>
   </section>

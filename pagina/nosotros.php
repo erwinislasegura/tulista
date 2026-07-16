@@ -49,13 +49,13 @@
   </header>
 
 <main>
-  <section class="page-hero page-hero-bg" style="--section-bg:url('pagina/assets/images/about-team.png')">
+  <section class="page-hero page-hero-bg" style="--section-bg:url('assets/source/images/2.png')">
     <div class="container">
       <div><div class="breadcrumb">Inicio / Nosotros</div><span class="kicker">Nosotros</span><h1>Una tienda pensada para resolver compras escolares y de oficina sin complicaciones.</h1><p>Tu Lista organiza productos de alta rotación para apoderados, empresas, colegios, librerías y comercios que necesitan comprar rápido, cotizar por volumen o resolver listas escolares completas.</p></div>
-      <img src="pagina/assets/images/about-team.png" alt="Equipo Tu Lista">
+      <img src="assets/source/images/2.png" alt="Tienda de útiles y productos de oficina">
     </div>
   </section>
-  <section class="section-bg" style="--section-bg:url('pagina/assets/images/hero-ninos.png')">
+  <section class="section-bg" style="--section-bg:url('assets/source/images/9.png')">
     <div class="container content-grid">
       <div class="card"><h3>Qué hacemos</h3><p>Centralizamos útiles escolares, materiales de arte, papelería y productos de oficina para que cada cliente encuentre lo que necesita de forma clara. La experiencia está preparada para compra rápida, cotización por WhatsApp y venta mayorista.</p></div>
       <div class="feature-list">

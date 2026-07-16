@@ -13,9 +13,9 @@ const categories = [
 ];
 
 const heroBackdrops = [
-  { image: "/images/hero-products.jpg", label: "Vuelta a clases" },
-  { image: "/images/prod-pinturas.png", label: "Arte que inspira" },
-  { image: "/images/prod-oficina.png", label: "Oficina en orden" },
+  { image: "/images/hero-school-real.png", label: "Todo para aprender", note: "Escolar y arte" },
+  { image: "/images/hero-orders-real.png", label: "Pedidos bien preparados", note: "Listas y volumen" },
+  { image: "/images/hero-office-real.png", label: "Tu oficina en orden", note: "Papelería y oficina" },
 ];
 
 const products = [
@@ -98,7 +98,7 @@ export default function Home() {
         <div className="hero-orbit orbit-one" /><div className="hero-orbit orbit-two" />
         <div className="shell hero-v2-grid">
           <div className="hero-v2-copy"><span className="eyebrow">Escolar · arte · oficina</span><h1>Todo lo que tu día necesita, <em>en una sola lista.</em></h1><p>Desde el primer cuaderno hasta la oficina completa. Compra por producto, envíanos tu lista o cotiza por volumen.</p><div className="hero-buttons"><button className="primary" onClick={() => scrollToCatalog()}>Explorar productos <span>→</span></button><button className="secondary" onClick={() => setQuoteOpen(true)}>Cotizar mi lista</button></div><div className="hero-proof"><span>✓ Despacho coordinado</span><span>✓ Atención real</span><span>✓ Precios por volumen</span></div></div>
-          <div className="hero-collage" aria-label="Selección de productos Tu Lista"><div className="collage-back" /><Image className="collage-bag" unoptimized src="/images/prod-mochila.png" width={500} height={500} alt="Mochila escolar" priority /><Image className="collage-books" unoptimized src="/images/prod-cuadernos.png" width={320} height={280} alt="Cuadernos" priority /><Image className="collage-pencils" unoptimized src="/images/prod-lapices.png" width={280} height={250} alt="Lápices de colores" priority /><div className="collage-note"><b>{heroBackdrops[heroSlide].label}</b><span>Todo listo, sin vueltas</span></div></div>
+          <div className="hero-photo-caption"><span>{heroBackdrops[heroSlide].note}</span><strong>{heroBackdrops[heroSlide].label}</strong></div>
           <div className="hero-pagination" aria-label="Imágenes destacadas">{heroBackdrops.map((slide, index) => <button key={slide.image} className={index === heroSlide ? "active" : ""} onClick={() => setHeroSlide(index)} aria-label={`Ver ${slide.label}`}><span>{String(index + 1).padStart(2, "0")}</span></button>)}</div>
         </div>
       </section>
