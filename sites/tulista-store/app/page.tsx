@@ -93,7 +93,7 @@ export default function Home() {
       </header>
 
       <section className="hero-v2" id="inicio" data-parallax>
-        <div className="hero-backdrops" aria-hidden="true">{heroBackdrops.map((slide, index) => <div key={slide.image} className={index === heroSlide ? "hero-backdrop active" : "hero-backdrop"} style={{ backgroundImage: `url(${slide.image})` }} />)}</div>
+        <div className="hero-backdrops" aria-hidden="true">{heroBackdrops.map((slide, index) => <div key={slide.image} className={index === heroSlide ? "hero-backdrop active" : "hero-backdrop"}><Image unoptimized src={slide.image} fill sizes="100vw" alt="" priority={index === 0} /></div>)}</div>
         <div className="hero-backdrop-overlay" />
         <div className="hero-orbit orbit-one" /><div className="hero-orbit orbit-two" />
         <div className="shell hero-v2-grid">

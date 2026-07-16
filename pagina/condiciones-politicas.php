@@ -49,13 +49,13 @@
   </header>
 
 <main>
-  <section class="page-hero page-hero-bg" style="--section-bg:url('pagina/assets/source/images/27.png')">
+  <section class="page-hero page-hero-bg" style="--section-bg:url('pagina/assets/images/policy.png')">
     <div class="container">
       <div><div class="breadcrumb">Inicio / Condiciones y políticas</div><span class="kicker">Legal</span><h1>Condiciones de compra y política de privacidad.</h1><p>Texto base para ecommerce. Debe ser revisado y ajustado con los datos legales reales de la empresa antes de publicarse.</p></div>
       <img src="pagina/assets/images/policy.png" alt="Condiciones y privacidad">
     </div>
   </section>
-  <section class="section-bg" style="--section-bg:url('pagina/assets/source/images/30.png')">
+  <section class="section-bg" style="--section-bg:url('pagina/assets/images/prod-carpetas.png')">
     <div class="container policy-content">
       <div class="notice">Importante: esta página es un modelo inicial. Reemplazar razón social, RUT, dirección, datos de contacto y políticas operativas reales.</div>
       <h2>Condiciones generales</h2><p>El uso de este sitio implica la aceptación de sus condiciones. Los productos, precios y disponibilidad pueden variar según stock, temporada y confirmación final del pedido.</p>
