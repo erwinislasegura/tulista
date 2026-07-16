@@ -279,6 +279,24 @@ function setupFAQ(){
   });
 }
 
+function setupImmersiveParallax(){
+  const sections = [...document.querySelectorAll('[data-parallax]')];
+  if(!sections.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let frame = 0;
+  const update = ()=>{
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(()=>{
+      sections.forEach(section=>{
+        const rect = section.getBoundingClientRect();
+        const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+        section.style.setProperty('--parallax', Math.max(0, Math.min(1, progress)).toFixed(3));
+      });
+    });
+  };
+  update();
+  window.addEventListener('scroll', update, {passive:true});
+}
+
 document.addEventListener('DOMContentLoaded',()=>{
   setActiveNav();
   renderTabs();
@@ -288,7 +306,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   setupForms();
   setupFAQ();
   setupHeroParallax();
-  document.querySelectorAll('[data-cat-link]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault(); location.href = '/#productos';}));
+  setupImmersiveParallax();
+  document.querySelectorAll('[data-cat-link]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault(); location.href = '#productos';}));
   document.querySelectorAll('[data-filter]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault(); setCategory(el.dataset.filter);}));
   document.getElementById('globalSearch')?.addEventListener('input',e=>{searchTerm=e.target.value; activeCategory='Todos'; renderTabs(); renderSideCategories(); renderProducts();});
   document.getElementById('sortSelect')?.addEventListener('change',renderProducts);

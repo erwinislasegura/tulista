@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const categories = [
   { name: "Escolar", image: "/images/prod-mochila.png" },
@@ -33,6 +33,23 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [quoteOpen, setQuoteOpen] = useState(false);
 
+  useEffect(() => {
+    let frame = 0;
+    const updateParallax = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        document.querySelectorAll<HTMLElement>("[data-parallax]").forEach((section) => {
+          const rect = section.getBoundingClientRect();
+          const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+          section.style.setProperty("--parallax", `${Math.max(0, Math.min(1, progress))}`);
+        });
+      });
+    };
+    updateParallax();
+    window.addEventListener("scroll", updateParallax, { passive: true });
+    return () => { cancelAnimationFrame(frame); window.removeEventListener("scroll", updateParallax); };
+  }, []);
+
   const visible = useMemo(() => products.filter((product) => {
     const matchesCategory = category === "Todos" || product.cat === category;
     const matchesQuery = product.name.toLowerCase().includes(query.toLowerCase());
@@ -63,13 +80,15 @@ export default function Home() {
         <nav className={menuOpen ? "open" : ""}><div className="shell"><a href="#inicio">Inicio</a>{["Escolar", "Oficina", "Arte", "Papelería", "Organización"].map((item) => <button key={item} onClick={() => scrollToCatalog(item)}>{item}</button>)}<a href="#mayorista">Mayorista</a></div></nav>
       </header>
 
-      <section className="hero" id="inicio">
-        <Image unoptimized className="hero-image" src="/images/hero-products.jpg" fill sizes="100vw" alt="Mochila, cuadernos y útiles escolares y de oficina" priority />
-        <div className="shell hero-inner">
-          <div className="hero-copy"><span className="eyebrow">Tu compra escolar comienza aquí</span><h1>Tu lista completa, <em>sin perder tiempo.</em></h1><p>Útiles escolares, arte y oficina con atención personalizada. Compra productos o envíanos tu lista y recibe una cotización organizada.</p><div className="hero-buttons"><button className="primary" onClick={() => scrollToCatalog()}>Comprar productos <span>→</span></button><button className="secondary" onClick={() => setQuoteOpen(true)}>Cotizar mi lista</button></div><div className="hero-proof"><span>✓ Precios claros</span><span>✓ Despacho coordinado</span><span>✓ Venta mayorista</span></div></div>
-          <div className="hero-float"><strong>+500 productos</strong><small>para colegio y oficina</small></div>
+      <section className="hero-v2" id="inicio" data-parallax>
+        <div className="hero-orbit orbit-one" /><div className="hero-orbit orbit-two" />
+        <div className="shell hero-v2-grid">
+          <div className="hero-v2-copy"><span className="eyebrow">Escolar · arte · oficina</span><h1>Todo lo que tu día necesita, <em>en una sola lista.</em></h1><p>Desde el primer cuaderno hasta la oficina completa. Compra por producto, envíanos tu lista o cotiza por volumen.</p><div className="hero-buttons"><button className="primary" onClick={() => scrollToCatalog()}>Explorar productos <span>→</span></button><button className="secondary" onClick={() => setQuoteOpen(true)}>Cotizar mi lista</button></div><div className="hero-proof"><span>✓ Despacho coordinado</span><span>✓ Atención real</span><span>✓ Precios por volumen</span></div></div>
+          <div className="hero-collage" aria-label="Selección de productos Tu Lista"><div className="collage-back" /><Image className="collage-bag" unoptimized src="/images/prod-mochila.png" width={500} height={500} alt="Mochila escolar" priority /><Image className="collage-books" unoptimized src="/images/prod-cuadernos.png" width={320} height={280} alt="Cuadernos" priority /><Image className="collage-pencils" unoptimized src="/images/prod-lapices.png" width={280} height={250} alt="Lápices de colores" priority /><div className="collage-note"><b>Vuelta a clases</b><span>Todo listo, sin vueltas</span></div></div>
         </div>
       </section>
+
+      <div className="color-ticker" aria-label="Categorías"><div><span>Cuadernos</span><i>✦</i><span>Arte y color</span><i>✦</i><span>Oficina</span><i>✦</i><span>Listas escolares</span><i>✦</i><span>Mayoristas</span></div></div>
 
       <section className="category-strip shell" aria-label="Categorías destacadas">
         {categories.map((item) => <button key={item.name} className="category-card" onClick={() => item.name === "Mayorista" ? document.getElementById("mayorista")?.scrollIntoView({ behavior: "smooth" }) : scrollToCatalog(item.name)}><Image unoptimized src={item.image} width={180} height={120} alt="" /><span>{item.name}</span><b>›</b></button>)}
@@ -77,10 +96,9 @@ export default function Home() {
 
       <section className="benefits shell"><div><b>▣</b><span><strong>Envíos a todo Chile</strong><small>Rápidos y seguros</small></span></div><div><b>%</b><span><strong>Precios mayoristas</strong><small>Descuentos por volumen</small></span></div><div><b>✓</b><span><strong>Compra confiable</strong><small>Asesoría antes de pagar</small></span></div><div><b>◎</b><span><strong>Atención personalizada</strong><small>Te ayudamos a elegir</small></span></div></section>
 
-      <section className="quick-paths shell" aria-label="Formas de comprar">
-        <article><span>01</span><div><small>Compra directa</small><h3>Elige desde el catálogo</h3><p>Encuentra productos escolares, arte, papelería y oficina con precios visibles.</p><button onClick={() => scrollToCatalog()}>Explorar productos →</button></div><Image unoptimized src="/images/prod-cuadernos.png" width={180} height={150} alt="Cuadernos escolares" /></article>
-        <article><span>02</span><div><small>Compra asistida</small><h3>Envíanos tu lista</h3><p>Sube una foto, PDF o Excel. Ordenamos los productos y preparamos tu cotización.</p><button onClick={() => setQuoteOpen(true)}>Cotizar mi lista →</button></div><Image unoptimized src="/images/prod-kit.png" width={180} height={150} alt="Kit de útiles escolares" /></article>
-      </section>
+      <section className="shop-worlds shell"><div className="section-heading"><div><span className="eyebrow">Compra según lo que necesitas</span><h2>Tres mundos, una sola tienda.</h2></div><p>Productos elegidos para estudiar, crear y trabajar mejor.</p></div><div className="world-grid"><article className="world-card school" data-parallax><div className="world-bg" /><div><span>01 / Escolar</span><h3>Todo para volver a clases</h3><p>Cuadernos, mochilas, geometría y kits listos.</p><button onClick={() => scrollToCatalog("Escolar")}>Ver escolares →</button></div></article><article className="world-card art" data-parallax><div className="world-bg" /><div><span>02 / Creatividad</span><h3>Color para grandes ideas</h3><p>Témperas, lápices, papeles y manualidades.</p><button onClick={() => scrollToCatalog("Arte")}>Explorar arte →</button></div></article><article className="world-card office" data-parallax><div className="world-bg" /><div><span>03 / Oficina</span><h3>Orden para hacer más</h3><p>Resmas, carpetas y esenciales de escritorio.</p><button onClick={() => scrollToCatalog("Oficina")}>Equipar oficina →</button></div></article></div></section>
+
+      <section className="list-parallax" data-parallax><div className="list-parallax-bg" /><div className="shell"><div className="list-panel"><span className="eyebrow">Tu lista, resuelta</span><h2>Sube una foto. Nosotros ordenamos el resto.</h2><p>Recibimos tu lista escolar en PDF, Excel o fotografía. Revisamos productos y cantidades para entregarte una cotización clara.</p><div><button className="primary" onClick={() => setQuoteOpen(true)}>Enviar mi lista →</button><a href="#catalogo">Prefiero comprar yo</a></div></div><div className="list-stat"><strong>1 archivo</strong><span>es todo lo que necesitas para comenzar</span></div></div></section>
 
       <section className="catalog shell" id="catalogo">
         <div className="section-heading"><div><span className="eyebrow">Productos destacados</span><h2>Resuelve tu lista en minutos</h2><p>Compra por unidad, arma tu pedido o solicita una cotización completa.</p></div><a href="#catalogo">Ver todo el catálogo →</a></div>
@@ -91,9 +109,9 @@ export default function Home() {
         {!visible.length && <p className="empty">No encontramos productos con esa búsqueda. Prueba con otra palabra.</p>}
       </section>
 
-      <section className="seo-section">
+      <section className="seo-section creative-editorial" data-parallax>
         <div className="shell seo-grid">
-          <div className="seo-image"><Image unoptimized src="/images/hero-products.png" fill sizes="(max-width: 800px) 100vw, 48vw" alt="Selección de útiles escolares, papelería y productos de oficina" /></div>
+          <div className="seo-image"><Image className="editorial-image" unoptimized src="/images/hero-products.png" fill sizes="(max-width: 800px) 100vw, 48vw" alt="Selección de útiles escolares, papelería y productos de oficina" /><span className="image-caption">Elegir · combinar · crear</span></div>
           <div><span className="eyebrow">Una compra, múltiples soluciones</span><h2>Útiles escolares y de oficina para cada etapa del año.</h2><p>En Tu Lista encuentras cuadernos, lápices, materiales de arte, resmas, carpetas, etiquetas y kits escolares. Reunimos productos esenciales para familias, colegios, empresas y librerías que necesitan comprar de forma simple y ordenada.</p><ul><li><b>Temporada escolar:</b> productos por unidad y listas completas.</li><li><b>Oficinas y empresas:</b> reposición frecuente y facturación.</li><li><b>Mayoristas:</b> atención comercial y precios por volumen.</li></ul><button className="primary" onClick={() => scrollToCatalog()}>Descubrir el catálogo</button></div>
         </div>
       </section>

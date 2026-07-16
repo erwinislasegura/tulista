@@ -122,26 +122,14 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
   </header>
 
 <main class="storefront-main">
-  <section class="hero hero-storefront hero-premium">
-    <div class="hero-bg" id="heroParallax" aria-hidden="true">
-      <?php for ($i = 1; $i <= 31; $i++): ?>
-        <div class="hero-slide<?= $i === 1 ? ' is-active' : '' ?>" style="background-image:url('assets/source/images/<?= $i ?>.png')"></div>
-      <?php endfor; ?>
-    </div>
-    <img class="hero-modern-image" src="sites/tulista-store/public/images/hero-products.jpg" alt="Mochila, cuadernos y útiles escolares y de oficina">
-    <div class="container hero-premium-grid">
-      <div class="hero-copy hero-premium-copy">
-        <span class="eyebrow"><b>Tu compra escolar comienza aquí</b> útiles, arte y oficina</span>
-        <h1>Tu lista completa, sin perder tiempo.</h1>
-        <p>Encuentra útiles escolares, arte, papelería y productos de oficina. Compra desde el catálogo o envíanos tu lista para recibir una cotización organizada.</p>
-        <div class="hero-actions"><a class="btn orange" href="#productos">Comprar productos →</a><a class="btn primary" href="cotizador-lista">Cotizar mi lista</a><a class="btn ghost" href="#mayoristas">Compras por volumen</a></div>
-        <div class="hero-assurance" aria-label="Garantías comerciales">
-          <span>✓ Atención por WhatsApp</span><span>✓ Compra por unidad o volumen</span><span>✓ Catálogo filtrable</span>
-        </div>
-      </div>
-      <div class="hero-modern-badge"><strong>+500 productos</strong><span>para colegio y oficina</span></div>
+  <section class="hero-v3" data-parallax>
+    <div class="hero-v3-orbit orbit-a"></div><div class="hero-v3-orbit orbit-b"></div>
+    <div class="container hero-v3-grid">
+      <div class="hero-v3-copy"><span class="kicker">Escolar · arte · oficina</span><h1>Todo lo que tu día necesita, <em>en una sola lista.</em></h1><p>Desde el primer cuaderno hasta la oficina completa. Compra por producto, envíanos tu lista o cotiza por volumen.</p><div class="hero-actions"><a class="btn orange" href="#productos">Explorar productos →</a><a class="btn ghost" href="cotizador-lista">Cotizar mi lista</a></div><div class="hero-v3-proof"><span>✓ Despacho coordinado</span><span>✓ Atención real</span><span>✓ Precios por volumen</span></div></div>
+      <div class="hero-v3-collage"><div class="collage-shape"></div><img class="bag" src="sites/tulista-store/public/images/prod-mochila.png" alt="Mochila escolar"><img class="books" src="sites/tulista-store/public/images/prod-cuadernos.png" alt="Cuadernos"><img class="pencils" src="sites/tulista-store/public/images/prod-lapices.png" alt="Lápices de colores"><div class="collage-label"><strong>Vuelta a clases</strong><span>Todo listo, sin vueltas</span></div></div>
     </div>
   </section>
+  <div class="color-ribbon"><span>Cuadernos</span><i>✦</i><span>Arte y color</span><i>✦</i><span>Oficina</span><i>✦</i><span>Listas escolares</span><i>✦</i><span>Mayoristas</span></div>
 
   <section class="seo-commerce-section">
     <div class="container seo-commerce-grid">
@@ -162,6 +150,12 @@ $publicCategoryNames = array_values(array_map(static fn (array $category): strin
       <div><strong>Mayoristas</strong><span>Librerías, comercio y compras recurrentes.</span></div>
     </div>
   </section>
+
+  <section class="worlds-v3">
+    <div class="container"><div class="section-head"><div><span class="kicker">Compra según lo que necesitas</span><h2 class="section-title">Tres mundos, una sola tienda.</h2></div><p class="section-copy">Productos elegidos para estudiar, crear y trabajar mejor.</p></div><div class="worlds-v3-grid"><article data-parallax><img src="sites/tulista-store/public/images/hero-products.jpg" alt="Útiles escolares"><div><span>01 / Escolar</span><h3>Todo para volver a clases</h3><p>Cuadernos, mochilas, geometría y kits listos.</p><a href="#productos">Ver escolares →</a></div></article><article data-parallax><img src="sites/tulista-store/public/images/prod-pinturas.png" alt="Materiales de arte"><div><span>02 / Creatividad</span><h3>Color para grandes ideas</h3><p>Témperas, lápices, papeles y manualidades.</p><a href="#productos">Explorar arte →</a></div></article><article data-parallax><img src="sites/tulista-store/public/images/prod-oficina.png" alt="Productos de oficina"><div><span>03 / Oficina</span><h3>Orden para hacer más</h3><p>Resmas, carpetas y esenciales de escritorio.</p><a href="#productos">Equipar oficina →</a></div></article></div></div>
+  </section>
+
+  <section class="list-v3" data-parallax><img class="list-v3-bg" src="sites/tulista-store/public/images/hero-products.jpg" alt="Lista escolar y útiles"><div class="container"><div class="list-v3-panel"><span class="kicker">Tu lista, resuelta</span><h2>Sube una foto. Nosotros ordenamos el resto.</h2><p>Recibimos tu lista escolar en PDF, Excel o fotografía. Revisamos productos y cantidades para entregarte una cotización clara.</p><div><a class="btn orange" href="cotizador-lista">Enviar mi lista →</a><a href="#productos">Prefiero comprar yo</a></div></div><div class="list-v3-stat"><strong>1 archivo</strong><span>es todo lo que necesitas para comenzar</span></div></div></section>
 
   <section id="productos" class="catalog-section">
     <div class="container">
